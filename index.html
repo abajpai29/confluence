@@ -1585,6 +1585,11 @@ function shareCard() {
 
 // ── INIT ──
 document.addEventListener('DOMContentLoaded', () => {
+  // ?reset clears all data for fresh start
+  if (window.location.search.includes('reset')) {
+    localStorage.clear();
+    window.history.replaceState({}, '', window.location.pathname);
+  }
   loadState();
   updateStreak();
   renderStreak();
