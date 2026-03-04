@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Confluence — Think in Every Dimension</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;1,8..60,300;1,8..60,400&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #1a1614;
+    --paper: #f5f0e8;
+    --paper2: #ede8dc;
+    --warm: #8b6914;
+    --accent: #c4460a;
+    --muted: #8a7d6b;
+    --border: #d4c9b0;
+    --gold: #b8860b;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Source Serif 4', Georgia, serif;
+    min-height: 100vh;
+    line-height: 1.7;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* Texture overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 100;
+    opacity: 0.4;
+  }
+
+  /* Ambient ink bleed */
+  body::after {
+    content: '';
+    position: fixed;
+    top: 0; right: 0;
+    width: 40%;
+    height: 60%;
+    background: radial-gradient(ellipse at top right, rgba(196,70,10,0.04) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .wrap {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 0 32px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── HEADER ── */
+  header {
+    padding: 64px 0 48px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 56px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+
+  .wordmark {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: var(--ink);
+  }
+
+  .wordmark span {
+    color: var(--accent);
+  }
+
+  .issue-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding-top: 6px;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    margin-bottom: 56px;
+    animation: fadeUp 0.8s ease both;
+  }
+
+  .hero-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .hero-eyebrow::after {
+    content: '';
+    display: block;
+    height: 1px;
+    width: 48px;
+    background: var(--accent);
+    opacity: 0.4;
+  }
+
+  .hero h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(36px, 6vw, 54px);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -1px;
+    color: var(--ink);
+    margin-bottom: 20px;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .hero p {
+    font-size: 17px;
+    color: var(--muted);
+    font-weight: 300;
+    max-width: 520px;
+    line-height: 1.8;
+  }
+
+  /* ── ONBOARDING ── */
+  #onboarding {
+    animation: fadeUp 0.8s 0.1s ease both;
+  }
+
+  .step {
+    display: none;
+    animation: fadeUp 0.5s ease both;
+  }
+
+  .step.active { display: block; }
+
+  .step-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+
+  .step-q {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.3;
+    margin-bottom: 8px;
+  }
+
+  .step-sub {
+    font-size: 14px;
+    color: var(--muted);
+    margin-bottom: 28px;
+    font-style: italic;
+  }
+
+  /* Input styles */
+  .input-field {
+    width: 100%;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 16px 20px;
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 16px;
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.2s;
+    resize: none;
+    line-height: 1.7;
+  }
+
+  .input-field:focus { border-color: var(--warm); }
+  .input-field::placeholder { color: #bbb; font-style: italic; }
+
+  /* Chip options */
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+
+  .chip {
+    padding: 10px 18px;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 14px;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.15s;
+    background: white;
+    user-select: none;
+  }
+
+  .chip:hover { border-color: var(--warm); color: var(--warm); }
+  .chip.selected { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+  .chip-hint {
+    font-size: 12px;
+    color: var(--muted);
+    font-style: italic;
+    margin-top: 8px;
+  }
+
+  /* Navigation */
+  .step-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+  }
+
+  .btn-back {
+    background: none;
+    border: none;
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 14px;
+    color: var(--muted);
+    cursor: pointer;
+    padding: 0;
+    transition: color 0.15s;
+  }
+
+  .btn-back:hover { color: var(--ink); }
+
+  .btn-next {
+    background: var(--ink);
+    color: var(--paper);
+    border: none;
+    padding: 14px 32px;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 16px;
+    font-style: italic;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .btn-next:hover { background: var(--accent); }
+  .btn-next:disabled { opacity: 0.3; cursor: not-allowed; }
+
+  .btn-next .spinner {
+    width: 14px; height: 14px;
+    border: 1.5px solid rgba(245,240,232,0.3);
+    border-top-color: var(--paper);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    display: none;
+  }
+
+  .btn-next.loading .spinner { display: block; }
+  .btn-next.loading .btn-label { display: none; }
+
+  /* Progress bar */
+  .progress {
+    height: 2px;
+    background: var(--border);
+    margin-bottom: 48px;
+    border-radius: 1px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 1px;
+    transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* ── INSIGHT ── */
+  #insight-view {
+    display: none;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  #insight-view.visible { display: block; }
+
+  .insight-header {
+    margin-bottom: 40px;
+  }
+
+  .insight-from {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .lens-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 4px 12px;
+    border-radius: 1px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .insight-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(26px, 4vw, 38px);
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--ink);
+    letter-spacing: -0.5px;
+    margin-bottom: 8px;
+  }
+
+  .insight-discipline {
+    font-size: 13px;
+    color: var(--accent);
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.05em;
+    margin-bottom: 32px;
+  }
+
+  /* The hook */
+  .hook {
+    border-left: 3px solid var(--accent);
+    padding: 20px 24px;
+    margin-bottom: 32px;
+    background: white;
+  }
+
+  .hook-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .hook-text {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 19px;
+    font-style: italic;
+    line-height: 1.5;
+    color: var(--ink);
+  }
+
+  /* Body sections */
+  .insight-body {
+    font-size: 16px;
+    line-height: 1.9;
+    color: #3a3028;
+    font-weight: 300;
+    margin-bottom: 32px;
+  }
+
+  .insight-body p { margin-bottom: 20px; }
+
+  .insight-body p:last-child { margin-bottom: 0; }
+
+  /* Connection */
+  .connection-box {
+    background: var(--paper2);
+    border: 1px solid var(--border);
+    padding: 24px;
+    margin-bottom: 32px;
+    border-radius: 2px;
+  }
+
+  .connection-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--warm);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .connection-text {
+    font-size: 15px;
+    line-height: 1.8;
+    color: var(--ink);
+    font-weight: 300;
+  }
+
+  /* The question */
+  .question-box {
+    border-top: 2px solid var(--ink);
+    padding-top: 28px;
+    margin-bottom: 40px;
+  }
+
+  .question-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+
+  .question-text {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 22px;
+    font-style: italic;
+    line-height: 1.4;
+    color: var(--ink);
+  }
+
+  /* Next lens teaser */
+  .teaser {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 24px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    border-radius: 2px;
+    margin-bottom: 32px;
+  }
+
+  .teaser-left { flex: 1; }
+
+  .teaser-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: rgba(245,240,232,0.4);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .teaser-text {
+    font-size: 15px;
+    color: var(--paper);
+    font-weight: 300;
+    line-height: 1.5;
+  }
+
+  .teaser-lens {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 13px;
+    font-style: italic;
+    color: rgba(245,240,232,0.6);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  /* Actions */
+  .actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding-bottom: 80px;
+  }
+
+  .btn-share {
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 14px 28px;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 15px;
+    font-style: italic;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.15s;
+  }
+
+  .btn-share:hover { background: #a33a08; }
+
+  .btn-again {
+    background: transparent;
+    color: var(--ink);
+    border: 1px solid var(--border);
+    padding: 14px 28px;
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.15s;
+  }
+
+  .btn-again:hover { border-color: var(--ink); }
+
+  /* Error */
+  .error-box {
+    background: #fff5f5;
+    border: 1px solid #fcc;
+    padding: 20px 24px;
+    border-radius: 2px;
+    font-size: 14px;
+    color: #c00;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* Loading state */
+  .loading-view {
+    display: none;
+    text-align: center;
+    padding: 80px 0;
+  }
+
+  .loading-view.visible { display: block; }
+
+  .loading-ink {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 22px;
+    font-style: italic;
+    color: var(--muted);
+    animation: pulse 2s ease-in-out infinite;
+    margin-bottom: 16px;
+  }
+
+  .loading-sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--border);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  /* Footer */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 24px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--border);
+    letter-spacing: 0.05em;
+  }
+
+  /* Animations */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  /* Divider */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 36px 0;
+  }
+
+  @media (max-width: 600px) {
+    .wrap { padding: 0 20px; }
+    header { padding: 40px 0 32px; }
+    .teaser { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <div>
+      <div class="wordmark">Con<span>fluence</span></div>
+    </div>
+    <div class="issue-tag">Think in Every Dimension</div>
+  </header>
+
+  <!-- HERO -->
+  <div class="hero" id="heroSection">
+    <div class="hero-eyebrow">For the perpetually curious</div>
+    <h1>The world makes more sense<br>when you see it through<br><em>every lens.</em></h1>
+    <p>Tell us who you are. We'll show you something about your world that you've never seen before — through a discipline you'd never have reached for yourself.</p>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="progress" id="progressBar" style="display:none">
+    <div class="progress-fill" id="progressFill" style="width:0%"></div>
+  </div>
+
+  <!-- ONBOARDING -->
+  <div id="onboarding">
+
+    <!-- Step 1 -->
+    <div class="step active" id="step1">
+      <div class="step-num">01 of 05</div>
+      <div class="step-q">What's your name?</div>
+      <div class="step-sub">Just your first name is fine.</div>
+      <input type="text" class="input-field" id="q1" placeholder="e.g. Arjun" maxlength="50">
+      <div class="step-nav">
+        <span></span>
+        <button class="btn-next" onclick="nextStep(1)">
+          <div class="spinner"></div>
+          <span class="btn-label">Continue →</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="step" id="step2">
+      <div class="step-num">02 of 05</div>
+      <div class="step-q">What do you do?</div>
+      <div class="step-sub">Your work, field, or how you'd describe yourself professionally.</div>
+      <textarea class="input-field" id="q2" rows="3" placeholder="e.g. Product manager at a fintech startup, been in banking for 8 years before that"></textarea>
+      <div class="step-nav">
+        <button class="btn-back" onclick="prevStep(2)">← Back</button>
+        <button class="btn-next" onclick="nextStep(2)">
+          <div class="spinner"></div>
+          <span class="btn-label">Continue →</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="step" id="step3">
+      <div class="step-num">03 of 05</div>
+      <div class="step-q">Which domains have shaped your thinking?</div>
+      <div class="step-sub">Pick everything that applies — education, work, deep interests, obsessions.</div>
+      <div class="chips" id="domainChips">
+        <div class="chip" onclick="toggleChip(this)">Engineering / STEM</div>
+        <div class="chip" onclick="toggleChip(this)">Economics</div>
+        <div class="chip" onclick="toggleChip(this)">Philosophy</div>
+        <div class="chip" onclick="toggleChip(this)">History</div>
+        <div class="chip" onclick="toggleChip(this)">Business / Strategy</div>
+        <div class="chip" onclick="toggleChip(this)">Politics / Governance</div>
+        <div class="chip" onclick="toggleChip(this)">Sociology</div>
+        <div class="chip" onclick="toggleChip(this)">Psychology</div>
+        <div class="chip" onclick="toggleChip(this)">Law</div>
+        <div class="chip" onclick="toggleChip(this)">Medicine / Health</div>
+        <div class="chip" onclick="toggleChip(this)">Environment / Climate</div>
+        <div class="chip" onclick="toggleChip(this)">International Relations</div>
+        <div class="chip" onclick="toggleChip(this)">Arts / Literature</div>
+        <div class="chip" onclick="toggleChip(this)">Mathematics</div>
+        <div class="chip" onclick="toggleChip(this)">Biology / Life Sciences</div>
+        <div class="chip" onclick="toggleChip(this)">Computer Science / AI</div>
+        <div class="chip" onclick="toggleChip(this)">Finance / Investing</div>
+        <div class="chip" onclick="toggleChip(this)">Urban Studies</div>
+        <div class="chip" onclick="toggleChip(this)">Anthropology</div>
+        <div class="chip" onclick="toggleChip(this)">Spirituality / Religion</div>
+      </div>
+      <div class="chip-hint">Select as many as feel true.</div>
+      <div class="step-nav">
+        <button class="btn-back" onclick="prevStep(3)">← Back</button>
+        <button class="btn-next" onclick="nextStep(3)">
+          <div class="spinner"></div>
+          <span class="btn-label">Continue →</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Step 4 -->
+    <div class="step" id="step4">
+      <div class="step-num">04 of 05</div>
+      <div class="step-q">What problem or question is living rent-free in your head right now?</div>
+      <div class="step-sub">A work challenge, a life question, something you keep returning to. The more specific, the better.</div>
+      <textarea class="input-field" id="q4" rows="4" placeholder="e.g. Why do our best employees leave after 2 years no matter what we try? Or: I'm trying to understand why smart people keep making the same policy mistakes."></textarea>
+      <div class="step-nav">
+        <button class="btn-back" onclick="prevStep(4)">← Back</button>
+        <button class="btn-next" onclick="nextStep(4)">
+          <div class="spinner"></div>
+          <span class="btn-label">Continue →</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Step 5 -->
+    <div class="step" id="step5">
+      <div class="step-num">05 of 05</div>
+      <div class="step-q">What disciplines do you almost never think from?</div>
+      <div class="step-sub">The ones that feel foreign, that you skipped, that you "weren't good at." These are your blind spots — and your biggest opportunity.</div>
+      <div class="chips" id="blindspotChips">
+        <div class="chip" onclick="toggleChip(this)">Biology / Evolution</div>
+        <div class="chip" onclick="toggleChip(this)">Physics</div>
+        <div class="chip" onclick="toggleChip(this)">Chemistry</div>
+        <div class="chip" onclick="toggleChip(this)">Philosophy</div>
+        <div class="chip" onclick="toggleChip(this)">Anthropology</div>
+        <div class="chip" onclick="toggleChip(this)">Military History</div>
+        <div class="chip" onclick="toggleChip(this)">Neuroscience</div>
+        <div class="chip" onclick="toggleChip(this)">Linguistics</div>
+        <div class="chip" onclick="toggleChip(this)">Thermodynamics</div>
+        <div class="chip" onclick="toggleChip(this)">Mythology</div>
+        <div class="chip" onclick="toggleChip(this)">Game Theory</div>
+        <div class="chip" onclick="toggleChip(this)">Complexity Theory</div>
+        <div class="chip" onclick="toggleChip(this)">Ecology</div>
+        <div class="chip" onclick="toggleChip(this)">Architecture</div>
+        <div class="chip" onclick="toggleChip(this)">Music Theory</div>
+        <div class="chip" onclick="toggleChip(this)">Geography</div>
+      </div>
+      <div class="chip-hint">These are the lenses we'll use to surprise you.</div>
+      <div class="step-nav">
+        <button class="btn-back" onclick="prevStep(5)">← Back</button>
+        <button class="btn-next" id="generateBtn" onclick="generateInsight()">
+          <div class="spinner"></div>
+          <span class="btn-label">Show me what I'm missing →</span>
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- LOADING -->
+  <div class="loading-view" id="loadingView">
+    <div class="loading-ink">Finding the unexpected connection...</div>
+    <div class="loading-sub">Traversing disciplines</div>
+  </div>
+
+  <!-- INSIGHT -->
+  <div id="insight-view">
+    <div id="insightContent"></div>
+  </div>
+
+</div>
+
+<!-- Footer -->
+<div class="wrap">
+  <footer>
+    <span>Confluence © 2025</span>
+    <span>Every discipline. One mind.</span>
+  </footer>
+</div>
+
+<script>
+  let currentStep = 1;
+  const totalSteps = 5;
+
+  const profile = {
+    name: '', role: '', domains: [], problem: '', blindspots: []
+  };
+
+  function updateProgress() {
+    const pct = ((currentStep - 1) / totalSteps) * 100;
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressBar').style.display = currentStep > 1 ? 'block' : 'none';
+  }
+
+  function showStep(n) {
+    document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+    document.getElementById('step' + n).classList.add('active');
+    currentStep = n;
+    updateProgress();
+  }
+
+  function toggleChip(el) {
+    el.classList.toggle('selected');
+  }
+
+  function getSelectedChips(containerId) {
+    return Array.from(document.querySelectorAll(`#${containerId} .chip.selected`))
+      .map(c => c.textContent.trim());
+  }
+
+  function nextStep(from) {
+    if (from === 1) {
+      profile.name = document.getElementById('q1').value.trim();
+      if (!profile.name) { document.getElementById('q1').focus(); return; }
+      // Hide hero after step 1
+      document.getElementById('heroSection').style.display = 'none';
+    }
+    if (from === 2) {
+      profile.role = document.getElementById('q2').value.trim();
+      if (!profile.role) { document.getElementById('q2').focus(); return; }
+    }
+    if (from === 3) {
+      profile.domains = getSelectedChips('domainChips');
+    }
+    if (from === 4) {
+      profile.problem = document.getElementById('q4').value.trim();
+      if (!profile.problem) { document.getElementById('q4').focus(); return; }
+    }
+    showStep(from + 1);
+  }
+
+  function prevStep(from) {
+    if (from === 2) document.getElementById('heroSection').style.display = 'block';
+    showStep(from - 1);
+  }
+
+  async function generateInsight() {
+    profile.blindspots = getSelectedChips('blindspotChips');
+
+    // Show loading
+    document.getElementById('onboarding').style.display = 'none';
+    document.getElementById('progressBar').style.display = 'none';
+    document.getElementById('loadingView').classList.add('visible');
+
+    const prompt = `You are Confluence — a polymathic thinking companion. Your mission is to build genuine wisdom and cross-disciplinary thinking in people.
+
+Here is the person's profile:
+- Name: ${profile.name}
+- What they do: ${profile.role}
+- Domains they know well: ${profile.domains.join(', ') || 'Not specified'}
+- Problem on their mind: ${profile.problem}
+- Disciplines they rarely think from (their blind spots): ${profile.blindspots.join(', ') || 'Not specified'}
+
+Your task: Generate a deeply personalised cross-disciplinary insight. 
+
+CRITICAL RULES:
+1. Pick ONE surprising discipline from their blind spots (or one they'd never expect) as the lens
+2. Use that lens to illuminate their specific problem in a way that genuinely reframes it
+3. The connection must be REAL, DEEP, and INTELLECTUALLY HONEST — not superficial or forced
+4. The tone is a brilliant, warm friend who is widely read — not a professor, not a chatbot
+5. Use their name naturally. Make it feel personal and intimate.
+6. The insight should make them think "I can't unsee this now"
+
+Return ONLY valid JSON with NO markdown, NO backticks:
+
+{
+  "lens": "Name of the discipline being used as the lens",
+  "lensEmoji": "one relevant emoji",
+  "title": "A striking, Playfair Display-worthy headline for this insight (max 10 words)",
+  "hook": "The 'bro did you know...' opening — one powerful sentence that immediately connects their world to this unexpected discipline. Make it personal, use their name.",
+  "body": "Three paragraphs. First: explain the concept from the unexpected discipline in vivid, concrete terms. Second: draw the explicit connection to their specific problem/work — be precise, not vague. Third: what this means for how they should think or act differently. Write like the most interesting person they've ever met. No jargon. No hedging. 350-400 words total.",
+  "connection": "One crisp sentence: 'The reason this matters for you specifically is...' — make it undeniable and personal.",
+  "question": "One question they cannot answer quickly. The kind that lingers for days. Make it specific to their situation, not generic.",
+  "nextLens": "Name of another unexpected discipline we'd explore next time",
+  "nextTeaser": "One sentence teasing what that next exploration would reveal about their problem"
+}`;
+
+    try {
+      const response = await fetch("https://api.anthropic.com/v1/messages", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          model: "claude-sonnet-4-20250514",
+          max_tokens: 1000,
+          messages: [{ role: "user", content: prompt }]
+        })
+      });
+
+      const data = await response.json();
+      const raw = data.content.map(b => b.text || '').join('');
+
+      let d;
+      try {
+        d = JSON.parse(raw.replace(/```json|```/g, '').trim());
+      } catch(e) {
+        throw new Error("Couldn't parse the insight. Try again.");
+      }
+
+      renderInsight(d);
+
+    } catch(err) {
+      document.getElementById('loadingView').classList.remove('visible');
+      document.getElementById('insightContent').innerHTML = `<div class="error-box">⚠ ${err.message || 'Something went wrong. Please try again.'}</div>`;
+      document.getElementById('insight-view').classList.add('visible');
+    }
+  }
+
+  function renderInsight(d) {
+    document.getElementById('loadingView').classList.remove('visible');
+
+    // Format body paragraphs
+    const paragraphs = d.body.split('\n').filter(p => p.trim()).map(p => `<p>${p}</p>`).join('');
+
+    document.getElementById('insightContent').innerHTML = `
+      <div class="insight-header">
+        <div class="insight-from">
+          <span>Today's lens</span>
+          <span class="lens-badge">${d.lensEmoji} ${d.lens}</span>
+        </div>
+        <div class="insight-title">${d.title}</div>
+        <div class="insight-discipline">Viewed through ${d.lens}</div>
+      </div>
+
+      <div class="hook">
+        <div class="hook-label">The unexpected connection</div>
+        <div class="hook-text">${d.hook}</div>
+      </div>
+
+      <div class="insight-body">${paragraphs}</div>
+
+      <div class="connection-box">
+        <div class="connection-label">Why this matters for you</div>
+        <div class="connection-text">${d.connection}</div>
+      </div>
+
+      <hr class="divider">
+
+      <div class="question-box">
+        <div class="question-label">Sit with this</div>
+        <div class="question-text">${d.question}</div>
+      </div>
+
+      <div class="teaser">
+        <div class="teaser-left">
+          <div class="teaser-label">Next time on Confluence</div>
+          <div class="teaser-text">${d.nextTeaser}</div>
+        </div>
+        <div class="teaser-lens">Through ${d.nextLens} →</div>
+      </div>
+
+      <div class="actions">
+        <button class="btn-share" onclick="shareInsight()">Share on LinkedIn</button>
+        <button class="btn-again" onclick="startAgain()">Try a different problem</button>
+      </div>
+    `;
+
+    document.getElementById('insight-view').classList.add('visible');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // Store for sharing
+    window.currentInsight = d;
+  }
+
+  function shareInsight() {
+    const d = window.currentInsight;
+    if (!d) return;
+    const text = `Just tried Confluence — a tool that builds polymathic thinking.\n\nIt looked at my problem through the lens of ${d.lens} and I genuinely can't unsee it.\n\n"${d.hook}"\n\nThe question it left me with: ${d.question}\n\nTry it yourself 👇`;
+    const url = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.href)}&summary=${encodeURIComponent(text)}`;
+    window.open(url, '_blank');
+  }
+
+  function startAgain() {
+    profile.problem = '';
+    document.getElementById('insight-view').classList.remove('visible');
+    document.getElementById('insightContent').innerHTML = '';
+    document.getElementById('onboarding').style.display = 'block';
+    document.getElementById('heroSection').style.display = 'none';
+    document.getElementById('q4').value = '';
+    showStep(4);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // Enter key support
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !e.shiftKey && currentStep < 5) {
+      const step = document.getElementById('step' + currentStep);
+      if (step && step.classList.contains('active')) {
+        const textarea = step.querySelector('textarea');
+        if (!textarea || document.activeElement !== textarea) {
+          nextStep(currentStep);
+        }
+      }
+    }
+  });
+</script>
+</body>
+</html>
