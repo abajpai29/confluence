@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Confluence — Think in Every Dimension</title>
+<title>Confluence — See Everything Connected</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;1,8..60,300;1,8..60,400&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -17,6 +17,7 @@
     --muted: #8a7d6b;
     --border: #d4c9b0;
     --gold: #b8860b;
+    --green: #2d6a4f;
   }
 
   html { scroll-behavior: smooth; }
@@ -27,11 +28,9 @@
     font-family: 'Source Serif 4', Georgia, serif;
     min-height: 100vh;
     line-height: 1.7;
-    position: relative;
     overflow-x: hidden;
   }
 
-  /* Texture overlay */
   body::before {
     content: '';
     position: fixed;
@@ -42,19 +41,8 @@
     opacity: 0.4;
   }
 
-  /* Ambient ink bleed */
-  body::after {
-    content: '';
-    position: fixed;
-    top: 0; right: 0;
-    width: 40%;
-    height: 60%;
-    background: radial-gradient(ellipse at top right, rgba(196,70,10,0.04) 0%, transparent 70%);
-    pointer-events: none;
-  }
-
   .wrap {
-    max-width: 720px;
+    max-width: 740px;
     margin: 0 auto;
     padding: 0 32px;
     position: relative;
@@ -63,54 +51,84 @@
 
   /* ── HEADER ── */
   header {
-    padding: 64px 0 48px;
+    padding: 48px 0 36px;
     border-bottom: 1px solid var(--border);
-    margin-bottom: 56px;
+    margin-bottom: 0;
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     justify-content: space-between;
   }
 
   .wordmark {
     font-family: 'Playfair Display', Georgia, serif;
-    font-size: 28px;
+    font-size: 26px;
     font-weight: 700;
     letter-spacing: -0.5px;
     color: var(--ink);
   }
 
-  .wordmark span {
-    color: var(--accent);
+  .wordmark span { color: var(--accent); }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
   }
 
-  .issue-tag {
+  .streak-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
     font-family: 'JetBrains Mono', monospace;
     font-size: 11px;
-    color: var(--muted);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    padding-top: 6px;
+    color: var(--warm);
+    letter-spacing: 0.05em;
+    background: rgba(184,134,11,0.08);
+    padding: 6px 12px;
+    border-radius: 2px;
+    border: 1px solid rgba(184,134,11,0.2);
   }
 
-  /* ── HERO ── */
-  .hero {
-    margin-bottom: 56px;
+  .btn-settings {
+    background: none;
+    border: 1px solid var(--border);
+    width: 34px;
+    height: 34px;
+    border-radius: 2px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    font-size: 14px;
+    transition: all 0.15s;
+  }
+
+  .btn-settings:hover { border-color: var(--ink); color: var(--ink); }
+
+  /* ── VIEWS ── */
+  .view { display: none; }
+  .view.active { display: block; }
+
+  /* ── LANDING ── */
+  #landing {
+    padding: 72px 0 80px;
     animation: fadeUp 0.8s ease both;
   }
 
-  .hero-eyebrow {
+  .landing-eyebrow {
     font-family: 'JetBrains Mono', monospace;
     font-size: 11px;
     color: var(--accent);
     letter-spacing: 0.15em;
     text-transform: uppercase;
-    margin-bottom: 20px;
+    margin-bottom: 24px;
     display: flex;
     align-items: center;
     gap: 10px;
   }
 
-  .hero-eyebrow::after {
+  .landing-eyebrow::after {
     content: '';
     display: block;
     height: 1px;
@@ -119,122 +137,206 @@
     opacity: 0.4;
   }
 
-  .hero h1 {
+  .landing-h1 {
     font-family: 'Playfair Display', Georgia, serif;
-    font-size: clamp(36px, 6vw, 54px);
+    font-size: clamp(38px, 6vw, 58px);
     font-weight: 700;
-    line-height: 1.15;
-    letter-spacing: -1px;
+    line-height: 1.12;
+    letter-spacing: -1.5px;
     color: var(--ink);
-    margin-bottom: 20px;
+    margin-bottom: 24px;
   }
 
-  .hero h1 em {
+  .landing-h1 em {
     font-style: italic;
     color: var(--accent);
   }
 
-  .hero p {
+  .landing-sub {
     font-size: 17px;
     color: var(--muted);
     font-weight: 300;
-    max-width: 520px;
+    max-width: 500px;
     line-height: 1.8;
+    margin-bottom: 48px;
   }
+
+  /* Example card on landing */
+  .example-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 28px 32px;
+    margin-bottom: 48px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .example-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px;
+    height: 100%;
+    background: var(--accent);
+  }
+
+  .example-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+
+  .example-lens {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 4px 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border-radius: 1px;
+    margin-bottom: 16px;
+  }
+
+  .example-text {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 18px;
+    font-style: italic;
+    line-height: 1.55;
+    color: var(--ink);
+    margin-bottom: 12px;
+  }
+
+  .example-field {
+    font-size: 13px;
+    color: var(--muted);
+    font-weight: 300;
+  }
+
+  .example-field strong {
+    color: var(--warm);
+    font-weight: 400;
+  }
+
+  .btn-start {
+    background: var(--ink);
+    color: var(--paper);
+    border: none;
+    padding: 16px 40px;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 17px;
+    font-style: italic;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .btn-start:hover { background: var(--accent); }
 
   /* ── ONBOARDING ── */
   #onboarding {
-    animation: fadeUp 0.8s 0.1s ease both;
-  }
-
-  .step {
-    display: none;
+    padding: 64px 0 80px;
     animation: fadeUp 0.5s ease both;
   }
 
-  .step.active { display: block; }
+  .onboard-step { display: none; }
+  .onboard-step.active { display: block; animation: fadeUp 0.4s ease both; }
 
-  .step-num {
+  .step-counter {
     font-family: 'JetBrains Mono', monospace;
     font-size: 11px;
     color: var(--muted);
     letter-spacing: 0.1em;
-    margin-bottom: 16px;
     text-transform: uppercase;
+    margin-bottom: 20px;
   }
 
   .step-q {
     font-family: 'Playfair Display', Georgia, serif;
-    font-size: 24px;
+    font-size: 28px;
     font-weight: 600;
+    line-height: 1.25;
     color: var(--ink);
-    line-height: 1.3;
     margin-bottom: 8px;
   }
 
-  .step-sub {
+  .step-hint {
     font-size: 14px;
     color: var(--muted);
-    margin-bottom: 28px;
     font-style: italic;
+    margin-bottom: 32px;
   }
 
-  /* Input styles */
-  .input-field {
+  .input-name {
     width: 100%;
     background: white;
     border: 1px solid var(--border);
     border-radius: 2px;
     padding: 16px 20px;
     font-family: 'Source Serif 4', Georgia, serif;
-    font-size: 16px;
+    font-size: 18px;
     color: var(--ink);
     outline: none;
     transition: border-color 0.2s;
-    resize: none;
-    line-height: 1.7;
   }
 
-  .input-field:focus { border-color: var(--warm); }
-  .input-field::placeholder { color: #bbb; font-style: italic; }
+  .input-name:focus { border-color: var(--warm); }
+  .input-name::placeholder { color: #ccc; font-style: italic; }
 
-  /* Chip options */
-  .chips {
-    display: flex;
-    flex-wrap: wrap;
+  .field-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 10px;
     margin-bottom: 8px;
   }
 
-  .chip {
-    padding: 10px 18px;
+  .field-card {
+    background: white;
     border: 1px solid var(--border);
     border-radius: 2px;
-    font-family: 'Source Serif 4', Georgia, serif;
-    font-size: 14px;
-    color: var(--muted);
+    padding: 14px 18px;
     cursor: pointer;
     transition: all 0.15s;
-    background: white;
     user-select: none;
   }
 
-  .chip:hover { border-color: var(--warm); color: var(--warm); }
-  .chip.selected { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .field-card:hover { border-color: var(--warm); }
 
-  .chip-hint {
-    font-size: 12px;
-    color: var(--muted);
-    font-style: italic;
-    margin-top: 8px;
+  .field-card.selected {
+    background: var(--ink);
+    border-color: var(--ink);
   }
 
-  /* Navigation */
+  .field-card-name {
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 14px;
+    color: var(--muted);
+    transition: color 0.15s;
+  }
+
+  .field-card.selected .field-card-name { color: var(--paper); }
+
+  .field-card-icon {
+    font-size: 18px;
+    margin-bottom: 6px;
+    display: block;
+  }
+
   .step-nav {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-top: 32px;
+    margin-top: 36px;
     padding-top: 24px;
     border-top: 1px solid var(--border);
   }
@@ -271,281 +373,19 @@
   .btn-next:hover { background: var(--accent); }
   .btn-next:disabled { opacity: 0.3; cursor: not-allowed; }
 
-  .btn-next .spinner {
-    width: 14px; height: 14px;
-    border: 1.5px solid rgba(245,240,232,0.3);
-    border-top-color: var(--paper);
-    border-radius: 50%;
-    animation: spin 0.7s linear infinite;
-    display: none;
-  }
-
-  .btn-next.loading .spinner { display: block; }
-  .btn-next.loading .btn-label { display: none; }
-
-  /* Progress bar */
-  .progress {
-    height: 2px;
-    background: var(--border);
-    margin-bottom: 48px;
-    border-radius: 1px;
-    overflow: hidden;
-  }
-
-  .progress-fill {
-    height: 100%;
-    background: var(--accent);
-    border-radius: 1px;
-    transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  /* ── INSIGHT ── */
-  #insight-view {
-    display: none;
-    animation: fadeUp 0.6s ease both;
-  }
-
-  #insight-view.visible { display: block; }
-
-  .insight-header {
-    margin-bottom: 40px;
-  }
-
-  .insight-from {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 11px;
-    color: var(--muted);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    margin-bottom: 12px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  .lens-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: var(--ink);
-    color: var(--paper);
-    padding: 4px 12px;
-    border-radius: 1px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-  }
-
-  .insight-title {
-    font-family: 'Playfair Display', Georgia, serif;
-    font-size: clamp(26px, 4vw, 38px);
-    font-weight: 700;
-    line-height: 1.2;
-    color: var(--ink);
-    letter-spacing: -0.5px;
-    margin-bottom: 8px;
-  }
-
-  .insight-discipline {
-    font-size: 13px;
-    color: var(--accent);
-    font-family: 'JetBrains Mono', monospace;
-    letter-spacing: 0.05em;
-    margin-bottom: 32px;
-  }
-
-  /* The hook */
-  .hook {
-    border-left: 3px solid var(--accent);
-    padding: 20px 24px;
-    margin-bottom: 32px;
-    background: white;
-  }
-
-  .hook-label {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    color: var(--accent);
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    margin-bottom: 10px;
-  }
-
-  .hook-text {
-    font-family: 'Playfair Display', Georgia, serif;
-    font-size: 19px;
-    font-style: italic;
-    line-height: 1.5;
-    color: var(--ink);
-  }
-
-  /* Body sections */
-  .insight-body {
-    font-size: 16px;
-    line-height: 1.9;
-    color: #3a3028;
-    font-weight: 300;
-    margin-bottom: 32px;
-  }
-
-  .insight-body p { margin-bottom: 20px; }
-
-  .insight-body p:last-child { margin-bottom: 0; }
-
-  /* Connection */
-  .connection-box {
-    background: var(--paper2);
-    border: 1px solid var(--border);
-    padding: 24px;
-    margin-bottom: 32px;
-    border-radius: 2px;
-  }
-
-  .connection-label {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    color: var(--warm);
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    margin-bottom: 12px;
-  }
-
-  .connection-text {
-    font-size: 15px;
-    line-height: 1.8;
-    color: var(--ink);
-    font-weight: 300;
-  }
-
-  /* The question */
-  .question-box {
-    border-top: 2px solid var(--ink);
-    padding-top: 28px;
-    margin-bottom: 40px;
-  }
-
-  .question-label {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    color: var(--muted);
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    margin-bottom: 14px;
-  }
-
-  .question-text {
-    font-family: 'Playfair Display', Georgia, serif;
-    font-size: 22px;
-    font-style: italic;
-    line-height: 1.4;
-    color: var(--ink);
-  }
-
-  /* Next lens teaser */
-  .teaser {
-    background: var(--ink);
-    color: var(--paper);
-    padding: 24px 28px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 20px;
-    border-radius: 2px;
-    margin-bottom: 32px;
-  }
-
-  .teaser-left { flex: 1; }
-
-  .teaser-label {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    color: rgba(245,240,232,0.4);
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    margin-bottom: 8px;
-  }
-
-  .teaser-text {
-    font-size: 15px;
-    color: var(--paper);
-    font-weight: 300;
-    line-height: 1.5;
-  }
-
-  .teaser-lens {
-    font-family: 'Playfair Display', Georgia, serif;
-    font-size: 13px;
-    font-style: italic;
-    color: rgba(245,240,232,0.6);
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
-
-  /* Actions */
-  .actions {
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-    padding-bottom: 80px;
-  }
-
-  .btn-share {
-    background: var(--accent);
-    color: white;
-    border: none;
-    padding: 14px 28px;
-    font-family: 'Playfair Display', Georgia, serif;
-    font-size: 15px;
-    font-style: italic;
-    cursor: pointer;
-    border-radius: 2px;
-    transition: all 0.15s;
-  }
-
-  .btn-share:hover { background: #a33a08; }
-
-  .btn-again {
-    background: transparent;
-    color: var(--ink);
-    border: 1px solid var(--border);
-    padding: 14px 28px;
-    font-family: 'Source Serif 4', Georgia, serif;
-    font-size: 14px;
-    cursor: pointer;
-    border-radius: 2px;
-    transition: all 0.15s;
-  }
-
-  .btn-again:hover { border-color: var(--ink); }
-
-  /* Error */
-  .error-box {
-    background: #fff5f5;
-    border: 1px solid #fcc;
-    padding: 20px 24px;
-    border-radius: 2px;
-    font-size: 14px;
-    color: #c00;
-    font-family: 'JetBrains Mono', monospace;
-  }
-
-  /* Loading state */
-  .loading-view {
-    display: none;
+  /* ── LOADING ── */
+  #loading {
+    padding: 100px 0;
     text-align: center;
-    padding: 80px 0;
   }
 
-  .loading-view.visible { display: block; }
-
-  .loading-ink {
+  .loading-text {
     font-family: 'Playfair Display', Georgia, serif;
     font-size: 22px;
     font-style: italic;
     color: var(--muted);
     animation: pulse 2s ease-in-out infinite;
-    margin-bottom: 16px;
+    margin-bottom: 12px;
   }
 
   .loading-sub {
@@ -556,7 +396,495 @@
     text-transform: uppercase;
   }
 
-  /* Footer */
+  /* ── CARD VIEW ── */
+  #cardview {
+    padding: 56px 0 80px;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  /* Card meta row */
+  .card-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .card-meta-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .card-number {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .lens-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 5px 12px;
+    border-radius: 1px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .level-pill {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 5px 10px;
+    border-radius: 1px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+  }
+
+  .level-pill.l1 { border-color: #b8d4c8; color: var(--green); background: rgba(45,106,79,0.06); }
+  .level-pill.l2 { border-color: var(--warm); color: var(--warm); background: rgba(139,105,20,0.06); }
+  .level-pill.l3 { border-color: var(--accent); color: var(--accent); background: rgba(196,70,10,0.06); }
+
+  /* Card title */
+  .card-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(28px, 4.5vw, 42px);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.8px;
+    color: var(--ink);
+    margin-bottom: 32px;
+  }
+
+  /* Hook */
+  .card-hook {
+    border-left: 3px solid var(--accent);
+    padding: 20px 24px;
+    margin-bottom: 28px;
+    background: white;
+  }
+
+  .card-hook-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .card-hook-text {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 19px;
+    font-style: italic;
+    line-height: 1.5;
+    color: var(--ink);
+  }
+
+  /* Body */
+  .card-body {
+    font-size: 16px;
+    line-height: 1.9;
+    color: #3a3028;
+    font-weight: 300;
+    margin-bottom: 28px;
+  }
+
+  .card-body p { margin-bottom: 18px; }
+  .card-body p:last-child { margin-bottom: 0; }
+
+  /* Why it matters */
+  .card-why {
+    background: var(--paper2);
+    border: 1px solid var(--border);
+    padding: 22px 26px;
+    margin-bottom: 28px;
+    border-radius: 2px;
+  }
+
+  .card-why-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--warm);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .card-why-text {
+    font-size: 15px;
+    line-height: 1.8;
+    color: var(--ink);
+    font-weight: 300;
+  }
+
+  /* Question */
+  .card-question {
+    border-top: 2px solid var(--ink);
+    padding-top: 26px;
+    margin-bottom: 36px;
+  }
+
+  .card-question-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .card-question-text {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 22px;
+    font-style: italic;
+    line-height: 1.4;
+    color: var(--ink);
+  }
+
+  /* ── PROGRESS SECTION ── */
+  .progress-section {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 28px 28px 24px;
+    margin-bottom: 28px;
+  }
+
+  .progress-section-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .thinker-level {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 15px;
+    font-style: italic;
+    color: var(--ink);
+  }
+
+  /* Radar / lattice */
+  .lattice-wrap {
+    display: flex;
+    align-items: flex-start;
+    gap: 28px;
+    margin-bottom: 20px;
+  }
+
+  #latticeCanvas {
+    flex-shrink: 0;
+  }
+
+  .lattice-legend {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    font-size: 12px;
+    color: var(--muted);
+    font-family: 'Source Serif 4', Georgia, serif;
+  }
+
+  .legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .legend-item.seen .legend-dot { background: var(--accent); }
+  .legend-item.unseen .legend-dot { background: var(--border); }
+  .legend-item .legend-disc { font-weight: 400; color: var(--ink); }
+  .legend-item .legend-level {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    margin-left: auto;
+  }
+
+  /* Stats row */
+  .stats-row {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .stat-box {
+    flex: 1;
+    min-width: 100px;
+    background: var(--paper2);
+    border-radius: 2px;
+    padding: 14px 16px;
+    text-align: center;
+  }
+
+  .stat-num {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .stat-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  /* Milestone toast */
+  .milestone-toast {
+    position: fixed;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: var(--ink);
+    color: var(--paper);
+    padding: 16px 28px;
+    border-radius: 3px;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 15px;
+    font-style: italic;
+    z-index: 200;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    text-align: center;
+    max-width: 360px;
+    width: 90%;
+  }
+
+  .milestone-toast.show { transform: translateX(-50%) translateY(0); }
+
+  .milestone-toast-sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: rgba(245,240,232,0.5);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-top: 6px;
+  }
+
+  /* Next teaser */
+  .card-teaser {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 22px 26px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    border-radius: 2px;
+    margin-bottom: 28px;
+  }
+
+  .teaser-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: rgba(245,240,232,0.4);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .teaser-text {
+    font-size: 14px;
+    color: var(--paper);
+    font-weight: 300;
+    line-height: 1.5;
+  }
+
+  .teaser-lens-name {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 13px;
+    font-style: italic;
+    color: rgba(245,240,232,0.5);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  /* Actions */
+  .card-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .btn-next-card {
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 14px 28px;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 15px;
+    font-style: italic;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .btn-next-card:hover { background: #a33a08; }
+
+  .btn-share {
+    background: transparent;
+    color: var(--ink);
+    border: 1px solid var(--border);
+    padding: 14px 24px;
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.15s;
+  }
+
+  .btn-share:hover { border-color: var(--ink); }
+
+  .spinner {
+    width: 14px; height: 14px;
+    border: 1.5px solid rgba(245,240,232,0.3);
+    border-top-color: var(--paper);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    display: none;
+  }
+
+  .loading-btn .spinner { display: block; }
+  .loading-btn .btn-label { display: none; }
+
+  /* Error */
+  .error-box {
+    background: #fff5f5;
+    border: 1px solid #fcc;
+    padding: 20px 24px;
+    border-radius: 2px;
+    font-size: 14px;
+    color: #c00;
+    font-family: 'JetBrains Mono', monospace;
+    margin-bottom: 20px;
+  }
+
+  /* ── SETTINGS MODAL ── */
+  .modal-bg {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(26,22,20,0.6);
+    z-index: 300;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .modal-bg.open { display: flex; }
+
+  .modal {
+    background: var(--paper);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 36px;
+    width: 90%;
+    max-width: 440px;
+    animation: fadeUp 0.3s ease both;
+  }
+
+  .modal-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 8px;
+  }
+
+  .modal-sub {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 24px;
+    line-height: 1.6;
+  }
+
+  .modal-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .modal-input {
+    width: 100%;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    padding: 12px 16px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.2s;
+    margin-bottom: 20px;
+  }
+
+  .modal-input:focus { border-color: var(--warm); }
+
+  .modal-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+  }
+
+  .btn-modal-save {
+    background: var(--ink);
+    color: var(--paper);
+    border: none;
+    padding: 10px 24px;
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.15s;
+  }
+
+  .btn-modal-save:hover { background: var(--accent); }
+
+  .btn-modal-cancel {
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    padding: 10px 20px;
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 2px;
+  }
+
+  /* ── FOOTER ── */
   footer {
     border-top: 1px solid var(--border);
     padding: 24px 0;
@@ -569,32 +897,26 @@
     letter-spacing: 0.05em;
   }
 
-  /* Animations */
+  /* ── ANIMATIONS ── */
   @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(20px); }
+    from { opacity: 0; transform: translateY(16px); }
     to { opacity: 1; transform: translateY(0); }
   }
 
-  @keyframes spin {
-    to { transform: rotate(360deg); }
-  }
+  @keyframes spin { to { transform: rotate(360deg); } }
 
   @keyframes pulse {
     0%, 100% { opacity: 1; }
     50% { opacity: 0.4; }
   }
 
-  /* Divider */
-  .divider {
-    border: none;
-    border-top: 1px solid var(--border);
-    margin: 36px 0;
-  }
-
   @media (max-width: 600px) {
     .wrap { padding: 0 20px; }
-    header { padding: 40px 0 32px; }
-    .teaser { flex-direction: column; align-items: flex-start; }
+    header { padding: 32px 0 24px; }
+    .field-grid { grid-template-columns: 1fr 1fr; }
+    .lattice-wrap { flex-direction: column; }
+    .card-teaser { flex-direction: column; align-items: flex-start; }
+    .stats-row { gap: 10px; }
   }
 </style>
 </head>
@@ -602,155 +924,152 @@
 
 <div class="wrap">
   <header>
-    <div>
-      <div class="wordmark">Con<span>fluence</span></div>
+    <div class="wordmark">Con<span>fluence</span></div>
+    <div class="header-right">
+      <div class="streak-badge" id="streakBadge" style="display:none">
+        🔥 <span id="streakCount">0</span> day streak
+      </div>
+      <button class="btn-settings" onclick="openSettings()" title="API Key Settings">⚙</button>
     </div>
-    <div class="issue-tag">Think in Every Dimension</div>
   </header>
+</div>
 
-  <!-- HERO -->
-  <div class="hero" id="heroSection">
-    <div class="hero-eyebrow">For the perpetually curious</div>
-    <h1>The world makes more sense<br>when you see it through<br><em>every lens.</em></h1>
-    <p>Tell us who you are. We'll show you something about your world that you've never seen before — through a discipline you'd never have reached for yourself.</p>
+<!-- ── LANDING ── -->
+<div class="wrap">
+  <div class="view active" id="landing">
+    <div class="landing-eyebrow">For the polymathic mind</div>
+    <h1 class="landing-h1">Everything is connected.<br><em>Most people never see it.</em></h1>
+    <p class="landing-sub">Confluence builds the habit of cross-disciplinary thinking — one unexpected connection at a time. Tell us your world. We'll show you what you've been missing.</p>
+
+    <div class="example-card">
+      <div class="example-label">Example connection</div>
+      <div class="example-lens">🧬 Evolutionary Biology</div>
+      <div class="example-text">"The reason your best strategy eventually stops working isn't bad execution — it's the Red Queen Effect. In evolution, every species must keep running just to stay in the same place, because its rivals are evolving too. Markets, careers, and products follow the exact same law."</div>
+      <div class="example-field">Seen through <strong>Evolutionary Biology</strong> — for anyone in Business, Strategy, or Tech</div>
+    </div>
+
+    <button class="btn-start" onclick="showView('onboarding'); showOnboardStep(1)">
+      Start building your mind →
+    </button>
   </div>
+</div>
 
-  <!-- PROGRESS -->
-  <div class="progress" id="progressBar" style="display:none">
-    <div class="progress-fill" id="progressFill" style="width:0%"></div>
-  </div>
+<!-- ── ONBOARDING ── -->
+<div class="wrap">
+  <div class="view" id="onboarding">
 
-  <!-- ONBOARDING -->
-  <div id="onboarding">
-
-    <!-- Step 1 -->
-    <div class="step active" id="step1">
-      <div class="step-num">01 of 05</div>
+    <!-- Step 1: Name -->
+    <div class="onboard-step active" id="ostep1">
+      <div class="step-counter">Step 1 of 2</div>
       <div class="step-q">What's your name?</div>
-      <div class="step-sub">Just your first name is fine.</div>
-      <input type="text" class="input-field" id="q1" placeholder="e.g. Arjun" maxlength="50">
+      <div class="step-hint">Just your first name — so your cards feel personal.</div>
+      <input type="text" class="input-name" id="inputName" placeholder="e.g. Arjun" maxlength="40" autocomplete="off">
       <div class="step-nav">
-        <span></span>
-        <button class="btn-next" onclick="nextStep(1)">
-          <div class="spinner"></div>
-          <span class="btn-label">Continue →</span>
-        </button>
+        <button class="btn-back" onclick="showView('landing')">← Back</button>
+        <button class="btn-next" onclick="onboardNext1()">Continue →</button>
       </div>
     </div>
 
-    <!-- Step 2 -->
-    <div class="step" id="step2">
-      <div class="step-num">02 of 05</div>
-      <div class="step-q">What do you do?</div>
-      <div class="step-sub">Your work, field, or how you'd describe yourself professionally.</div>
-      <textarea class="input-field" id="q2" rows="3" placeholder="e.g. Product manager at a fintech startup, been in banking for 8 years before that"></textarea>
+    <!-- Step 2: Field -->
+    <div class="onboard-step" id="ostep2">
+      <div class="step-counter">Step 2 of 2</div>
+      <div class="step-q" id="fieldQuestion">And your world, <span id="nameInQ">friend</span>?</div>
+      <div class="step-hint">Pick the field closest to how you spend your thinking time.</div>
+      <div class="field-grid" id="fieldGrid">
+        <div class="field-card" onclick="selectField(this, 'Business & Strategy')">
+          <span class="field-card-icon">📊</span>
+          <div class="field-card-name">Business & Strategy</div>
+        </div>
+        <div class="field-card" onclick="selectField(this, 'Technology & Engineering')">
+          <span class="field-card-icon">⚙️</span>
+          <div class="field-card-name">Technology & Engineering</div>
+        </div>
+        <div class="field-card" onclick="selectField(this, 'Medicine & Health')">
+          <span class="field-card-icon">🩺</span>
+          <div class="field-card-name">Medicine & Health</div>
+        </div>
+        <div class="field-card" onclick="selectField(this, 'Law & Policy')">
+          <span class="field-card-icon">⚖️</span>
+          <div class="field-card-name">Law & Policy</div>
+        </div>
+        <div class="field-card" onclick="selectField(this, 'Finance & Economics')">
+          <span class="field-card-icon">💹</span>
+          <div class="field-card-name">Finance & Economics</div>
+        </div>
+        <div class="field-card" onclick="selectField(this, 'Arts & Design')">
+          <span class="field-card-icon">🎨</span>
+          <div class="field-card-name">Arts & Design</div>
+        </div>
+        <div class="field-card" onclick="selectField(this, 'Education & Research')">
+          <span class="field-card-icon">📚</span>
+          <div class="field-card-name">Education & Research</div>
+        </div>
+        <div class="field-card" onclick="selectField(this, 'Politics & Governance')">
+          <span class="field-card-icon">🏛️</span>
+          <div class="field-card-name">Politics & Governance</div>
+        </div>
+        <div class="field-card" onclick="selectField(this, 'Social Sciences')">
+          <span class="field-card-icon">🧠</span>
+          <div class="field-card-name">Social Sciences</div>
+        </div>
+        <div class="field-card" onclick="selectField(this, 'Science & Research')">
+          <span class="field-card-icon">🔬</span>
+          <div class="field-card-name">Science & Research</div>
+        </div>
+        <div class="field-card" onclick="selectField(this, 'Media & Communication')">
+          <span class="field-card-icon">📡</span>
+          <div class="field-card-name">Media & Communication</div>
+        </div>
+        <div class="field-card" onclick="selectField(this, 'Entrepreneurship')">
+          <span class="field-card-icon">🚀</span>
+          <div class="field-card-name">Entrepreneurship</div>
+        </div>
+      </div>
       <div class="step-nav">
-        <button class="btn-back" onclick="prevStep(2)">← Back</button>
-        <button class="btn-next" onclick="nextStep(2)">
+        <button class="btn-back" onclick="showOnboardStep(1)">← Back</button>
+        <button class="btn-next" id="btnGenFirst" onclick="startJourney()" disabled>
           <div class="spinner"></div>
-          <span class="btn-label">Continue →</span>
-        </button>
-      </div>
-    </div>
-
-    <!-- Step 3 -->
-    <div class="step" id="step3">
-      <div class="step-num">03 of 05</div>
-      <div class="step-q">Which domains have shaped your thinking?</div>
-      <div class="step-sub">Pick everything that applies — education, work, deep interests, obsessions.</div>
-      <div class="chips" id="domainChips">
-        <div class="chip" onclick="toggleChip(this)">Engineering / STEM</div>
-        <div class="chip" onclick="toggleChip(this)">Economics</div>
-        <div class="chip" onclick="toggleChip(this)">Philosophy</div>
-        <div class="chip" onclick="toggleChip(this)">History</div>
-        <div class="chip" onclick="toggleChip(this)">Business / Strategy</div>
-        <div class="chip" onclick="toggleChip(this)">Politics / Governance</div>
-        <div class="chip" onclick="toggleChip(this)">Sociology</div>
-        <div class="chip" onclick="toggleChip(this)">Psychology</div>
-        <div class="chip" onclick="toggleChip(this)">Law</div>
-        <div class="chip" onclick="toggleChip(this)">Medicine / Health</div>
-        <div class="chip" onclick="toggleChip(this)">Environment / Climate</div>
-        <div class="chip" onclick="toggleChip(this)">International Relations</div>
-        <div class="chip" onclick="toggleChip(this)">Arts / Literature</div>
-        <div class="chip" onclick="toggleChip(this)">Mathematics</div>
-        <div class="chip" onclick="toggleChip(this)">Biology / Life Sciences</div>
-        <div class="chip" onclick="toggleChip(this)">Computer Science / AI</div>
-        <div class="chip" onclick="toggleChip(this)">Finance / Investing</div>
-        <div class="chip" onclick="toggleChip(this)">Urban Studies</div>
-        <div class="chip" onclick="toggleChip(this)">Anthropology</div>
-        <div class="chip" onclick="toggleChip(this)">Spirituality / Religion</div>
-      </div>
-      <div class="chip-hint">Select as many as feel true.</div>
-      <div class="step-nav">
-        <button class="btn-back" onclick="prevStep(3)">← Back</button>
-        <button class="btn-next" onclick="nextStep(3)">
-          <div class="spinner"></div>
-          <span class="btn-label">Continue →</span>
-        </button>
-      </div>
-    </div>
-
-    <!-- Step 4 -->
-    <div class="step" id="step4">
-      <div class="step-num">04 of 05</div>
-      <div class="step-q">What problem or question is living rent-free in your head right now?</div>
-      <div class="step-sub">A work challenge, a life question, something you keep returning to. The more specific, the better.</div>
-      <textarea class="input-field" id="q4" rows="4" placeholder="e.g. Why do our best employees leave after 2 years no matter what we try? Or: I'm trying to understand why smart people keep making the same policy mistakes."></textarea>
-      <div class="step-nav">
-        <button class="btn-back" onclick="prevStep(4)">← Back</button>
-        <button class="btn-next" onclick="nextStep(4)">
-          <div class="spinner"></div>
-          <span class="btn-label">Continue →</span>
-        </button>
-      </div>
-    </div>
-
-    <!-- Step 5 -->
-    <div class="step" id="step5">
-      <div class="step-num">05 of 05</div>
-      <div class="step-q">What disciplines do you almost never think from?</div>
-      <div class="step-sub">The ones that feel foreign, that you skipped, that you "weren't good at." These are your blind spots — and your biggest opportunity.</div>
-      <div class="chips" id="blindspotChips">
-        <div class="chip" onclick="toggleChip(this)">Biology / Evolution</div>
-        <div class="chip" onclick="toggleChip(this)">Physics</div>
-        <div class="chip" onclick="toggleChip(this)">Chemistry</div>
-        <div class="chip" onclick="toggleChip(this)">Philosophy</div>
-        <div class="chip" onclick="toggleChip(this)">Anthropology</div>
-        <div class="chip" onclick="toggleChip(this)">Military History</div>
-        <div class="chip" onclick="toggleChip(this)">Neuroscience</div>
-        <div class="chip" onclick="toggleChip(this)">Linguistics</div>
-        <div class="chip" onclick="toggleChip(this)">Thermodynamics</div>
-        <div class="chip" onclick="toggleChip(this)">Mythology</div>
-        <div class="chip" onclick="toggleChip(this)">Game Theory</div>
-        <div class="chip" onclick="toggleChip(this)">Complexity Theory</div>
-        <div class="chip" onclick="toggleChip(this)">Ecology</div>
-        <div class="chip" onclick="toggleChip(this)">Architecture</div>
-        <div class="chip" onclick="toggleChip(this)">Music Theory</div>
-        <div class="chip" onclick="toggleChip(this)">Geography</div>
-      </div>
-      <div class="chip-hint">These are the lenses we'll use to surprise you.</div>
-      <div class="step-nav">
-        <button class="btn-back" onclick="prevStep(5)">← Back</button>
-        <button class="btn-next" id="generateBtn" onclick="generateInsight()">
-          <div class="spinner"></div>
-          <span class="btn-label">Show me what I'm missing →</span>
+          <span class="btn-label">Begin my journey →</span>
         </button>
       </div>
     </div>
 
   </div>
+</div>
 
-  <!-- LOADING -->
-  <div class="loading-view" id="loadingView">
-    <div class="loading-ink">Finding the unexpected connection...</div>
+<!-- ── LOADING ── -->
+<div class="wrap">
+  <div class="view" id="loading">
+    <div class="loading-text">Finding the unexpected connection...</div>
     <div class="loading-sub">Traversing disciplines</div>
   </div>
+</div>
 
-  <!-- INSIGHT -->
-  <div id="insight-view">
-    <div id="insightContent"></div>
+<!-- ── CARD VIEW ── -->
+<div class="wrap">
+  <div class="view" id="cardview">
+    <div id="cardContent"></div>
   </div>
+</div>
 
+<!-- ── SETTINGS MODAL ── -->
+<div class="modal-bg" id="settingsModal">
+  <div class="modal">
+    <div class="modal-title">API Key</div>
+    <div class="modal-sub">Confluence uses the Claude API to generate your connections. Your key is stored only in your browser — never sent anywhere else.</div>
+    <label class="modal-label" for="apiKeyInput">Anthropic API Key</label>
+    <input type="password" class="modal-input" id="apiKeyInput" placeholder="sk-ant-...">
+    <div class="modal-actions">
+      <button class="btn-modal-cancel" onclick="closeSettings()">Cancel</button>
+      <button class="btn-modal-save" onclick="saveSettings()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── MILESTONE TOAST ── -->
+<div class="milestone-toast" id="milestoneToast">
+  <div id="milestoneMsg"></div>
+  <div class="milestone-toast-sub" id="milestoneSub"></div>
 </div>
 
 <!-- Footer -->
@@ -762,219 +1081,506 @@
 </div>
 
 <script>
-  let currentStep = 1;
-  const totalSteps = 5;
+// ── STATE ──
+const DISCIPLINES = [
+  'Evolutionary Biology', 'Thermodynamics', 'Game Theory',
+  'Ecology', 'Neuroscience', 'Complexity Theory',
+  'Anthropology', 'Military History', 'Philosophy',
+  'Linguistics', 'Architecture', 'Music Theory',
+  'Mythology', 'Chemistry', 'Geology',
+  'Astronomy', 'Epidemiology', 'Behavioural Economics',
+  'Immunology', 'Information Theory'
+];
 
-  const profile = {
-    name: '', role: '', domains: [], problem: '', blindspots: []
-  };
+const THINKER_LEVELS = [
+  { breadth: 0,  avgDepth: 0, label: 'The Newcomer',         desc: 'Your journey begins.' },
+  { breadth: 2,  avgDepth: 1, label: 'The Curious',          desc: 'You\'ve started looking beyond your lane.' },
+  { breadth: 5,  avgDepth: 1, label: 'The Explorer',         desc: 'New disciplines are becoming familiar territory.' },
+  { breadth: 8,  avgDepth: 1.5, label: 'Cross-Domain Thinker', desc: 'You\'re making connections most people miss.' },
+  { breadth: 12, avgDepth: 2, label: 'Systems Thinker',      desc: 'You see structure where others see noise.' },
+  { breadth: 16, avgDepth: 2.5, label: 'The Polymath',       desc: 'Munger\'s latticework is real in your mind.' },
+];
 
-  function updateProgress() {
-    const pct = ((currentStep - 1) / totalSteps) * 100;
-    document.getElementById('progressFill').style.width = pct + '%';
-    document.getElementById('progressBar').style.display = currentStep > 1 ? 'block' : 'none';
+let state = {
+  name: '',
+  field: '',
+  selectedField: null,
+  cardCount: 0,
+  // disciplineProgress: { "Evolutionary Biology": { seen: true, level: 1 }, ... }
+  disciplineProgress: {},
+  streak: 0,
+  lastVisitDate: null,
+  apiKey: ''
+};
+
+function loadState() {
+  const saved = localStorage.getItem('confluence_state');
+  if (saved) {
+    try { Object.assign(state, JSON.parse(saved)); } catch(e) {}
+  }
+  const key = localStorage.getItem('confluence_key');
+  if (key) state.apiKey = key;
+}
+
+function saveState() {
+  const toSave = { ...state };
+  delete toSave.apiKey;
+  localStorage.setItem('confluence_state', JSON.stringify(toSave));
+  if (state.apiKey) localStorage.setItem('confluence_key', state.apiKey);
+}
+
+function updateStreak() {
+  const today = new Date().toDateString();
+  if (state.lastVisitDate === today) return;
+  const yesterday = new Date(Date.now() - 86400000).toDateString();
+  if (state.lastVisitDate === yesterday) {
+    state.streak = (state.streak || 0) + 1;
+  } else if (state.lastVisitDate !== today) {
+    state.streak = 1;
+  }
+  state.lastVisitDate = today;
+  saveState();
+}
+
+function renderStreak() {
+  const badge = document.getElementById('streakBadge');
+  if (state.streak >= 2) {
+    badge.style.display = 'flex';
+    document.getElementById('streakCount').textContent = state.streak;
+  }
+}
+
+// ── VIEWS ──
+function showView(id) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function showOnboardStep(n) {
+  document.querySelectorAll('.onboard-step').forEach(s => s.classList.remove('active'));
+  document.getElementById('ostep' + n).classList.add('active');
+}
+
+// ── ONBOARDING ──
+function onboardNext1() {
+  const name = document.getElementById('inputName').value.trim();
+  if (!name) { document.getElementById('inputName').focus(); return; }
+  state.name = name;
+  document.getElementById('nameInQ').textContent = name;
+  showOnboardStep(2);
+}
+
+function selectField(el, fieldName) {
+  document.querySelectorAll('.field-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  state.field = fieldName;
+  state.selectedField = el;
+  document.getElementById('btnGenFirst').disabled = false;
+}
+
+async function startJourney() {
+  if (!state.field) return;
+  saveState();
+  updateStreak();
+  renderStreak();
+  await generateCard();
+}
+
+// ── CARD GENERATION ──
+function getNextDiscipline() {
+  // Priority: unseen disciplines first (breadth), then lowest level (depth)
+  const unseen = DISCIPLINES.filter(d => !state.disciplineProgress[d]);
+  if (unseen.length > 0) {
+    return unseen[Math.floor(Math.random() * Math.min(unseen.length, 5))];
+  }
+  // All seen — find lowest level
+  const byLevel = [...DISCIPLINES].sort((a, b) => {
+    const la = state.disciplineProgress[a]?.level || 0;
+    const lb = state.disciplineProgress[b]?.level || 0;
+    return la - lb;
+  });
+  return byLevel[0];
+}
+
+function getDisciplineLevel(disc) {
+  return state.disciplineProgress[disc]?.level || 0;
+}
+
+function getNextLevel(disc) {
+  const current = getDisciplineLevel(disc);
+  return Math.min(current + 1, 3);
+}
+
+function getLevelLabel(level) {
+  if (level === 1) return { label: 'L1 · Surface', cls: 'l1' };
+  if (level === 2) return { label: 'L2 · Structure', cls: 'l2' };
+  return { label: 'L3 · Paradigm', cls: 'l3' };
+}
+
+function getLevelInstruction(level) {
+  if (level === 1) return `Level 1 — Surface Connection: Show a clear, accessible parallel between this discipline and their field. The "aha, these rhyme" moment. Vivid and concrete.`;
+  if (level === 2) return `Level 2 — Structural Parallel: Go deeper. Show that these two fields share the same underlying mechanism, not just a surface similarity. The "they work the same way underneath" moment.`;
+  return `Level 3 — Paradigm Shift: The deepest level. Show how a concept from this discipline completely reframes how they should think about something fundamental in their field. The "I can never unsee this" moment.`;
+}
+
+async function generateCard(disciplineOverride) {
+  if (!state.apiKey) {
+    openSettings();
+    return;
   }
 
-  function showStep(n) {
-    document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
-    document.getElementById('step' + n).classList.add('active');
-    currentStep = n;
-    updateProgress();
-  }
+  const discipline = disciplineOverride || getNextDiscipline();
+  const level = getNextLevel(discipline);
+  const levelInstr = getLevelInstruction(level);
 
-  function toggleChip(el) {
-    el.classList.toggle('selected');
-  }
+  showView('loading');
 
-  function getSelectedChips(containerId) {
-    return Array.from(document.querySelectorAll(`#${containerId} .chip.selected`))
-      .map(c => c.textContent.trim());
-  }
+  const prompt = `You are Confluence — a polymathic thinking companion. Your mission: build genuine cross-disciplinary thinking in people by showing them unexpected connections.
 
-  function nextStep(from) {
-    if (from === 1) {
-      profile.name = document.getElementById('q1').value.trim();
-      if (!profile.name) { document.getElementById('q1').focus(); return; }
-      // Hide hero after step 1
-      document.getElementById('heroSection').style.display = 'none';
-    }
-    if (from === 2) {
-      profile.role = document.getElementById('q2').value.trim();
-      if (!profile.role) { document.getElementById('q2').focus(); return; }
-    }
-    if (from === 3) {
-      profile.domains = getSelectedChips('domainChips');
-    }
-    if (from === 4) {
-      profile.problem = document.getElementById('q4').value.trim();
-      if (!profile.problem) { document.getElementById('q4').focus(); return; }
-    }
-    showStep(from + 1);
-  }
+Person profile:
+- Name: ${state.name}
+- Field: ${state.field}
+- Cards seen so far: ${state.cardCount}
+- Discipline being explored today: ${discipline}
 
-  function prevStep(from) {
-    if (from === 2) document.getElementById('heroSection').style.display = 'block';
-    showStep(from - 1);
-  }
+${levelInstr}
 
-  async function generateInsight() {
-    profile.blindspots = getSelectedChips('blindspotChips');
+Your task: Generate a deeply personal cross-disciplinary insight connecting ${discipline} to ${state.name}'s world in ${state.field}.
 
-    // Show loading
-    document.getElementById('onboarding').style.display = 'none';
-    document.getElementById('progressBar').style.display = 'none';
-    document.getElementById('loadingView').classList.add('visible');
+RULES:
+1. The connection must be REAL and INTELLECTUALLY HONEST — not superficial or forced
+2. Tone: a brilliant, warm friend who is widely read — not a professor, not a chatbot
+3. Use ${state.name}'s name naturally once. Make it feel personal.
+4. Write like the most interesting person they've ever met. No jargon. No hedging.
+5. The insight should make them think "I can't unsee this now"
+6. Ground it in something observable and real first, then make the leap
 
-    const prompt = `You are Confluence — a polymathic thinking companion. Your mission is to build genuine wisdom and cross-disciplinary thinking in people.
-
-Here is the person's profile:
-- Name: ${profile.name}
-- What they do: ${profile.role}
-- Domains they know well: ${profile.domains.join(', ') || 'Not specified'}
-- Problem on their mind: ${profile.problem}
-- Disciplines they rarely think from (their blind spots): ${profile.blindspots.join(', ') || 'Not specified'}
-
-Your task: Generate a deeply personalised cross-disciplinary insight. 
-
-CRITICAL RULES:
-1. Pick ONE surprising discipline from their blind spots (or one they'd never expect) as the lens
-2. Use that lens to illuminate their specific problem in a way that genuinely reframes it
-3. The connection must be REAL, DEEP, and INTELLECTUALLY HONEST — not superficial or forced
-4. The tone is a brilliant, warm friend who is widely read — not a professor, not a chatbot
-5. Use their name naturally. Make it feel personal and intimate.
-6. The insight should make them think "I can't unsee this now"
-
-Return ONLY valid JSON with NO markdown, NO backticks:
+Return ONLY valid JSON with NO markdown, NO backticks, NO extra text:
 
 {
-  "lens": "Name of the discipline being used as the lens",
-  "lensEmoji": "one relevant emoji",
-  "title": "A striking, Playfair Display-worthy headline for this insight (max 10 words)",
-  "hook": "The 'bro did you know...' opening — one powerful sentence that immediately connects their world to this unexpected discipline. Make it personal, use their name.",
-  "body": "Three paragraphs. First: explain the concept from the unexpected discipline in vivid, concrete terms. Second: draw the explicit connection to their specific problem/work — be precise, not vague. Third: what this means for how they should think or act differently. Write like the most interesting person they've ever met. No jargon. No hedging. 350-400 words total.",
-  "connection": "One crisp sentence: 'The reason this matters for you specifically is...' — make it undeniable and personal.",
-  "question": "One question they cannot answer quickly. The kind that lingers for days. Make it specific to their situation, not generic.",
-  "nextLens": "Name of another unexpected discipline we'd explore next time",
-  "nextTeaser": "One sentence teasing what that next exploration would reveal about their problem"
+  "discipline": "${discipline}",
+  "level": ${level},
+  "title": "A striking headline (max 10 words, Playfair Display-worthy)",
+  "hook": "The opening line — one powerful sentence that immediately connects ${discipline} to their world in ${state.field}. Personal, surprising, uses their name.",
+  "body": "Three paragraphs. Para 1: explain the concept from ${discipline} in vivid, concrete terms — no jargon, real examples. Para 2: draw the explicit connection to their specific field (${state.field}) — precise, not vague. Para 3: what this means for how they should think or act differently. 300-350 words total. Separate paragraphs with a newline.",
+  "why": "One crisp sentence: why this connection matters specifically for someone in ${state.field}.",
+  "question": "One question they cannot answer quickly. The kind that lingers. Specific to their situation.",
+  "nextDiscipline": "Name of another discipline to explore next",
+  "nextTeaser": "One sentence teasing what that next exploration reveals"
 }`;
 
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': state.apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-opus-4-5',
+        max_tokens: 1200,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+
+    const data = await response.json();
+    if (data.error) throw new Error(data.error.message || 'API error');
+
+    const raw = data.content.map(b => b.text || '').join('');
+    let card;
     try {
-      const response = await fetch("https://api.anthropic.com/v1/messages", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          model: "claude-sonnet-4-20250514",
-          max_tokens: 1000,
-          messages: [{ role: "user", content: prompt }]
-        })
-      });
-
-      const data = await response.json();
-      const raw = data.content.map(b => b.text || '').join('');
-
-      let d;
-      try {
-        d = JSON.parse(raw.replace(/```json|```/g, '').trim());
-      } catch(e) {
-        throw new Error("Couldn't parse the insight. Try again.");
-      }
-
-      renderInsight(d);
-
-    } catch(err) {
-      document.getElementById('loadingView').classList.remove('visible');
-      document.getElementById('insightContent').innerHTML = `<div class="error-box">⚠ ${err.message || 'Something went wrong. Please try again.'}</div>`;
-      document.getElementById('insight-view').classList.add('visible');
+      card = JSON.parse(raw.replace(/```json|```/g, '').trim());
+    } catch(e) {
+      throw new Error('Could not parse response. Please try again.');
     }
-  }
 
-  function renderInsight(d) {
-    document.getElementById('loadingView').classList.remove('visible');
+    // Update progress
+    state.cardCount++;
+    if (!state.disciplineProgress[discipline]) {
+      state.disciplineProgress[discipline] = { level: 0 };
+    }
+    state.disciplineProgress[discipline].level = level;
+    state.disciplineProgress[discipline].lastSeen = new Date().toISOString();
+    saveState();
 
-    // Format body paragraphs
-    const paragraphs = d.body.split('\n').filter(p => p.trim()).map(p => `<p>${p}</p>`).join('');
+    renderCard(card);
+    checkMilestones();
 
-    document.getElementById('insightContent').innerHTML = `
-      <div class="insight-header">
-        <div class="insight-from">
-          <span>Today's lens</span>
-          <span class="lens-badge">${d.lensEmoji} ${d.lens}</span>
-        </div>
-        <div class="insight-title">${d.title}</div>
-        <div class="insight-discipline">Viewed through ${d.lens}</div>
-      </div>
-
-      <div class="hook">
-        <div class="hook-label">The unexpected connection</div>
-        <div class="hook-text">${d.hook}</div>
-      </div>
-
-      <div class="insight-body">${paragraphs}</div>
-
-      <div class="connection-box">
-        <div class="connection-label">Why this matters for you</div>
-        <div class="connection-text">${d.connection}</div>
-      </div>
-
-      <hr class="divider">
-
-      <div class="question-box">
-        <div class="question-label">Sit with this</div>
-        <div class="question-text">${d.question}</div>
-      </div>
-
-      <div class="teaser">
-        <div class="teaser-left">
-          <div class="teaser-label">Next time on Confluence</div>
-          <div class="teaser-text">${d.nextTeaser}</div>
-        </div>
-        <div class="teaser-lens">Through ${d.nextLens} →</div>
-      </div>
-
-      <div class="actions">
-        <button class="btn-share" onclick="shareInsight()">Share on LinkedIn</button>
-        <button class="btn-again" onclick="startAgain()">Try a different problem</button>
-      </div>
+  } catch(err) {
+    showView('cardview');
+    document.getElementById('cardContent').innerHTML = `
+      <div class="error-box">⚠ ${err.message || 'Something went wrong. Please try again.'}</div>
+      <button class="btn-next-card" onclick="generateCard()">
+        <span class="btn-label">Try again →</span>
+      </button>
     `;
-
-    document.getElementById('insight-view').classList.add('visible');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-
-    // Store for sharing
-    window.currentInsight = d;
   }
+}
 
-  function shareInsight() {
-    const d = window.currentInsight;
-    if (!d) return;
-    const text = `Just tried Confluence — a tool that builds polymathic thinking.\n\nIt looked at my problem through the lens of ${d.lens} and I genuinely can't unsee it.\n\n"${d.hook}"\n\nThe question it left me with: ${d.question}\n\nTry it yourself 👇`;
-    const url = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.href)}&summary=${encodeURIComponent(text)}`;
-    window.open(url, '_blank');
-  }
+function renderCard(card) {
+  showView('cardview');
 
-  function startAgain() {
-    profile.problem = '';
-    document.getElementById('insight-view').classList.remove('visible');
-    document.getElementById('insightContent').innerHTML = '';
-    document.getElementById('onboarding').style.display = 'block';
-    document.getElementById('heroSection').style.display = 'none';
-    document.getElementById('q4').value = '';
-    showStep(4);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
+  const levelInfo = getLevelLabel(card.level);
+  const paragraphs = card.body.split('\n').filter(p => p.trim()).map(p => `<p>${p}</p>`).join('');
+  const breadth = Object.keys(state.disciplineProgress).length;
+  const thinkerLevel = getThinkerLevel();
 
-  // Enter key support
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Enter' && !e.shiftKey && currentStep < 5) {
-      const step = document.getElementById('step' + currentStep);
-      if (step && step.classList.contains('active')) {
-        const textarea = step.querySelector('textarea');
-        if (!textarea || document.activeElement !== textarea) {
-          nextStep(currentStep);
-        }
-      }
+  document.getElementById('cardContent').innerHTML = `
+    <div class="card-meta">
+      <div class="card-meta-left">
+        <span class="card-number">Connection #${state.cardCount}</span>
+        <span class="lens-pill">${card.discipline}</span>
+        <span class="level-pill ${levelInfo.cls}">${levelInfo.label}</span>
+      </div>
+    </div>
+
+    <div class="card-title">${card.title}</div>
+
+    <div class="card-hook">
+      <div class="card-hook-label">The unexpected connection</div>
+      <div class="card-hook-text">${card.hook}</div>
+    </div>
+
+    <div class="card-body">${paragraphs}</div>
+
+    <div class="card-why">
+      <div class="card-why-label">Why this matters for you</div>
+      <div class="card-why-text">${card.why}</div>
+    </div>
+
+    <div class="card-question">
+      <div class="card-question-label">Sit with this</div>
+      <div class="card-question-text">${card.question}</div>
+    </div>
+
+    <div class="progress-section">
+      <div class="progress-section-title">
+        <span>Your latticework</span>
+        <span class="thinker-level">${thinkerLevel.label}</span>
+      </div>
+      <div class="lattice-wrap">
+        <canvas id="latticeCanvas" width="160" height="160"></canvas>
+        <div class="lattice-legend" id="latticeLegend"></div>
+      </div>
+      <div class="stats-row">
+        <div class="stat-box">
+          <div class="stat-num">${breadth}</div>
+          <div class="stat-label">Disciplines</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num">${state.cardCount}</div>
+          <div class="stat-label">Connections</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num">${getAvgDepth().toFixed(1)}</div>
+          <div class="stat-label">Avg Depth</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-num">${state.streak || 1}</div>
+          <div class="stat-label">Day Streak</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-teaser">
+      <div>
+        <div class="teaser-label">Next on Confluence</div>
+        <div class="teaser-text">${card.nextTeaser}</div>
+      </div>
+      <div class="teaser-lens-name">Through ${card.nextDiscipline} →</div>
+    </div>
+
+    <div class="card-actions">
+      <button class="btn-next-card" onclick="generateCard('${card.nextDiscipline.replace(/'/g, "\\'")}')">
+        <div class="spinner"></div>
+        <span class="btn-label">Next connection →</span>
+      </button>
+      <button class="btn-share" onclick="shareCard()">Share this</button>
+    </div>
+  `;
+
+  drawLattice();
+  renderLegend();
+  window.currentCard = card;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ── LATTICE CHART ──
+function drawLattice() {
+  const canvas = document.getElementById('latticeCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const W = 160, H = 160;
+  const cx = W / 2, cy = H / 2;
+  const disciplines = Object.keys(state.disciplineProgress);
+  const n = Math.max(disciplines.length, 6);
+  const maxR = 62;
+
+  ctx.clearRect(0, 0, W, H);
+
+  // Draw grid rings
+  for (let r = 1; r <= 3; r++) {
+    ctx.beginPath();
+    ctx.strokeStyle = '#d4c9b0';
+    ctx.lineWidth = 0.5;
+    for (let i = 0; i <= n; i++) {
+      const angle = (i / n) * Math.PI * 2 - Math.PI / 2;
+      const x = cx + (maxR * r / 3) * Math.cos(angle);
+      const y = cy + (maxR * r / 3) * Math.sin(angle);
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
     }
+    ctx.closePath();
+    ctx.stroke();
+  }
+
+  if (disciplines.length < 3) return;
+
+  // Draw filled area
+  ctx.beginPath();
+  disciplines.forEach((disc, i) => {
+    const angle = (i / disciplines.length) * Math.PI * 2 - Math.PI / 2;
+    const level = state.disciplineProgress[disc]?.level || 0;
+    const r = (level / 3) * maxR;
+    const x = cx + r * Math.cos(angle);
+    const y = cy + r * Math.sin(angle);
+    i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
   });
+  ctx.closePath();
+  ctx.fillStyle = 'rgba(196,70,10,0.12)';
+  ctx.fill();
+  ctx.strokeStyle = 'rgba(196,70,10,0.5)';
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+
+  // Draw points
+  disciplines.forEach((disc, i) => {
+    const angle = (i / disciplines.length) * Math.PI * 2 - Math.PI / 2;
+    const level = state.disciplineProgress[disc]?.level || 0;
+    const r = (level / 3) * maxR;
+    const x = cx + r * Math.cos(angle);
+    const y = cy + r * Math.sin(angle);
+    ctx.beginPath();
+    ctx.arc(x, y, 3, 0, Math.PI * 2);
+    ctx.fillStyle = '#c4460a';
+    ctx.fill();
+  });
+}
+
+function renderLegend() {
+  const el = document.getElementById('latticeLegend');
+  if (!el) return;
+  const seen = Object.entries(state.disciplineProgress)
+    .sort((a, b) => b[1].level - a[1].level)
+    .slice(0, 6);
+
+  el.innerHTML = seen.map(([disc, data]) => `
+    <div class="legend-item seen">
+      <div class="legend-dot"></div>
+      <span class="legend-disc">${disc}</span>
+      <span class="legend-level">L${data.level}</span>
+    </div>
+  `).join('');
+}
+
+// ── THINKER LEVEL ──
+function getAvgDepth() {
+  const discs = Object.values(state.disciplineProgress);
+  if (!discs.length) return 0;
+  return discs.reduce((s, d) => s + (d.level || 0), 0) / discs.length;
+}
+
+function getThinkerLevel() {
+  const breadth = Object.keys(state.disciplineProgress).length;
+  const avg = getAvgDepth();
+  let current = THINKER_LEVELS[0];
+  for (const lvl of THINKER_LEVELS) {
+    if (breadth >= lvl.breadth && avg >= lvl.avgDepth) current = lvl;
+  }
+  return current;
+}
+
+// ── MILESTONES ──
+let lastMilestoneLabel = null;
+
+function checkMilestones() {
+  const current = getThinkerLevel();
+  if (current.label !== 'The Newcomer' && current.label !== lastMilestoneLabel) {
+    const saved = localStorage.getItem('confluence_last_milestone');
+    if (saved !== current.label) {
+      lastMilestoneLabel = current.label;
+      localStorage.setItem('confluence_last_milestone', current.label);
+      showMilestone(current);
+    }
+  }
+}
+
+function showMilestone(level) {
+  const toast = document.getElementById('milestoneToast');
+  document.getElementById('milestoneMsg').textContent = `You've become: ${level.label}`;
+  document.getElementById('milestoneSub').textContent = level.desc;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 4000);
+}
+
+// ── SETTINGS ──
+function openSettings() {
+  document.getElementById('apiKeyInput').value = state.apiKey || '';
+  document.getElementById('settingsModal').classList.add('open');
+}
+
+function closeSettings() {
+  document.getElementById('settingsModal').classList.remove('open');
+}
+
+function saveSettings() {
+  const key = document.getElementById('apiKeyInput').value.trim();
+  state.apiKey = key;
+  localStorage.setItem('confluence_key', key);
+  closeSettings();
+}
+
+// ── SHARE ──
+function shareCard() {
+  const card = window.currentCard;
+  if (!card) return;
+  const text = `Just got a mind-expanding connection from Confluence:\n\n"${card.hook}"\n\nThrough the lens of ${card.discipline}.\n\nBuilding polymathic thinking, one connection at a time 👇`;
+  const url = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.href)}&summary=${encodeURIComponent(text)}`;
+  window.open(url, '_blank');
+}
+
+// ── INIT ──
+document.addEventListener('DOMContentLoaded', () => {
+  loadState();
+  updateStreak();
+  renderStreak();
+
+  // If returning user with profile, skip onboarding
+  if (state.name && state.field) {
+    // Show landing but with a "continue" CTA
+    const btn = document.querySelector('.btn-start');
+    if (btn) {
+      btn.textContent = `Continue, ${state.name} →`;
+      btn.onclick = () => { updateStreak(); renderStreak(); generateCard(); };
+    }
+    const sub = document.querySelector('.landing-sub');
+    if (sub) {
+      sub.textContent = `Welcome back, ${state.name}. ${state.cardCount} connections so far. Your lattice keeps growing.`;
+    }
+  }
+
+  // Enter key on name input
+  document.getElementById('inputName').addEventListener('keydown', e => {
+    if (e.key === 'Enter') onboardNext1();
+  });
+
+  // Close modal on bg click
+  document.getElementById('settingsModal').addEventListener('click', e => {
+    if (e.target === document.getElementById('settingsModal')) closeSettings();
+  });
+});
 </script>
 </body>
 </html>
