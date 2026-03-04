@@ -503,6 +503,59 @@
   .card-body p { margin-bottom: 18px; }
   .card-body p:last-child { margin-bottom: 0; }
 
+  /* Bullets */
+  .card-bullets {
+    list-style: none;
+    margin-bottom: 28px;
+    padding: 0;
+  }
+
+  .card-bullets li {
+    font-size: 16px;
+    line-height: 1.7;
+    color: #3a3028;
+    font-weight: 300;
+    padding: 10px 0 10px 24px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+
+  .card-bullets li:last-child { border-bottom: none; }
+
+  .card-bullets li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+  }
+
+  /* Visual */
+  .card-visual {
+    background: var(--ink);
+    border-radius: 3px;
+    padding: 22px 26px;
+    margin-bottom: 28px;
+  }
+
+  .card-visual-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: rgba(245,240,232,0.4);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+
+  .visual-line {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--paper);
+    line-height: 1.9;
+    letter-spacing: 0.02em;
+  }
+
   /* Why it matters */
   .card-why {
     background: var(--paper2);
@@ -1283,8 +1336,9 @@ Return ONLY valid JSON:
   "level": ${level},
   "title": "Striking headline, max 8 words",
   "hook": "One punchy sentence connecting ${discipline} to ${state.field}. Use ${state.name}'s name. Make it land like a surprise.",
-  "body": "Two short paragraphs. Para 1: one vivid concrete example from ${discipline} — no jargon, real and specific. Para 2: the direct connection to ${state.field} and what it means for how ${state.name} should think or act. 150-180 words total. Separate with a newline.",
-  "question": "One question that lingers for days. Specific, not generic.",
+  "bullets": ["3 to 4 short bullet points. Each is one crisp sentence. Together they tell the full story: what the concept is, how it works, and what it means for ${state.name} in ${state.field}. Plain language. No jargon. Every word earns its place."],
+  "visual": "A simple text diagram using arrows, symbols, and emojis (2-4 lines max) that visually shows the concept from ${discipline} AND its parallel in ${state.field}. Like: '🌿 Keystone species removed → ecosystem collapses\\n📉 Core product removed → company collapses'. Make it instantly readable.",
+  "question": "One question that makes them stop and think. Specific to their situation, not generic.",
   "nextDiscipline": "Name of another discipline to explore next",
   "nextTeaser": "One punchy sentence teasing what that next lens reveals"
 }`;
@@ -1349,7 +1403,10 @@ function renderCard(card) {
   showView('cardview');
 
   const levelInfo = getLevelLabel(card.level);
-  const paragraphs = card.body.split('\n').filter(p => p.trim()).map(p => `<p>${p}</p>`).join('');
+  const bullets = Array.isArray(card.bullets) ? card.bullets : (card.body || '').split('\n').filter(p => p.trim());
+  const bulletHTML = bullets.map(b => `<li>${b}</li>`).join('');
+  const visualLines = (card.visual || '').split('\\n').filter(l => l.trim());
+  const visualHTML = visualLines.map(l => `<div class="visual-line">${l}</div>`).join('');
   const breadth = Object.keys(state.disciplineProgress).length;
   const thinkerLevel = getThinkerLevel();
   const discMeta = DISCIPLINE_PARENT[card.discipline] || { parent: 'Science', emoji: '🔬' };
@@ -1370,16 +1427,21 @@ function renderCard(card) {
       <div class="card-hook-text">${card.hook}</div>
     </div>
 
-    <div class="card-body">${paragraphs}</div>
+    <ul class="card-bullets">${bulletHTML}</ul>
+
+    ${visualHTML ? `<div class="card-visual">
+      <div class="card-visual-label">See it visually</div>
+      <div class="card-visual-content">${visualHTML}</div>
+    </div>` : ''}
 
     <div class="card-question">
-      <div class="card-question-label">Sit with this</div>
+      <div class="card-question-label">Reflect on this</div>
       <div class="card-question-text">${card.question}</div>
     </div>
 
     <div class="progress-section">
       <div class="progress-section-title">
-        <span>Your latticework</span>
+        <span>Disciplines you've explored</span>
         <span class="thinker-level">${thinkerLevel.label}</span>
       </div>
       <div class="lattice-wrap">
