@@ -186,6 +186,34 @@
 
     .ob-divider { height: 1px; background: var(--border); margin: 28px 0; }
 
+    .ob-hero {
+      margin-bottom: 32px;
+      padding: 28px 0 0;
+      text-align: center;
+    }
+    .ob-hero-quote {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 20px;
+      font-weight: 600;
+      font-style: italic;
+      color: var(--ink);
+      line-height: 1.4;
+      margin-bottom: 16px;
+    }
+    .ob-hero-body {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 12px;
+    }
+    .ob-hero-cta {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--accent);
+      letter-spacing: 0.03em;
+      line-height: 1.6;
+    }
+
     #ob-submit, .btn-primary {
       width: 100%;
       padding: 16px;
@@ -601,6 +629,65 @@
       color: var(--accent);
     }
 
+    /* Cross-discipline tag */
+    .card-cross-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* Hook as pull-quote */
+    .card-hook-pullquote {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 20px;
+      font-style: italic;
+      font-weight: 400;
+      color: var(--ink);
+      line-height: 1.45;
+      margin-bottom: 20px;
+      padding-left: 16px;
+      border-left: 3px solid var(--accent);
+    }
+
+    /* Inline lattice */
+    .lattice-inline-wrap {
+      background: var(--paper2);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      padding: 20px 16px;
+      margin: 24px 0 0;
+    }
+    .lattice-inline-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .lattice-label {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--ink);
+    }
+    .lattice-stats {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+    }
+    #radarCanvasInline {
+      display: block;
+      margin: 0 auto;
+      max-width: 100%;
+    }
+
     /* ===== PROGRESS SCREEN ===== */
     #screen-progress {
       max-width: 740px;
@@ -839,6 +926,11 @@
 <!-- ===== ONBOARDING ===== -->
 <div id="screen-onboarding">
   <div class="ob-wrap">
+    <div class="ob-hero">
+      <div class="ob-hero-quote">"The world's best thinkers stole from disciplines far outside their own."</div>
+      <div class="ob-hero-body">Darwin borrowed from economics. Feynman borrowed from music. Gates borrowed from biology. The pattern is clear: cross-disciplinary thinking is the engine of breakthrough ideas.</div>
+      <div class="ob-hero-cta">Confluence gives you one unexpected insight every day — connecting a distant field to your world. Five minutes. One idea. A new way of seeing.</div>
+    </div>
     <div class="ob-header">
       <div class="ob-logo">Confluen<span>ce</span></div>
       <div class="ob-tagline">One insight a day. 100+ disciplines. Become a systems thinker.</div>
@@ -896,7 +988,7 @@
         <div class="ob-label">What have you studied? <span>(pick all that apply)</span></div>
         <div class="chips" id="chips-edu">
           <div class="chip" data-val="Engineering & Technology">Engineering</div>
-          <div class="chip" data-val="Sciences (Biology / Chemistry / Physics)">Sciences</div>
+          <div class="chip" data-val="Natural Sciences (Biology / Chemistry / Physics)">Natural Sciences</div>
           <div class="chip" data-val="Mathematics & Statistics">Mathematics</div>
           <div class="chip" data-val="Medicine & Health">Medicine</div>
           <div class="chip" data-val="Economics & Commerce">Economics</div>
@@ -907,6 +999,7 @@
           <div class="chip" data-val="Architecture & Design">Architecture</div>
           <div class="chip" data-val="Agriculture">Agriculture</div>
           <div class="chip" data-val="Education">Education</div>
+          <div class="chip" data-val="Public Policy & Governance">Public Policy</div>
         </div>
       </div>
 
@@ -949,7 +1042,7 @@
         </div>
       </div>
 
-      <button class="btn-primary" id="ob-submit" disabled>Begin my journey →</button>
+      <button class="btn-primary" id="ob-submit" disabled>Enter Confluence →</button>
     </div>
   </div>
 </div>
@@ -966,8 +1059,7 @@
 
   <div class="today-banner">
     <div class="today-meta">Today's lens</div>
-    <div class="today-travel-line" id="today-travel-line">Your mind travels to...</div>
-    <div class="today-discipline" id="today-discipline">—</div>
+    <div class="today-travel-line">Today's lens</div>
     <div class="today-cluster">
       <div class="cluster-badge" id="today-cluster-badge">—</div>
     </div>
@@ -975,6 +1067,7 @@
   </div>
 
   <div id="card-area"></div>
+  <div id="lattice-inline" class="hidden"></div>
 
   <div id="progress-teaser" class="hidden" onclick="showProgress()">
     View your lattice of knowledge →
@@ -992,7 +1085,7 @@
     <div class="stats-grid">
       <div class="stat">
         <div class="stat-value" id="stat-cards">0</div>
-        <div class="stat-label">Cards</div>
+        <div class="stat-label">Lenses</div>
       </div>
       <div class="stat">
         <div class="stat-value" id="stat-streak">0</div>
@@ -1179,8 +1272,7 @@ Respond ONLY with valid JSON — no markdown, no code fences, no extra text befo
     "rightLabel": "${p.primaryField}",
     "rightConcept": "same principle expressed in their world"
   },
-  "whyItMatters": "One short paragraph (2-3 sentences). Why does this connection matter right now, in this AI age, for someone building wisdom? Make it urgent.",
-  "reflection": "One question. Specific. Actionable. Makes ${p.name} look at THIS week differently. Not generic."
+  "whyItMatters": "One short paragraph (2-3 sentences). Why does this connection matter right now, in this AI age, for someone building wisdom? Make it urgent."
 }`;
 }
 
@@ -1518,13 +1610,11 @@ function renderCard(card, discipline) {
 
   document.getElementById('card-area').innerHTML = `
     <div class="card">
-      <div class="card-discipline-tag">✦ ${discipline}</div>
-      <div class="card-title">${card.title || ''}</div>
+      <div class="card-cross-tag">✦ ${discipline} × ${state.profile.primaryField || 'Your World'}</div>
 
-      <div class="card-hook-wrap">
-        <div class="card-hook-label">The Connection</div>
-        <div class="card-hook">${card.hook || ''}</div>
-      </div>
+      <div class="card-hook-pullquote">${card.hook || ''}</div>
+
+      <div class="card-title">${card.title || ''}</div>
 
       <div class="card-body">
         ${card.para1 ? `<p class="card-para">${card.para1}</p>` : ''}
@@ -1543,12 +1633,6 @@ function renderCard(card, discipline) {
         <div class="card-why-text">${card.whyItMatters}</div>
       </div>` : ''}
 
-      ${card.reflection ? `
-      <div class="card-reflection">
-        <div class="card-reflection-label">Reflect</div>
-        <div class="card-reflection-text">${card.reflection}</div>
-      </div>` : ''}
-
       <div class="card-actions">
         <button class="btn-action ${alreadySaved ? 'saved' : ''}" id="btn-save" onclick="toggleSave()">
           ${alreadySaved ? '✓ Saved' : '🔖 Save'}
@@ -1561,6 +1645,23 @@ function renderCard(card, discipline) {
 
   document.getElementById('generate-area').innerHTML =
     '<p class="already-generated">✓ Today\'s card is ready. Come back tomorrow for a new lens.</p>';
+
+  // Show inline lattice if enough lenses
+  if ((state.cardCount || 0) >= 3) {
+    const latticeEl = document.getElementById('lattice-inline');
+    if (latticeEl) {
+      latticeEl.classList.remove('hidden');
+      latticeEl.innerHTML = `
+        <div class="lattice-inline-wrap">
+          <div class="lattice-inline-header">
+            <span class="lattice-label">Your Lattice</span>
+            <span class="lattice-stats">${state.cardCount} Lenses · ${state.streak || 0} Day Streak · ${Object.values(state.clusterProgress||{}).filter(v=>v>0).length} Clusters</span>
+          </div>
+          <canvas id="radarCanvasInline" width="320" height="320"></canvas>
+        </div>`;
+      drawRadarInline();
+    }
+  }
 }
 
 // ============================================================
@@ -1631,14 +1732,14 @@ function showApp() {
 }
 
 // ============================================================
-// RADAR — improved with labels, animated fill, styled dots
+// RADAR — shared drawing logic + per-canvas wrappers
 // ============================================================
-function drawRadar() {
-  const canvas = document.getElementById('radarCanvas');
+function drawRadarOnCanvas(canvas, size) {
   const ctx = canvas.getContext('2d');
-  const W = canvas.width, H = canvas.height;
+  const W = size, H = size;
   const cx = W / 2, cy = H / 2;
-  const maxR = Math.min(cx, cy) - 64;
+  const maxR = Math.min(cx, cy) * 0.62;
+  const labelOffset = size * 0.086; // proportional label distance
 
   ctx.clearRect(0, 0, W, H);
 
@@ -1646,90 +1747,17 @@ function drawRadar() {
   const n = names.length;
   const angle = i => (i / n) * Math.PI * 2 - Math.PI / 2;
 
-  // Background polygon at 25%
-  ctx.beginPath();
-  names.forEach((_, i) => {
-    const r = maxR * 0.25;
-    const x = cx + r * Math.cos(angle(i));
-    const y = cy + r * Math.sin(angle(i));
-    i === 0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
-  });
-  ctx.closePath();
-  ctx.fillStyle = 'rgba(212,201,176,0.18)';
-  ctx.fill();
-  ctx.strokeStyle = 'rgba(212,201,176,0.5)';
-  ctx.lineWidth = 1;
-  ctx.stroke();
-
-  // Grid rings
-  [1,2,3,4].forEach(ring => {
-    ctx.beginPath();
-    names.forEach((_, i) => {
-      const r = (maxR * ring) / 4;
-      const x = cx + r * Math.cos(angle(i));
-      const y = cy + r * Math.sin(angle(i));
-      i === 0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
-    });
-    ctx.closePath();
-    ctx.strokeStyle = '#d4c9b0';
-    ctx.lineWidth = 1;
-    ctx.stroke();
-  });
-
-  // Spokes
-  names.forEach((cluster, i) => {
-    const a = angle(i);
-    ctx.beginPath();
-    ctx.moveTo(cx, cy);
-    ctx.lineTo(cx + maxR * Math.cos(a), cy + maxR * Math.sin(a));
-    ctx.strokeStyle = '#d4c9b0';
-    ctx.lineWidth = 1;
-    ctx.stroke();
-  });
-
-  // Cluster name labels at spoke tips
-  names.forEach((cluster, i) => {
-    const a = angle(i);
-    const labelR = maxR + 36;
-    const lx = cx + labelR * Math.cos(a);
-    const ly = cy + labelR * Math.sin(a);
-
-    // Abbreviate to ~10 chars
-    const abbrev = cluster.length > 11 ? cluster.slice(0, 10) + '…' : cluster;
-
-    ctx.save();
-    ctx.font = '600 9px "JetBrains Mono", monospace';
-    ctx.fillStyle = (state.clusterProgress?.[cluster] || 0) > 0 ? '#c4460a' : '#8a7d6b';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-
-    // Multi-line if needed: split at space
-    const words = abbrev.split(' ');
-    if (words.length > 1 && abbrev.length > 9) {
-      ctx.fillText(words[0], lx, ly - 6);
-      ctx.fillText(words.slice(1).join(' '), lx, ly + 6);
-    } else {
-      ctx.fillText(abbrev, lx, ly);
-    }
-    ctx.restore();
-  });
-
-  // Progress polygon — animate with requestAnimationFrame
+  // Progress polygon values
   const prog = names.map(c => {
     const count = (state.clusterProgress || {})[c] || 0;
     const total = CLUSTERS[c].disciplines.length;
     return Math.min(count / Math.max(total * 0.25, 1), 1);
   });
 
-  let t = 0;
-  function animateRadar() {
-    t = Math.min(t + 0.04, 1);
-
-    // Redraw background first (clear only polygon area)
-    // We only need to redraw the filled polygon — clear a region and redraw
+  function drawFrame(t) {
     ctx.clearRect(0, 0, W, H);
 
-    // Re-draw background polygon at 25%
+    // Background polygon at 25%
     ctx.beginPath();
     names.forEach((_, i) => {
       const r = maxR * 0.25;
@@ -1771,14 +1799,15 @@ function drawRadar() {
     });
 
     // Labels
+    const fontSize = Math.max(7, Math.round(size * 0.021));
     names.forEach((cluster, i) => {
       const a = angle(i);
-      const labelR = maxR + 36;
+      const labelR = maxR + labelOffset;
       const lx = cx + labelR * Math.cos(a);
       const ly = cy + labelR * Math.sin(a);
       const abbrev = cluster.length > 11 ? cluster.slice(0, 10) + '…' : cluster;
       ctx.save();
-      ctx.font = '600 9px "JetBrains Mono", monospace';
+      ctx.font = `600 ${fontSize}px "JetBrains Mono", monospace`;
       ctx.fillStyle = (state.clusterProgress?.[cluster] || 0) > 0 ? '#c4460a' : '#8a7d6b';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
@@ -1807,13 +1836,12 @@ function drawRadar() {
     ctx.lineWidth = 2;
     ctx.stroke();
 
-    // Dots — filled terracotta for explored, hollow for unexplored
+    // Dots
     names.forEach((cluster, i) => {
       const r = maxR * Math.max(prog[i], 0.05) * t;
       const dx = cx + r * Math.cos(angle(i));
       const dy = cy + r * Math.sin(angle(i));
       const explored = (state.clusterProgress?.[cluster] || 0) > 0;
-
       ctx.beginPath();
       ctx.arc(dx, dy, 5, 0, Math.PI*2);
       if (explored) {
@@ -1827,11 +1855,27 @@ function drawRadar() {
         ctx.stroke();
       }
     });
-
-    if (t < 1) requestAnimationFrame(animateRadar);
   }
 
+  let t = 0;
+  function animateRadar() {
+    t = Math.min(t + 0.04, 1);
+    drawFrame(t);
+    if (t < 1) requestAnimationFrame(animateRadar);
+  }
   requestAnimationFrame(animateRadar);
+}
+
+function drawRadar() {
+  const canvas = document.getElementById('radarCanvas');
+  if (!canvas) return;
+  drawRadarOnCanvas(canvas, 420);
+}
+
+function drawRadarInline() {
+  const canvas = document.getElementById('radarCanvasInline');
+  if (!canvas) return;
+  drawRadarOnCanvas(canvas, 320);
 }
 
 function renderClusterLegend() {
@@ -1897,7 +1941,6 @@ function initApp() {
   const discipline = getTodaysDiscipline();
   const cluster    = DISC_TO_CLUSTER[discipline];
 
-  document.getElementById('today-discipline').textContent = discipline;
   document.getElementById('today-cluster-badge').textContent =
     `${CLUSTERS[cluster]?.emoji || ''} ${cluster}`;
   document.getElementById('streak-count').textContent = state.streak || 0;
