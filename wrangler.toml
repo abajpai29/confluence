@@ -1,0 +1,12 @@
+name = "confluence-proxy"
+main = "worker.js"
+compatibility_date = "2024-09-01"
+
+# ALLOWED_ORIGIN and ANTHROPIC_API_KEY are set by setup.ps1 — do not edit manually.
+
+[vars]
+ALLOWED_ORIGIN = "https://abajpai29-hash.github.io"
+
+[[kv_namespaces]]
+binding = "RATE_LIMIT"
+id = "a543f31185f14bdfa4b61b25d583d2ea"
