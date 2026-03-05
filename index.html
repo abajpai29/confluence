@@ -326,39 +326,31 @@ body::before {
   margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid var(--border);
 }
 .card-actions { margin-bottom: 10px; }
-.share-label {
-  font-family: 'JetBrains Mono', monospace; font-size: 12px;
-  letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted);
-  margin-bottom: 10px;
-}
-.share-row { display: flex; gap: 8px; margin-bottom: 12px; }
+.share-row { display: flex; gap: 8px; margin-bottom: 8px; align-items: stretch; }
 .share-btn {
-  flex: 1; height: 44px; border: none; border-radius: 2px;
+  flex: 1; height: 42px; border: none; border-radius: 2px;
   font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600;
   letter-spacing: 0.05em; cursor: pointer;
-  display: flex; align-items: center; justify-content: center; gap: 7px;
-  transition: opacity 0.15s, transform 0.1s; color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  transition: opacity 0.15s; background: var(--ink); color: #fff;
 }
-.share-btn:hover { opacity: 0.88; transform: translateY(-1px); }
-.share-btn:active { transform: translateY(0); }
-.share-linkedin { background: #0A66C2; }
-.share-whatsapp { background: #25D366; }
-.share-copy     { background: var(--ink); }
-.card-save-row { display: flex; gap: 8px; }
+.share-btn:hover { opacity: 0.85; }
 .btn-action {
+  flex: 1; height: 42px;
   font-family: 'JetBrains Mono', monospace; font-size: 10px;
-  letter-spacing: 0.1em; text-transform: uppercase; padding: 9px 16px;
+  letter-spacing: 0.1em; text-transform: uppercase;
   background: transparent; border: 1px solid var(--border); color: var(--muted);
-  border-radius: 1px; cursor: pointer; transition: all 0.15s;
+  border-radius: 2px; cursor: pointer; transition: all 0.15s;
+  display: flex; align-items: center; justify-content: center;
 }
 .btn-action:hover { border-color: var(--accent); color: var(--accent); }
 .btn-action.saved { border-color: var(--green); color: var(--green); }
 .btn-calendar {
-  display: block; width: 100%; margin-top: 8px;
+  display: block; width: 100%; box-sizing: border-box;
   font-family: 'JetBrains Mono', monospace; font-size: 11px;
   letter-spacing: 0.1em; text-transform: uppercase; padding: 12px 20px;
   background: transparent; border: 1px solid var(--border); color: var(--muted);
-  border-radius: 1px; cursor: pointer; transition: all 0.15s; text-align: center;
+  border-radius: 2px; cursor: pointer; transition: all 0.15s; text-align: center;
 }
 .btn-calendar:hover { border-color: var(--muted); color: var(--ink); }
 
@@ -981,7 +973,7 @@ function renderBridge(bridgeData) {
   return `<div style="display:flex;align-items:center;gap:0;width:100%;box-sizing:border-box;padding:8px 0;">
     <div style="flex:1;min-width:0;border:1px solid #d4c9b0;background:#ede8dc;border-radius:3px;padding:14px 16px;text-align:center;">
       <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:#c4460a;margin-bottom:8px;">${ll}</div>
-      <div style="font-family:'Playfair Display',Georgia,serif;font-size:13px;font-style:italic;color:#1a1614;line-height:1.4;">${lc}</div>
+      <div style="font-family:'Playfair Display',Georgia,serif;font-size:13px;font-style:italic;color:#1a1614;line-height:1.4;word-wrap:break-word;overflow-wrap:break-word;">${lc}</div>
     </div>
     <div style="flex:0 0 auto;text-align:center;padding:0 14px;">
       ${al ? `<div style="font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:#c4460a;margin-bottom:6px;white-space:nowrap;">${al}</div>` : ''}
@@ -989,7 +981,7 @@ function renderBridge(bridgeData) {
     </div>
     <div style="flex:1;min-width:0;border:1px solid #d4c9b0;background:#ede8dc;border-radius:3px;padding:14px 16px;text-align:center;">
       <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:#c4460a;margin-bottom:8px;">${rl}</div>
-      <div style="font-family:'Playfair Display',Georgia,serif;font-size:13px;font-style:italic;color:#1a1614;line-height:1.4;">${rc}</div>
+      <div style="font-family:'Playfair Display',Georgia,serif;font-size:13px;font-style:italic;color:#1a1614;line-height:1.4;word-wrap:break-word;overflow-wrap:break-word;">${rc}</div>
     </div>
   </div>`;
 }
@@ -1260,6 +1252,9 @@ async function generateCard() {
     const jsonMatch = text.match(/\{[\s\S]*\}/);
     if (!jsonMatch) throw new Error(`JSON parse failed: ${text.slice(0,200)}`);
     const card = JSON.parse(jsonMatch[0]);
+    // Strip em dashes from all text fields
+    const stripEm = s => typeof s === 'string' ? s.replace(/—/g, '.').replace(/\.\s*\./g, '.') : s;
+    ['hook','title','para1','para2','whyItMatters'].forEach(f => { if (card[f]) card[f] = stripEm(card[f]); });
 
     state.todayDate       = today;
     state.todayCard       = card;
@@ -1324,14 +1319,10 @@ function renderCard(card, discipline) {
       <div class="card-actions">
         <div class="share-row">
           <button class="share-btn share-copy" onclick="shareCard()">Share</button>
+          <button class="btn-action ${alreadySaved ? 'saved' : ''}" id="btn-save" onclick="toggleSave()">${alreadySaved ? '✓ Saved' : '⊕ Save'}</button>
         </div>
-        <div class="card-save-row">
-          <button class="btn-action ${alreadySaved ? 'saved' : ''}" id="btn-save" onclick="toggleSave()">
-            ${alreadySaved ? '✓ Saved' : '⊕ Save'}
-          </button>
-        </div>
+        <button class="btn-calendar" onclick="addToCalendar()">Add to my morning routine →</button>
       </div>
-      <button class="btn-calendar" onclick="addToCalendar()">Add to my morning routine →</button>
     </div>`;
 
   document.getElementById('generate-area').innerHTML =
@@ -1403,7 +1394,7 @@ function renderTomorrow(todayDiscipline) {
       <span class="tomorrow-sunrise">🌅</span>
       <div class="tomorrow-main">${name}, that's your ${todayDiscipline} lens unlocked.</div>
       <div class="tomorrow-body">Tomorrow's lens: ${nextDisc}.</div>
-      <div class="tomorrow-sub">See you tomorrow.</div>
+      <div class="tomorrow-sub">See you tomorrow with a fresh lens.</div>
     </div>`;
 }
 
