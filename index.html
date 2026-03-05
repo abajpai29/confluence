@@ -95,19 +95,38 @@ body::before {
   background: var(--paper); position: relative; z-index: 1;
 }
 
+.ob-wordmark { padding: 32px 0 0 32px; }
+.ob-wordmark-name {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 20px; font-weight: 700; color: var(--ink);
+}
+.ob-wordmark-tagline {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; color: var(--muted); margin-top: 4px;
+}
+.ob-cta {
+  margin-top: 28px;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-style: italic; font-size: 16px;
+  background: var(--ink); color: var(--paper);
+  border: none; border-radius: 0;
+  padding: 14px 28px; cursor: pointer;
+  display: inline-block; transition: opacity 0.15s;
+}
+.ob-cta:hover { opacity: 0.85; }
 .ob-hero {
-  max-width: 680px; margin: 0 auto; padding: 72px 24px 56px;
+  max-width: 680px; margin: 0 auto; padding: 36px 24px 48px;
   border-bottom: 1px solid var(--border);
 }
 .ob-eyebrow {
   font-family: 'JetBrains Mono', monospace;
   font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
-  color: var(--accent); margin-bottom: 28px;
+  color: var(--accent); margin-bottom: 16px;
 }
 .ob-headline {
   font-family: 'Playfair Display', Georgia, serif;
   font-size: clamp(32px, 6vw, 52px); font-weight: 700;
-  color: var(--ink); line-height: 1.15; margin-bottom: 32px;
+  color: var(--ink); line-height: 1.15; margin-bottom: 20px;
   letter-spacing: -0.025em;
 }
 .ob-body {
@@ -556,9 +575,10 @@ body::before {
 
 <!-- ===== ONBOARDING ===== -->
 <div id="screen-onboarding">
-  <nav class="nav">
-    <div class="nav-logo">Confluence</div>
-  </nav>
+  <div class="ob-wordmark">
+    <div class="ob-wordmark-name">✦ Confluence</div>
+    <div class="ob-wordmark-tagline">see through every lens.</div>
+  </div>
   <div class="ob-hero">
     <div class="ob-eyebrow">A daily practice for the perpetually curious</div>
     <h1 class="ob-headline">The world is one thing.<br>We just study it in pieces.</h1>
@@ -568,6 +588,7 @@ body::before {
       <p>Every weekday morning, Confluence brings you one unexpected connection — from across the full map of human knowledge.</p>
       <p>Read in five minutes. Something you can't unsee.</p>
     </div>
+    <button class="ob-cta" onclick="document.getElementById('ob-form-wrap').scrollIntoView({behavior:'smooth'})">Begin your first lens →</button>
   </div>
 
   <div class="ob-form-wrap">
