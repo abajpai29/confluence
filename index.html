@@ -278,21 +278,15 @@ body::before {
   color: var(--ink); opacity: 0.04; line-height: 1;
   pointer-events: none; user-select: none; white-space: nowrap; letter-spacing: -0.03em;
 }
-.card-lens-badge {
-  font-family: 'JetBrains Mono', monospace; font-size: 10px;
-  letter-spacing: 0.15em; text-transform: uppercase;
-  color: var(--muted); margin-bottom: 24px;
-}
 .card-hook {
   font-family: 'Playfair Display', Georgia, serif;
   font-size: clamp(20px, 4vw, 26px); font-style: italic; font-weight: 400;
-  color: var(--ink); line-height: 1.45; margin-bottom: 24px; letter-spacing: -0.01em;
+  color: var(--ink); line-height: 1.45; margin-bottom: 12px; letter-spacing: -0.01em;
 }
-.card-title {
-  font-family: 'Playfair Display', Georgia, serif;
-  font-size: clamp(22px, 4.2vw, 30px); font-weight: 700;
-  color: var(--ink); line-height: 1.2; margin-bottom: 0;
-  letter-spacing: -0.02em; padding-top: 22px; border-top: 1px solid var(--border);
+.card-disc-tag {
+  font-family: 'JetBrains Mono', monospace; font-size: 10px;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 24px; opacity: 0.7;
 }
 .card-pull-quote {
   font-family: 'Playfair Display', Georgia, serif;
@@ -347,13 +341,13 @@ body::before {
 .card-actions { margin-bottom: 10px; }
 .share-row { display: flex; gap: 8px; margin-bottom: 8px; align-items: stretch; }
 .share-btn {
-  flex: 1; height: 42px; border: none; border-radius: 2px;
+  flex: 1; height: 42px; border: 1px solid var(--border); border-radius: 2px;
   font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600;
   letter-spacing: 0.05em; cursor: pointer;
   display: flex; align-items: center; justify-content: center;
-  transition: opacity 0.15s; background: var(--ink); color: #fff;
+  transition: all 0.15s; background: transparent; color: var(--muted);
 }
-.share-btn:hover { opacity: 0.85; }
+.share-btn:hover { border-color: var(--accent); color: var(--accent); }
 .btn-action {
   flex: 1; height: 42px;
   font-family: 'JetBrains Mono', monospace; font-size: 10px;
@@ -577,13 +571,13 @@ body::before {
 <div id="screen-onboarding">
   <div class="ob-wordmark">
     <div class="ob-wordmark-name">✦ Confluence</div>
-    <div class="ob-wordmark-tagline">see through every lens.</div>
+    <div class="ob-wordmark-tagline">see through every lens</div>
   </div>
   <div class="ob-hero">
     <div class="ob-eyebrow">A daily practice for the perpetually curious</div>
     <h1 class="ob-headline">The world is one thing.<br>We just study it in pieces.</h1>
     <div class="ob-body">
-      <p>Physics, Chemistry, History, Mathematics, Biology, Economics, Geography, English Literature, Political Science — studied separately, each in its own world. The conversation happening between them? Nobody showed us that.</p>
+      <p>Physics, Chemistry, History, Mathematics, Biology, Economics, Geography, English Literature, Political Science. Studied separately, each in its own world. The conversation happening between them? Nobody showed us that.</p>
       <p>That conversation is where the best thinking lives.</p>
       <p>Every weekday morning, Confluence brings you one unexpected connection — from across the full map of human knowledge.</p>
       <p>Read in five minutes. Something you can't unsee.</p>
@@ -592,7 +586,6 @@ body::before {
   </div>
 
   <div class="ob-form-wrap">
-    <div class="ob-form-kicker">Make it yours.</div>
     <div class="ob-card">
       <div class="ob-section">
         <label class="ob-label">What should we call you?</label>
@@ -667,9 +660,6 @@ body::before {
       </div>
       <button id="ob-submit" disabled>Enter the Confluence →</button>
     </div>
-    <div class="ob-about-link">
-      <button onclick="showScreen('screen-about')">What is Confluence? →</button>
-    </div>
   </div>
 </div>
 
@@ -677,7 +667,7 @@ body::before {
 <div id="screen-app" class="hidden">
   <div class="page-wrap">
     <div class="app-header">
-      <div class="app-logo">Confluen<span>ce</span></div>
+      <div class="app-logo">✦ Confluence</div>
     </div>
 
     <div class="weekday-strip" id="weekday-strip"></div>
@@ -717,7 +707,7 @@ body::before {
   <div class="page-wrap">
     <div class="about-header">
       <button class="back-btn" onclick="showScreen('screen-app')">← Back</button>
-      <div class="app-logo">Confluen<span>ce</span></div>
+      <div class="app-logo">✦ Confluence</div>
     </div>
     <div class="about-wrap">
       <div class="about-eyebrow">Why this exists</div>
@@ -1000,8 +990,7 @@ function renderBridge(bridgeData) {
       <div style="font-family:'Playfair Display',Georgia,serif;font-size:13px;font-style:italic;color:#1a1614;line-height:1.4;word-wrap:break-word;overflow-wrap:break-word;">${lc}</div>
     </div>
     <div style="flex:0 0 auto;text-align:center;padding:0 14px;">
-      ${al ? `<div style="font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:#c4460a;margin-bottom:6px;white-space:nowrap;">${al}</div>` : ''}
-      <div style="font-size:22px;color:#c4460a;line-height:1;opacity:0.8;">→</div>
+      ${al ? `<div style="font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:#c4460a;margin-bottom:6px;white-space:nowrap;">${al}</div><div style="font-size:22px;color:#c4460a;line-height:1;opacity:0.8;">→</div>` : '<div style="font-size:18px;color:#d4c9b0;line-height:1;">↔</div>'}
     </div>
     <div style="flex:1;min-width:0;border:1px solid #d4c9b0;background:#ede8dc;border-radius:3px;padding:14px 16px;text-align:center;">
       <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:#c4460a;margin-bottom:8px;">${rl}</div>
@@ -1184,7 +1173,15 @@ NO EM DASHES — ever. Not a single one. This is a hard rule.
    A 45-year-old professional must find it genuinely insightful.
    These are not in conflict.
    Clarity is not simplification. It is respect.
-   The best writing does both.`;
+   The best writing does both.
+
+13. GRAMMAR AND PUNCTUATION ARE NON-NEGOTIABLE
+
+   Every sentence must be grammatically complete and correctly punctuated.
+   No sentence should trail off or end mid-thought.
+   No missing full stops. No double full stops. No comma splices.
+   Before you output, re-read each sentence. If it sounds wrong aloud — fix it.
+   A punctuation error is as serious as a factual error. Both destroy trust.`;
 
 function buildPrompt(discipline, cluster) {
   const p    = state.profile;
@@ -1321,12 +1318,12 @@ function renderCard(card, discipline) {
   const caption      = bd.caption || '';
   const clusterEmoji = CLUSTERS[DISC_TO_CLUSTER[discipline]]?.emoji || '✦';
 
+  const primaryDomain = (state.profile.domains || [])[0] || 'Your World';
   document.getElementById('card-area').innerHTML = `
     <div class="card">
       <div class="card-watermark">${discipline}</div>
-      <div class="card-lens-badge">${clusterEmoji} ${discipline}</div>
       <div class="card-hook">${card.hook || ''}</div>
-      <div class="card-title">${card.title || ''}</div>
+      <div class="card-disc-tag">${clusterEmoji} ${discipline} × ${primaryDomain}</div>
       <div class="card-body">
         ${card.para1 ? `<p class="card-para">${card.para1}</p>` : ''}
         ${card.para2 ? `<p class="card-para">${card.para2}</p>` : ''}
@@ -1417,7 +1414,6 @@ function renderTomorrow(todayDiscipline) {
     <div class="tomorrow-wrap">
       <span class="tomorrow-sunrise">🌅</span>
       <div class="tomorrow-main">${name}, that's your ${todayDiscipline} lens unlocked.</div>
-      <div class="tomorrow-body">Tomorrow's lens: ${nextDisc}.</div>
       <div class="tomorrow-sub">See you tomorrow with a fresh lens.</div>
     </div>`;
 }
