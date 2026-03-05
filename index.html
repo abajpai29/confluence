@@ -74,7 +74,7 @@ body::before {
 }
 .app-logo {
   font-family: 'Playfair Display', Georgia, serif;
-  font-size: 20px; font-weight: 700; color: var(--ink); letter-spacing: -0.3px;
+  font-size: 22px; font-weight: 700; color: var(--ink); letter-spacing: 0.02em;
 }
 .app-logo span { color: var(--accent); }
 .header-nav { display: flex; gap: 20px; align-items: center; }
@@ -263,7 +263,7 @@ body::before {
 }
 .card-hook {
   font-family: 'Playfair Display', Georgia, serif;
-  font-size: clamp(19px, 3.8vw, 25px); font-style: italic; font-weight: 400;
+  font-size: clamp(20px, 4vw, 26px); font-style: italic; font-weight: 400;
   color: var(--ink); line-height: 1.45; margin-bottom: 24px; letter-spacing: -0.01em;
 }
 .card-title {
@@ -274,10 +274,10 @@ body::before {
 }
 .card-pull-quote {
   font-family: 'Playfair Display', Georgia, serif;
-  font-size: clamp(19px, 3.5vw, 25px); font-style: italic;
-  color: var(--accent); line-height: 1.45;
-  padding: 28px 0; margin: 24px 0;
-  border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+  font-size: clamp(18px, 3.2vw, 23px); font-style: italic;
+  color: var(--ink); opacity: 0.85; line-height: 1.55;
+  padding: 6px 0 6px 20px; margin: 28px 0;
+  border-left: 3px solid var(--accent);
   letter-spacing: -0.01em;
 }
 .card-body { margin-bottom: 32px; }
@@ -322,18 +322,26 @@ body::before {
   letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent);
   margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid var(--border);
 }
-.card-actions { display: flex; flex-direction: column; gap: 10px; margin-bottom: 10px; }
-.btn-linkedin {
-  display: block; width: 100%;
-  font-family: 'Playfair Display', Georgia, serif;
-  font-size: 16px; font-style: italic; font-weight: 600;
-  color: #fff; background: var(--accent); border: none;
-  padding: 15px 20px; border-radius: 1px; cursor: pointer;
-  transition: background 0.2s, transform 0.1s; text-align: center;
+.card-actions { margin-bottom: 10px; }
+.share-label {
+  font-family: 'JetBrains Mono', monospace; font-size: 9px;
+  letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted);
+  margin-bottom: 10px;
 }
-.btn-linkedin:hover { background: #a33a08; transform: translateY(-1px); }
-.btn-linkedin:active { transform: translateY(0); }
-.card-secondary-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.share-row { display: flex; gap: 8px; margin-bottom: 12px; }
+.share-btn {
+  flex: 1; height: 44px; border: none; border-radius: 2px;
+  font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600;
+  letter-spacing: 0.05em; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 7px;
+  transition: opacity 0.15s, transform 0.1s; color: #fff;
+}
+.share-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+.share-btn:active { transform: translateY(0); }
+.share-linkedin { background: #0A66C2; }
+.share-whatsapp { background: #25D366; }
+.share-copy     { background: var(--ink); }
+.card-save-row { display: flex; gap: 8px; }
 .btn-action {
   font-family: 'JetBrains Mono', monospace; font-size: 10px;
   letter-spacing: 0.1em; text-transform: uppercase; padding: 9px 16px;
@@ -503,6 +511,38 @@ body::before {
   .app-header { padding: 20px 0 18px; }
   .today-banner { padding: 28px 0 20px; margin-bottom: 28px; }
 }
+
+/* ===== OB ABOUT LINK ===== */
+.ob-about-link { text-align: center; margin-top: 20px; }
+.ob-about-link button {
+  font-family: 'JetBrains Mono', monospace; font-size: 11px;
+  letter-spacing: 0.08em; color: var(--muted);
+  background: none; border: none; cursor: pointer; transition: color 0.15s;
+}
+.ob-about-link button:hover { color: var(--accent); }
+
+/* ===== CONSTELLATION ===== */
+.constellation-wrap {
+  padding: 36px 0 8px; border-top: 1px solid var(--border); margin-top: 32px;
+  animation: fadeUp 0.4s ease 0.2s both;
+}
+.constellation-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 18px; font-weight: 600; color: var(--ink); margin-bottom: 8px;
+}
+.constellation-pre-text {
+  font-family: 'Source Serif 4', Georgia, serif;
+  font-size: 14px; font-weight: 300; color: var(--muted); font-style: italic;
+  line-height: 1.8; margin-bottom: 20px;
+}
+.constellation-label-text {
+  font-family: 'Source Serif 4', Georgia, serif;
+  font-size: 14px; font-weight: 300; color: var(--muted); font-style: italic;
+  line-height: 1.7; margin-bottom: 20px;
+}
+
+/* ===== BRIDGE ARC ===== */
+@keyframes arcFlow { from { stroke-dashoffset: 110; } to { stroke-dashoffset: 0; } }
   </style>
 </head>
 <body>
@@ -510,64 +550,55 @@ body::before {
 <!-- ===== ONBOARDING ===== -->
 <div id="screen-onboarding">
   <div class="ob-hero">
-    <div class="ob-eyebrow">A daily practice for restless minds</div>
+    <div class="ob-eyebrow">A daily practice for the perpetually curious</div>
     <h1 class="ob-headline">The world is one thing.<br>We just study it in pieces.</h1>
     <div class="ob-body">
-      <p>Physics, history, biology, economics — learned separately, in silos, for exams. The conversation happening between them? Nobody showed us that.</p>
+      <p>Physics, Chemistry, History, Mathematics, Biology, Economics, Geography, English Literature, Political Science — studied separately, each in its own world. The conversation happening between them? Nobody showed us that.</p>
       <p>That conversation is where the best thinking lives.</p>
-      <p>Every weekday morning, Confluence brings you one unexpected connection — between a discipline you know and one you'd never think to apply to your world.</p>
-      <p>Five minutes. Something you can't unsee.</p>
+      <p>Every weekday morning, Confluence brings you one unexpected connection — from across the full map of human knowledge.</p>
+      <p>Read in five minutes. Something you can't unsee.</p>
     </div>
   </div>
 
   <div class="ob-form-wrap">
-    <div class="ob-form-kicker">Two minutes. Then we show you something you can't unsee.</div>
+    <div class="ob-form-kicker">Make it yours.</div>
     <div class="ob-card">
       <div class="ob-section">
         <label class="ob-label">What should we call you?</label>
         <input type="text" class="ob-input" id="ob-name" placeholder="Your name" maxlength="40" />
       </div>
       <div class="ob-section">
-        <label class="ob-label">Your age</label>
-        <div class="chips" id="chips-age">
-          <div class="chip" data-val="18–24">18–24</div>
-          <div class="chip" data-val="25–34">25–34</div>
-          <div class="chip" data-val="35–44">35–44</div>
-          <div class="chip" data-val="45+">45+</div>
-        </div>
-      </div>
-      <div class="ob-section">
-        <label class="ob-label">You primarily are a…</label>
+        <label class="ob-label">Right now, you are a…</label>
         <div class="chips" id="chips-stage">
           <div class="chip" data-val="Student">Student</div>
           <div class="chip" data-val="Working Professional">Working Professional</div>
           <div class="chip" data-val="Entrepreneur">Entrepreneur</div>
           <div class="chip" data-val="Researcher">Researcher</div>
-          <div class="chip" data-val="Other">Other</div>
         </div>
       </div>
       <div class="ob-section">
-        <label class="ob-label">Your primary domain today</label>
-        <div class="chips" id="chips-field">
-          <div class="chip" data-val="Technology & Software">Technology</div>
-          <div class="chip" data-val="Business & Consulting">Business</div>
-          <div class="chip" data-val="Finance & Banking">Finance</div>
-          <div class="chip" data-val="Medicine & Healthcare">Healthcare</div>
-          <div class="chip" data-val="Law & Governance">Law & Policy</div>
-          <div class="chip" data-val="Science & Research">Science</div>
-          <div class="chip" data-val="Creative & Design">Creative</div>
-          <div class="chip" data-val="Education & Academia">Education</div>
-          <div class="chip" data-val="Social Development">Development</div>
-          <div class="chip" data-val="Agriculture & Environment">Agriculture</div>
+        <label class="ob-label">Domains you work in, or have worked in <span>(pick all that apply)</span></label>
+        <div class="chips" id="chips-domain">
+          <div class="chip" data-val="Technology & Software">Technology & Software</div>
           <div class="chip" data-val="Engineering">Engineering</div>
-          <div class="chip" data-val="Media & Communication">Media</div>
-          <div class="chip" data-val="Public Policy & Governance">Public Policy</div>
-          <div class="chip" data-val="Other">Other</div>
+          <div class="chip" data-val="Business & Strategy">Business & Strategy</div>
+          <div class="chip" data-val="Finance & Banking">Finance & Banking</div>
+          <div class="chip" data-val="Medicine & Healthcare">Medicine & Healthcare</div>
+          <div class="chip" data-val="Law">Law</div>
+          <div class="chip" data-val="Policy & Government">Policy & Government</div>
+          <div class="chip" data-val="Science & Research">Science & Research</div>
+          <div class="chip" data-val="Creative & Design">Creative & Design</div>
+          <div class="chip" data-val="Education & Teaching">Education & Teaching</div>
+          <div class="chip" data-val="Social Impact">Social Impact</div>
+          <div class="chip" data-val="Agriculture">Agriculture</div>
+          <div class="chip" data-val="Media & Communication">Media & Communication</div>
+          <div class="chip" data-val="Consulting & Advisory">Consulting & Advisory</div>
+          <div class="chip" data-val="Entrepreneurship & Startups">Entrepreneurship & Startups</div>
+          <div class="chip" data-val="Research & Academia">Research & Academia</div>
         </div>
       </div>
-      <div class="ob-divider"></div>
       <div class="ob-section">
-        <label class="ob-label">What have you studied? <span>(pick all that apply)</span></label>
+        <label class="ob-label">What have you studied? <span>(pick all that apply — optional)</span></label>
         <div class="chips" id="chips-edu">
           <div class="chip" data-val="Engineering & Technology">Engineering</div>
           <div class="chip" data-val="Natural Sciences (Biology / Chemistry / Physics)">Natural Sciences</div>
@@ -585,25 +616,7 @@ body::before {
         </div>
       </div>
       <div class="ob-section">
-        <label class="ob-label">Worlds you've worked in <span>(pick all that apply)</span></label>
-        <div class="chips" id="chips-work">
-          <div class="chip" data-val="Technology & Software">Technology</div>
-          <div class="chip" data-val="Finance & Banking">Finance</div>
-          <div class="chip" data-val="Consulting & Strategy">Consulting</div>
-          <div class="chip" data-val="Healthcare & Medicine">Healthcare</div>
-          <div class="chip" data-val="Government & Policy">Government</div>
-          <div class="chip" data-val="Education & Research">Education</div>
-          <div class="chip" data-val="Media & Content">Media</div>
-          <div class="chip" data-val="Entrepreneurship & Startups">Startups</div>
-          <div class="chip" data-val="Manufacturing & Industry">Manufacturing</div>
-          <div class="chip" data-val="Development Sector (NGO / Impact)">Development</div>
-          <div class="chip" data-val="Legal Services">Legal</div>
-          <div class="chip" data-val="Marketing & Sales">Marketing</div>
-          <div class="chip" data-val="Creative Industries">Creative</div>
-        </div>
-      </div>
-      <div class="ob-section">
-        <label class="ob-label">What lights you up outside work <span>(pick all that apply)</span></label>
+        <label class="ob-label">What lights you up outside work <span>(pick all that apply — optional)</span></label>
         <div class="chips" id="chips-hobby">
           <div class="chip" data-val="Music">Music</div>
           <div class="chip" data-val="Sports & Athletics">Sports</div>
@@ -621,7 +634,10 @@ body::before {
           <div class="chip" data-val="Photography">Photography</div>
         </div>
       </div>
-      <button id="ob-submit" disabled>Show me what I'm missing →</button>
+      <button id="ob-submit" disabled>Enter the Confluence →</button>
+    </div>
+    <div class="ob-about-link">
+      <button onclick="showScreen('screen-about')">What is Confluence? →</button>
     </div>
   </div>
 </div>
@@ -631,9 +647,6 @@ body::before {
   <div class="page-wrap">
     <div class="app-header">
       <div class="app-logo">Confluen<span>ce</span></div>
-      <div class="header-nav">
-        <button class="nav-link" onclick="showScreen('screen-about')">About</button>
-      </div>
     </div>
 
     <div class="weekday-strip" id="weekday-strip"></div>
@@ -788,7 +801,7 @@ Object.entries(CLUSTERS).forEach(([cluster, data]) => {
 // STATE
 // ============================================================
 let state = {
-  profile: { name:'', age:'', lifeStage:'', primaryField:'', education:[], profession:[], hobbies:[] },
+  profile: { name:'', lifeStage:'', domains:[], education:[], hobbies:[] },
   onboarded: false,
   todayDate: null,
   todayCard: null,
@@ -933,246 +946,57 @@ function getChips(id) {
 
 function validateOb() {
   const ok = document.getElementById('ob-name').value.trim()
-    && getChips('chips-age').length
     && getChips('chips-stage').length
-    && getChips('chips-field').length;
+    && getChips('chips-domain').length;
   document.getElementById('ob-submit').disabled = !ok;
 }
 
 // ============================================================
-// SVG DIAGRAM RENDERER
+// BRIDGE VISUAL RENDERER
 // ============================================================
+function renderBridge(bridgeData) {
+  const bd  = bridgeData || {};
+  const ll  = bd.leftLabel    || 'Discipline';
+  const lc  = bd.leftConcept  || '';
+  const rl  = bd.rightLabel   || 'Your World';
+  const rc  = bd.rightConcept || '';
+  const al  = bd.arcLabel     || '';
+
+  const W = 560, H = 190;
+  const accent = '#c4460a', ink = '#1a1614', border = '#d4c9b0', paper2 = '#ede8dc';
+  const trunc = (s, n) => s && s.length > n ? s.slice(0, n - 1) + '…' : (s || '');
+
+  return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;">
+    <defs>
+      <style>
+        .br-label   { font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:0.12em; text-transform:uppercase; fill:${accent}; }
+        .br-concept { font-family:'Playfair Display',Georgia,serif; font-size:12px; fill:${ink}; font-style:italic; }
+        .br-arc     { font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:0.1em; text-transform:uppercase; fill:${accent}; }
+      </style>
+    </defs>
+    <!-- Left node -->
+    <rect x="16" y="72" width="152" height="62" rx="2" fill="${paper2}" stroke="${border}" stroke-width="1"/>
+    <text x="92" y="92" text-anchor="middle" class="br-label">${trunc(ll, 16)}</text>
+    <text x="92" y="114" text-anchor="middle" class="br-concept">${trunc(lc, 18)}</text>
+    <!-- Right node -->
+    <rect x="392" y="72" width="152" height="62" rx="2" fill="${paper2}" stroke="${border}" stroke-width="1"/>
+    <text x="468" y="92" text-anchor="middle" class="br-label">${trunc(rl, 16)}</text>
+    <text x="468" y="114" text-anchor="middle" class="br-concept">${trunc(rc, 18)}</text>
+    <!-- Animated arc -->
+    <path d="M 168 103 Q 280 28 392 103" fill="none" stroke="${accent}" stroke-width="2" stroke-dasharray="16 6">
+      <animate attributeName="stroke-dashoffset" from="110" to="0" dur="2.5s" repeatCount="indefinite"/>
+    </path>
+    <!-- Arc endpoints -->
+    <circle cx="168" cy="103" r="3" fill="${accent}" opacity="0.6"/>
+    <circle cx="392" cy="103" r="3" fill="${accent}" opacity="0.6"/>
+    <!-- Arc label -->
+    ${al ? `<text x="280" y="50" text-anchor="middle" class="br-arc">${trunc(al, 22)}</text>` : ''}
+  </svg>`;
+}
+
+// Legacy shim — kept for any cached cards that might still have visualType
 function renderDiagram(visualType, visualData) {
-  const vd = visualData || {};
-  const ll = vd.leftLabel   || 'Source';
-  const lc = vd.leftConcept  || '';
-  const rl = vd.rightLabel  || 'Target';
-  const rc = vd.rightConcept || '';
-
-  const W = 560, H = 200;
-  const accent = '#c4460a', ink = '#1a1614', border = '#d4c9b0', paper = '#f5f0e8', paper2 = '#ede8dc';
-
-  const base = (content, height = H) =>
-    `<svg viewBox="0 0 ${W} ${height}" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;">
-      <defs>
-        <style>
-          .svg-label { font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:0.1em; text-transform:uppercase; fill:${accent}; }
-          .svg-concept { font-family:'Playfair Display',Georgia,serif; font-size:13px; fill:${ink}; }
-          .svg-small { font-family:'JetBrains Mono',monospace; font-size:9px; fill:#8a7d6b; }
-        </style>
-      </defs>
-      ${content}
-    </svg>`;
-
-  if (visualType === 'feedback_loop') {
-    return base(`
-      <!-- Left node -->
-      <rect x="30" y="70" width="140" height="60" rx="2" fill="white" stroke="${border}" stroke-width="1"/>
-      <text x="100" y="92" text-anchor="middle" class="svg-label">${ll.slice(0,14)}</text>
-      <text x="100" y="113" text-anchor="middle" class="svg-concept">${lc.slice(0,20)}</text>
-      <!-- Right node -->
-      <rect x="390" y="70" width="140" height="60" rx="2" fill="white" stroke="${border}" stroke-width="1"/>
-      <text x="460" y="92" text-anchor="middle" class="svg-label">${rl.slice(0,14)}</text>
-      <text x="460" y="113" text-anchor="middle" class="svg-concept">${rc.slice(0,20)}</text>
-      <!-- Top arrow left-to-right -->
-      <path d="M 170 88 Q 280 50 390 88" fill="none" stroke="${accent}" stroke-width="2" stroke-dasharray="8 4">
-        <animate attributeName="stroke-dashoffset" from="60" to="0" dur="2s" repeatCount="indefinite"/>
-      </path>
-      <polygon points="385,82 395,88 385,94" fill="${accent}"/>
-      <!-- Bottom arrow right-to-left -->
-      <path d="M 390 112 Q 280 150 170 112" fill="none" stroke="${ink}" stroke-width="1.5" stroke-dasharray="6 4" opacity="0.5">
-        <animate attributeName="stroke-dashoffset" from="0" to="60" dur="2.5s" repeatCount="indefinite"/>
-      </path>
-      <polygon points="175,118 165,112 175,106" fill="${ink}" opacity="0.5"/>
-      <!-- Center label -->
-      <text x="280" y="105" text-anchor="middle" class="svg-small">feedback</text>
-    `);
-  }
-
-  if (visualType === 'network') {
-    const nodes = [
-      { x:100, y:100, labeled:true, side:'left' },
-      { x:220, y:50  },
-      { x:280, y:150 },
-      { x:340, y:60  },
-      { x:460, y:100, labeled:true, side:'right' },
-    ];
-    const edges = [[0,1],[0,2],[1,3],[2,3],[3,4],[1,4],[2,4]];
-    const lines = edges.map(([a,b]) =>
-      `<line x1="${nodes[a].x}" y1="${nodes[a].y}" x2="${nodes[b].x}" y2="${nodes[b].y}" stroke="${border}" stroke-width="1.5"/>
-       <circle r="4" fill="${accent}" opacity="0">
-         <animateMotion dur="${(2.5 + (a+b)*0.3).toFixed(1)}s" repeatCount="indefinite">
-           <mpath xlink:href="#e${a}${b}"/>
-         </animateMotion>
-         <animate attributeName="opacity" values="0;0.9;0" dur="${(2.5 + (a+b)*0.3).toFixed(1)}s" repeatCount="indefinite"/>
-       </circle>`
-    ).join('');
-    const paths = edges.map(([a,b]) =>
-      `<path id="e${a}${b}" d="M${nodes[a].x},${nodes[a].y} L${nodes[b].x},${nodes[b].y}" fill="none"/>`
-    ).join('');
-    const circles = nodes.map((n,i) =>
-      `<circle cx="${n.x}" cy="${n.y}" r="${n.labeled ? 18 : 8}" fill="white" stroke="${n.labeled ? accent : border}" stroke-width="${n.labeled ? 2 : 1}"/>
-       ${n.labeled ? `<text x="${n.x}" y="${n.y - 4}" text-anchor="middle" class="svg-label">${(n.side==='left'?ll:rl).slice(0,10)}</text>
-       <text x="${n.x}" y="${n.y + 10}" text-anchor="middle" class="svg-small">${(n.side==='left'?lc:rc).slice(0,14)}</text>` : ''}`
-    ).join('');
-    return base(`<defs>${paths}</defs>${lines}${circles}`, 200);
-  }
-
-  if (visualType === 'spectrum') {
-    return base(`
-      <!-- Gradient bar -->
-      <defs>
-        <linearGradient id="specGrad" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0%" stop-color="${accent}" stop-opacity="0.8"/>
-          <stop offset="100%" stop-color="${ink}" stop-opacity="0.6"/>
-        </linearGradient>
-      </defs>
-      <rect x="60" y="88" width="440" height="24" rx="12" fill="url(#specGrad)" opacity="0.25"/>
-      <rect x="60" y="88" width="440" height="24" rx="12" fill="none" stroke="${border}" stroke-width="1"/>
-      <!-- Sliding marker -->
-      <g style="animation: spectrumSlide 4s ease-in-out infinite;">
-        <circle cx="0" cy="100" r="13" fill="${accent}" opacity="0.9"/>
-        <text x="0" y="104" text-anchor="middle" fill="white" style="font-family:'JetBrains Mono',monospace;font-size:10px;">↕</text>
-      </g>
-      <!-- Labels -->
-      <text x="60" y="75" text-anchor="middle" class="svg-label">${ll.slice(0,14)}</text>
-      <text x="60" y="140" text-anchor="middle" class="svg-small">${lc.slice(0,18)}</text>
-      <text x="500" y="75" text-anchor="middle" class="svg-label">${rl.slice(0,14)}</text>
-      <text x="500" y="140" text-anchor="middle" class="svg-small">${rc.slice(0,18)}</text>
-      <text x="280" y="145" text-anchor="middle" class="svg-small">tension ←→ balance</text>
-    `);
-  }
-
-  if (visualType === 'threshold') {
-    return base(`
-      <!-- Container bar -->
-      <rect x="220" y="20" width="60" height="160" rx="2" fill="${paper2}" stroke="${border}" stroke-width="1"/>
-      <!-- Fill bar animating upward -->
-      <clipPath id="barClip"><rect x="220" y="20" width="60" height="160"/></clipPath>
-      <rect x="222" y="100" width="56" height="78" fill="${accent}" opacity="0.6" clip-path="url(#barClip)">
-        <animate attributeName="y" from="178" to="100" dur="2s" fill="freeze" begin="0s"/>
-        <animate attributeName="height" from="0" to="78" dur="2s" fill="freeze" begin="0s"/>
-      </rect>
-      <!-- Tipping point line -->
-      <line x1="210" y1="100" x2="290" y2="100" stroke="${accent}" stroke-width="2" stroke-dasharray="4 3">
-        <animate attributeName="opacity" values="0.6;1;0.6" dur="1.5s" repeatCount="indefinite"/>
-      </line>
-      <text x="295" y="104" class="svg-small" fill="${accent}">tipping point</text>
-      <!-- Labels -->
-      <text x="250" y="15" text-anchor="middle" class="svg-label">${ll.slice(0,14)}</text>
-      <text x="250" y="195" text-anchor="middle" class="svg-small">${lc.slice(0,20)}</text>
-      <!-- Right side label -->
-      <text x="420" y="90" text-anchor="middle" class="svg-label">${rl.slice(0,14)}</text>
-      <text x="420" y="110" text-anchor="middle" class="svg-small">${rc.slice(0,20)}</text>
-      <line x1="295" y1="100" x2="380" y2="100" stroke="${border}" stroke-width="1" stroke-dasharray="3 3"/>
-    `, 210);
-  }
-
-  if (visualType === 'cascade') {
-    const boxes = [
-      { y:10, label: lc.slice(0,18) || 'trigger' },
-      { y:55, label: '' },
-      { y:100, label: '' },
-      { y:145, label: rc.slice(0,18) || 'outcome' },
-    ];
-    return base(boxes.map((b, i) => `
-      <g style="animation: cascadeReveal 0.5s ease ${(i*0.3).toFixed(1)}s both;">
-        <rect x="170" y="${b.y}" width="220" height="36" rx="2"
-          fill="${i===0||i===3 ? 'white' : paper2}"
-          stroke="${i===0||i===3 ? accent : border}" stroke-width="${i===0||i===3 ? '1.5' : '1'}"/>
-        <text x="280" y="${b.y + 23}" text-anchor="middle" class="${i===0||i===3 ? 'svg-concept' : 'svg-small'}">
-          ${b.label || '↓'}
-        </text>
-        ${i < 3 ? `<line x1="280" y1="${b.y+36}" x2="280" y2="${b.y+55}" stroke="${border}" stroke-width="1.5" marker-end="url(#arrowDown)"/>` : ''}
-      </g>
-    `).join('') + `
-      <text x="50" y="28" text-anchor="middle" class="svg-label">${ll.slice(0,12)}</text>
-      <text x="500" y="163" text-anchor="middle" class="svg-label">${rl.slice(0,12)}</text>
-      <defs><marker id="arrowDown" markerWidth="6" markerHeight="6" refX="3" refY="6" orient="auto">
-        <path d="M0,0 L3,6 L6,0" fill="none" stroke="${border}" stroke-width="1"/>
-      </marker></defs>
-    `, 195);
-  }
-
-  if (visualType === 'cycle') {
-    const stages = [
-      { angle: -90, label: lc.slice(0,12) || 'observe' },
-      { angle:   0, label: '' },
-      { angle:  90, label: rc.slice(0,12) || 'act' },
-      { angle: 180, label: '' },
-    ];
-    const cx2 = 280, cy2 = 100, r = 70;
-    const stageCircles = stages.map((s, i) => {
-      const rad = s.angle * Math.PI / 180;
-      const nx = cx2 + r * Math.cos(rad);
-      const ny = cy2 + r * Math.sin(rad);
-      return `<circle cx="${nx}" cy="${ny}" r="22" fill="white" stroke="${i===0||i===2 ? accent : border}" stroke-width="${i===0||i===2?'1.5':'1'}"/>
-        <text x="${nx}" y="${ny+4}" text-anchor="middle" class="svg-small">${s.label || '·'}</text>`;
-    }).join('');
-    return base(`
-      <g style="transform-origin:${cx2}px ${cy2}px; animation: slowSpin 12s linear infinite;">
-        <circle cx="${cx2}" cy="${cy2}" r="${r}" fill="none" stroke="${border}" stroke-width="1" stroke-dasharray="6 4"/>
-        ${stages.map((s,i) => {
-          const a1 = ((s.angle - 30) * Math.PI / 180);
-          const a2 = ((s.angle + 30) * Math.PI / 180);
-          return `<path d="M ${cx2 + r*Math.cos(a1)} ${cy2 + r*Math.sin(a1)} A ${r} ${r} 0 0 1 ${cx2 + r*Math.cos(a2)} ${cy2 + r*Math.sin(a2)}"
-            fill="none" stroke="${accent}" stroke-width="2" opacity="0.5"/>`;
-        }).join('')}
-      </g>
-      ${stageCircles}
-      <text x="${cx2}" y="${cy2+5}" text-anchor="middle" class="svg-small">cycle</text>
-      <text x="50" y="${cy2+5}" text-anchor="middle" class="svg-label">${ll.slice(0,12)}</text>
-      <text x="510" y="${cy2+5}" text-anchor="middle" class="svg-label">${rl.slice(0,12)}</text>
-    `);
-  }
-
-  if (visualType === 'bridge') {
-    return base(`
-      <!-- Left island -->
-      <rect x="20" y="120" width="140" height="50" rx="2" fill="${paper2}" stroke="${border}" stroke-width="1"/>
-      <text x="90" y="142" text-anchor="middle" class="svg-label">${ll.slice(0,14)}</text>
-      <text x="90" y="160" text-anchor="middle" class="svg-small">${lc.slice(0,18)}</text>
-      <!-- Right island -->
-      <rect x="400" y="120" width="140" height="50" rx="2" fill="${paper2}" stroke="${border}" stroke-width="1"/>
-      <text x="470" y="142" text-anchor="middle" class="svg-label">${rl.slice(0,14)}</text>
-      <text x="470" y="160" text-anchor="middle" class="svg-small">${rc.slice(0,18)}</text>
-      <!-- Bridge top rail -->
-      <path d="M 160 120 L 400 120" fill="none" stroke="${accent}" stroke-width="2.5" stroke-dasharray="300" stroke-dashoffset="300">
-        <animate attributeName="stroke-dashoffset" from="300" to="0" dur="2s" fill="freeze"/>
-      </path>
-      <!-- Bridge bottom rail -->
-      <path d="M 160 140 L 400 140" fill="none" stroke="${accent}" stroke-width="1.5" opacity="0.5" stroke-dasharray="300" stroke-dashoffset="300">
-        <animate attributeName="stroke-dashoffset" from="300" to="0" dur="2s" begin="0.3s" fill="freeze"/>
-      </path>
-      <!-- Bridge planks -->
-      ${[0,1,2,3,4,5,6].map(i => `
-        <line x1="${180 + i*35}" y1="120" x2="${180 + i*35}" y2="140" stroke="${border}" stroke-width="1" opacity="0">
-          <animate attributeName="opacity" from="0" to="1" dur="0.2s" begin="${0.3 + i*0.15}s" fill="freeze"/>
-        </line>
-      `).join('')}
-      <text x="280" y="108" text-anchor="middle" class="svg-small">shared structure</text>
-    `, 190);
-  }
-
-  // venn (default)
-  return base(`
-    <!-- Left circle -->
-    <circle cx="220" cy="100" r="80" fill="${accent}" opacity="0.15" stroke="${accent}" stroke-width="1.5"/>
-    <!-- Right circle -->
-    <circle cx="340" cy="100" r="80" fill="${ink}" opacity="0.08" stroke="${ink}" stroke-width="1" opacity="0.3"/>
-    <!-- Intersection pulse -->
-    <ellipse cx="280" cy="100" rx="40" ry="60" fill="${accent}" opacity="0.2">
-      <animate attributeName="opacity" values="0.15;0.4;0.15" dur="2.5s" repeatCount="indefinite"/>
-      <animate attributeName="rx" values="38;44;38" dur="2.5s" repeatCount="indefinite"/>
-    </ellipse>
-    <!-- Labels -->
-    <text x="170" y="74" text-anchor="middle" class="svg-label">${ll.slice(0,14)}</text>
-    <text x="170" y="107" text-anchor="middle" class="svg-small">${lc.slice(0,16)}</text>
-    <text x="390" y="74" text-anchor="middle" class="svg-label">${rl.slice(0,14)}</text>
-    <text x="390" y="107" text-anchor="middle" class="svg-small">${rc.slice(0,16)}</text>
-    <text x="280" y="97" text-anchor="middle" class="svg-small" fill="${accent}">shared</text>
-    <text x="280" y="112" text-anchor="middle" class="svg-small" fill="${accent}">pattern</text>
-  `);
+  return renderBridge(visualData);
 }
 
 // ============================================================
@@ -1207,26 +1031,86 @@ RULES:
 
 6. TONE
    Brilliant friend. Not professor. Excited about ideas. Not performing excitement.
-   Direct. Warm. Never condescending. Talks to them like they're intelligent — because they are.`;
+   Direct. Warm. Never condescending. Talks to them like they're intelligent — because they are.
+
+7. CHOOSE YOUR FORMAT
+   Every insight follows one of seven formats. Pick whichever fits today's discipline and this person best.
+
+   TYPE 1 — THE LENS
+   Take a concept from today's discipline and use it as a new lens on the person's world.
+   Show them their own domain through unfamiliar eyes.
+   Best for: Ecology, Architecture, Psychology, Linguistics, Anthropology
+
+   TYPE 2 — THE JOURNEY
+   Show how a concept originated in one field, then traveled across 2–3 others, before arriving in the person's world.
+   The concept proves its own universality by having already crossed disciplines.
+   Best for: Game Theory, Thermodynamics, Information Theory, Evolutionary concepts, Systems Thinking
+
+   TYPE 3 — THE UNTOLD STORY
+   Take something the person likely memorised in school — a theorem, a law, a formula, a historical event.
+   Reveal the human drama, the origin story, the controversy, the accident behind it.
+   Connect the story to something universal or directly relevant to their world.
+   Best for: Mathematics, Physics, History, Philosophy of Science, Classical disciplines
+
+   TYPE 4 — THE COMMON ANCESTOR
+   Two things that seem completely unrelated independently arrived at the same principle.
+   Not one borrowing from the other — both discovering it separately.
+   Show the shared root, then ask: what does that tell us about the nature of the problem?
+   Examples: music and mathematics both emerge from ratio; insurance and gambling are mathematically identical; evolution and financial markets both run on variation + selection.
+   Best for: disciplines with deep structural overlap — Mathematics, Economics, Biology, Music Theory
+
+   TYPE 5 — THE PARADOX
+   A result that is mathematically proven but completely defies intuition — and is secretly operating in the person's world.
+   Don't just explain the paradox. Show them where it's running in their domain without them knowing.
+   Examples: Braess's Paradox (adding a road worsens traffic), Simpson's Paradox (a treatment better in every subgroup, worse overall), the Friendship Paradox.
+   Best for: Mathematics, Statistics, Game Theory, Network Science, Economics
+
+   TYPE 6 — THE PERSON
+   A historical figure who crossed into unexpected territory and what they found there.
+   Not a biography — a story of what happens when someone refuses to stay in one discipline.
+   Connect their crossing to the person's own world: what would they find if they made the same leap?
+   Examples: Florence Nightingale as statistician, Shannon borrowing entropy from thermodynamics, Von Neumann, Da Vinci.
+   Best for: History of Science, Mathematics, Medicine, any discipline with a compelling origin figure
+
+   TYPE 7 — THE FAILURE
+   A famous collapse, disaster, or mistake in one domain that contains an exact lesson for the person's world.
+   Lead with the story. Land the lesson. Make it specific to them.
+   Examples: Tacoma Narrows Bridge (resonance) → where are oscillations building in your system? Challenger disaster (org ignored data) → where is your team doing the same?
+   Best for: Engineering, Medicine, Military History, Organisational Behaviour, any domain with documented failures
+
+   Do not announce which format you're using. Just write it.
+
+8. FACTUAL ACCURACY IS NON-NEGOTIABLE
+   Every claim in this insight must be accurate. Trust is the product.
+
+   - Historical facts must be real. If you cite that Shannon borrowed entropy from thermodynamics — that must be true.
+   - Named paradoxes, theorems, and concepts must exist and be described accurately.
+   - Historical figures must have actually done what you describe.
+   - Scientific claims must reflect genuine scientific consensus.
+   - Cross-disciplinary connections must be intellectually honest — not just poetic. The structural similarity must be real.
+
+   Inferences and analogies are welcome — but the source material must be solid.
+   If you are not confident in the accuracy of a specific claim, choose a different example. Never fabricate or approximate a fact to make the insight work.
+   A slightly less surprising true insight is infinitely better than a compelling false one.`;
 
 function buildPrompt(discipline, cluster) {
-  const p = state.profile;
-  const edu  = p.education.join(', ')  || 'not specified';
-  const work = p.profession.join(', ') || 'not specified';
-  const hob  = p.hobbies.join(', ')    || 'not specified';
+  const p    = state.profile;
+  const edu  = (p.education || []).join(', ')  || 'not specified';
+  const hob  = (p.hobbies   || []).join(', ')  || 'not specified';
+  const doms = (p.domains   || []).join(', ')  || 'not specified';
+  const primaryDomain = (p.domains || [])[0] || 'their world';
 
   return `Generate a cross-disciplinary insight for this person:
 
 NAME: ${p.name}
-AGE: ${p.age} | LIFE STAGE: ${p.lifeStage}
-PRIMARY DOMAIN: ${p.primaryField}
+LIFE STAGE: ${p.lifeStage}
+DOMAINS (current & past): ${doms}
 EDUCATION: ${edu}
-WORK EXPERIENCE: ${work}
 INTERESTS: ${hob}
 
 TODAY'S LENS: ${discipline} (Cluster: ${cluster})
 
-The connection must be genuinely surprising and specific to ${p.name}'s world in ${p.primaryField}.
+The connection must be genuinely surprising and specific to ${p.name}'s world.
 
 Respond ONLY with valid JSON — no markdown, no code fences, no extra text:
 {
@@ -1234,14 +1118,14 @@ Respond ONLY with valid JSON — no markdown, no code fences, no extra text:
   "hook": "Did you know that [specific surprising connection] — ${p.name}? One sentence, screenshot-worthy, ends with question mark",
   "pullQuote": "The single most striking sentence in the insight. Max 20 words. Makes someone stop scrolling.",
   "para1": "2-3 sentences. Open with a concrete specific real-world moment or example — not a definition. Story first, insight second.",
-  "para2": "2-3 sentences. Go deeper or sideways — counterintuitive implication, unexpected angle. Land it specifically in ${p.name}'s world (${p.primaryField}) at the end.",
-  "visualType": "one of: feedback_loop | network | spectrum | threshold | cascade | cycle | bridge | venn",
-  "visualData": {
+  "para2": "2-3 sentences. Go deeper or sideways — counterintuitive implication, unexpected angle. Land it specifically in ${p.name}'s world at the end.",
+  "bridgeData": {
     "leftLabel": "${discipline}",
     "leftConcept": "3-5 word core principle from this discipline",
-    "rightLabel": "${p.primaryField}",
+    "rightLabel": "${primaryDomain}",
     "rightConcept": "same principle expressed in their world",
-    "caption": "One sentence: what this diagram reveals about the connection"
+    "arcLabel": "2-4 word name for the bridging concept",
+    "caption": "One sentence: what this connection reveals — must be factually grounded"
   },
   "whyItMatters": "One sentence. Connects directly and specifically to ${p.name}'s background. Urgent. Make it sting."
 }`;
@@ -1254,7 +1138,7 @@ async function generateCard() {
   const today = getTodayStr();
   if (state.todayDate === today && state.todayCard) {
     renderCard(state.todayCard, state.todayDiscipline);
-    renderLattice();
+    renderConstellation();
     renderTomorrow(state.todayDiscipline);
     return;
   }
@@ -1306,9 +1190,9 @@ async function generateCard() {
     saveState();
 
     document.getElementById('generate-area').innerHTML = '';
-    showConnectionAnimation(discipline, state.profile.primaryField || 'Your World', () => {
+    showConnectionAnimation(discipline, (state.profile.domains || [])[0] || 'Your World', () => {
       renderCard(card, discipline);
-      renderLattice();
+      renderConstellation();
       renderTomorrow(discipline);
     });
 
@@ -1329,11 +1213,11 @@ async function generateCard() {
 // RENDER CARD
 // ============================================================
 function renderCard(card, discipline) {
-  const savedKey    = discipline + (state.todayDate || '');
+  const savedKey     = discipline + (state.todayDate || '');
   const alreadySaved = isSaved(savedKey);
-  const vd = (card.visualData && typeof card.visualData === 'object') ? card.visualData : {};
-  const svgDiagram  = renderDiagram(card.visualType || 'venn', vd);
-  const caption     = vd.caption || '';
+  const bd           = (card.bridgeData && typeof card.bridgeData === 'object') ? card.bridgeData
+                     : (card.visualData  && typeof card.visualData  === 'object') ? card.visualData : {};
+  const caption      = bd.caption || '';
   const clusterEmoji = CLUSTERS[DISC_TO_CLUSTER[discipline]]?.emoji || '✦';
 
   document.getElementById('card-area').innerHTML = `
@@ -1349,7 +1233,7 @@ function renderCard(card, discipline) {
       </div>
       <div class="visual-wrap">
         <div class="visual-label">The Pattern</div>
-        <div class="visual-svg-container">${svgDiagram}</div>
+        <div class="visual-svg-container">${renderBridge(bd)}</div>
         ${caption ? `<div class="visual-caption">${caption}</div>` : ''}
       </div>
       ${card.whyItMatters ? `
@@ -1357,12 +1241,23 @@ function renderCard(card, discipline) {
         <div class="card-why-label">Why this matters for you</div>
         <div class="card-why-text">${card.whyItMatters}</div>
       </div>` : ''}
-      <div class="card-bottom-tag">✦ ${discipline} × ${state.profile.primaryField || 'Your World'}</div>
       <div class="card-actions">
-        <button class="btn-linkedin" onclick="shareLinkedIn()">Share on LinkedIn</button>
-        <div class="card-secondary-actions">
-          <button class="btn-action" onclick="shareWhatsApp()">WhatsApp</button>
-          <button class="btn-action" onclick="copyCard()">Copy</button>
+        <div class="share-label">Share this insight</div>
+        <div class="share-row">
+          <button class="share-btn share-linkedin" onclick="shareLinkedIn()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+            LinkedIn
+          </button>
+          <button class="share-btn share-whatsapp" onclick="shareWhatsApp()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12 0C5.373 0 0 5.373 0 12c0 2.124.557 4.115 1.527 5.843L0 24l6.337-1.496A11.95 11.95 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.935 0-3.735-.509-5.28-1.393l-.378-.225-3.762.888.954-3.667-.247-.393A9.956 9.956 0 0 1 2 12C2 6.478 6.478 2 12 2s10 4.478 10 10-4.478 10-10 10z"/></svg>
+            WhatsApp
+          </button>
+          <button class="share-btn share-copy" onclick="copyCard()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            Copy
+          </button>
+        </div>
+        <div class="card-save-row">
           <button class="btn-action ${alreadySaved ? 'saved' : ''}" id="btn-save" onclick="toggleSave()">
             ${alreadySaved ? '✓ Saved' : '⊕ Save'}
           </button>
@@ -1440,7 +1335,7 @@ function renderTomorrow(todayDiscipline) {
 }
 
 // ============================================================
-// LATTICE (D3)
+// CONSTELLATION MAP
 // ============================================================
 const CLUSTER_COLORS = {
   'Natural Sciences':'#3B82F6','Chemistry':'#10B981','Mathematics':'#8B5CF6',
@@ -1451,88 +1346,86 @@ const CLUSTER_COLORS = {
   'Sports & Performance':'#F97316','Eastern & Classical':'#8B5CF6','Complex Systems':'#6366F1'
 };
 
-function renderLattice() {
+function renderConstellation() {
   const el = document.getElementById('lattice-area');
   if (!el) return;
-  const count   = state.cardCount || 0;
-  const name    = state.profile?.name || 'Friend';
-  const clusters = Object.values(state.clusterProgress || {}).filter(v => v > 0).length;
-  const explored = Object.entries(state.clusterProgress || {}).filter(([,v]) => v > 0).map(([k]) => k);
+
+  const count       = state.cardCount || 0;
+  const profileName = state.profile?.name || 'Friend';
+  const progress    = state.clusterProgress || {};
+  const explored    = new Set(Object.keys(progress).filter(k => (progress[k] || 0) > 0));
+  const clusterNames = Object.keys(CLUSTERS);
 
   let label = '';
-  if (count >= 100) label = `${name}, this is what a polymathic mind looks like.`;
+  if (count >= 100) label = `${profileName}, this is what a polymathic mind looks like.`;
   else if (count >= 30) label = `You've crossed ${count} disciplines. Most people never leave one.`;
-  else if (count >= 7)  label = `${count} disciplines. ${clusters} clusters. You're starting to see the shape of things.`;
+  else if (count >= 7)  label = `${count} disciplines. ${explored.size} clusters. You're starting to see the shape of things.`;
 
-  if (count < 3) {
-    el.innerHTML = `
-      <div class="lattice-wrap">
-        <div class="lattice-title">Your Lattice</div>
-        <div class="lattice-pre-text">Your thinking lattice is just beginning.<br>Every insight adds a node. Every connection adds an edge.</div>
-      </div>`;
-    return;
-  }
+  const W = 520, H = 300;
+  const cx = W / 2, cy = H / 2;
+  const R  = 118;
+
+  const dots = clusterNames.map((clName, i) => {
+    const angle   = (i / clusterNames.length) * 2 * Math.PI - Math.PI / 2;
+    const x       = cx + R * Math.cos(angle);
+    const y       = cy + R * Math.sin(angle);
+    const isExp   = explored.has(clName);
+    const cnt     = progress[clName] || 0;
+    const r       = Math.min(5 + cnt * 0.7, 10);
+    const color   = CLUSTER_COLORS[clName] || '#8a7d6b';
+    const shortName = clName.length > 13 ? clName.slice(0, 12) + '…' : clName;
+
+    // Label position: push outward from center
+    const lx = cx + (R + 20) * Math.cos(angle);
+    const ly = cy + (R + 20) * Math.sin(angle);
+    const anchor = Math.cos(angle) > 0.1 ? 'start' : Math.cos(angle) < -0.1 ? 'end' : 'middle';
+
+    if (isExp) {
+      return `
+        <circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${(r + 5).toFixed(1)}" fill="${color}" opacity="0.12">
+          <animate attributeName="opacity" values="0.07;0.18;0.07" dur="${(2.2 + i * 0.15).toFixed(1)}s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${r.toFixed(1)}" fill="${color}" opacity="0.9" stroke="#f5f0e8" stroke-width="1.5"/>
+        <text x="${lx.toFixed(1)}" y="${(ly + 3).toFixed(1)}" text-anchor="${anchor}" style="font-family:'JetBrains Mono',monospace;font-size:8px;fill:${color};letter-spacing:0.04em;opacity:0.9;">${shortName}</text>`;
+    } else {
+      return `
+        <circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="4" fill="#8a7d6b" opacity="0.18"/>
+        <text x="${lx.toFixed(1)}" y="${(ly + 3).toFixed(1)}" text-anchor="${anchor}" style="font-family:'JetBrains Mono',monospace;font-size:8px;fill:#8a7d6b;letter-spacing:0.04em;opacity:0.22;">${shortName}</text>`;
+    }
+  });
+
+  const lines = clusterNames.filter(n => explored.has(n)).map((clName, i) => {
+    const idx   = clusterNames.indexOf(clName);
+    const angle = (idx / clusterNames.length) * 2 * Math.PI - Math.PI / 2;
+    const x     = cx + R * Math.cos(angle);
+    const y     = cy + R * Math.sin(angle);
+    return `<line x1="${cx}" y1="${cy}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" stroke="#d4c9b0" stroke-width="1" opacity="0.35"/>`;
+  });
+
+  const centerDot = `
+    <circle cx="${cx}" cy="${cy}" r="20" fill="none" stroke="#c4460a" stroke-width="1" opacity="0.15">
+      <animate attributeName="opacity" values="0.1;0.25;0.1" dur="3s" repeatCount="indefinite"/>
+      <animate attributeName="r" values="18;23;18" dur="3s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="${cx}" cy="${cy}" r="7" fill="#c4460a" opacity="0.9" stroke="#f5f0e8" stroke-width="2"/>
+    <text x="${cx}" y="${cy + 20}" text-anchor="middle" style="font-family:'JetBrains Mono',monospace;font-size:9px;fill:#c4460a;letter-spacing:0.08em;">${profileName.slice(0, 10)}</text>`;
+
+  const svgContent = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:520px;height:auto;display:block;margin:0 auto;overflow:visible;">
+    ${lines.join('')}
+    ${dots.join('')}
+    ${centerDot}
+  </svg>`;
+
+  const preText = count < 3
+    ? `<div class="constellation-pre-text">Each cluster you explore will light up here. Your map of human knowledge — building every day.</div>`
+    : (label ? `<div class="constellation-label-text">${label}</div>` : '');
 
   el.innerHTML = `
-    <div class="lattice-wrap">
-      <div class="lattice-title">Your Lattice</div>
-      ${label ? `<div class="lattice-label-text">${label}</div>` : ''}
-      <div id="lattice-svg-container"></div>
+    <div class="constellation-wrap">
+      <div class="constellation-title">Your Knowledge Map</div>
+      ${preText}
+      ${svgContent}
     </div>`;
-
-  const W = Math.min((el.clientWidth || 320) - 0, 520);
-  const H = 260;
-
-  const nodes = [
-    { id: 'you', label: name, type: 'center', r: 13 },
-    ...explored.map(c => ({
-      id: c, label: c.length > 13 ? c.slice(0,12)+'…' : c,
-      type: 'cluster', color: CLUSTER_COLORS[c] || '#8a7d6b', r: 7
-    }))
-  ];
-  const links = explored.map(c => ({ source: 'you', target: c }));
-
-  const svg = d3.select('#lattice-svg-container')
-    .append('svg').attr('width', W).attr('height', H)
-    .attr('viewBox', `0 0 ${W} ${H}`).style('overflow','visible');
-
-  const sim = d3.forceSimulation(nodes)
-    .force('link', d3.forceLink(links).id(d => d.id).distance(85))
-    .force('charge', d3.forceManyBody().strength(-110))
-    .force('center', d3.forceCenter(W/2, H/2))
-    .force('collision', d3.forceCollide().radius(d => d.r + 18));
-
-  const link = svg.append('g').selectAll('line').data(links).join('line')
-    .attr('stroke','#d4c9b0').attr('stroke-width',1.5).attr('opacity',0.7);
-
-  const node = svg.append('g').selectAll('g').data(nodes).join('g');
-
-  node.filter(d => d.type === 'center').append('circle')
-    .attr('r', d => d.r + 7).attr('fill','none')
-    .attr('stroke','#c4460a').attr('stroke-width',1).attr('opacity',0.25)
-    .style('animation','glowPulse 2.5s ease infinite');
-
-  node.append('circle')
-    .attr('r', d => d.r)
-    .attr('fill', d => d.type === 'center' ? '#c4460a' : d.color)
-    .attr('opacity', 0.9)
-    .attr('stroke','#f5f0e8').attr('stroke-width',2);
-
-  node.append('text')
-    .attr('dy', d => d.type === 'center' ? -18 : d.r + 13)
-    .attr('text-anchor','middle')
-    .attr('font-family',"'JetBrains Mono', monospace")
-    .attr('font-size', d => d.type === 'center' ? 10 : 9)
-    .attr('fill','#8a7d6b').attr('letter-spacing','0.04em')
-    .text(d => d.label);
-
-  sim.on('tick', () => {
-    link
-      .attr('x1', d => d.source.x).attr('y1', d => d.source.y)
-      .attr('x2', d => d.target.x).attr('y2', d => d.target.y);
-    node.attr('transform', d =>
-      `translate(${Math.max(d.r+4, Math.min(W-d.r-4, d.x))},${Math.max(d.r+4, Math.min(H-d.r-4, d.y))})`);
-  });
 }
 
 // ============================================================
@@ -1583,7 +1476,7 @@ function initApp() {
   const today = getTodayStr();
   if (state.todayDate === today && state.todayCard) {
     renderCard(state.todayCard, state.todayDiscipline);
-    renderLattice();
+    renderConstellation();
     renderTomorrow(state.todayDiscipline);
   } else {
     generateCard();
@@ -1595,13 +1488,11 @@ function initApp() {
 // ============================================================
 function submitOb() {
   state.profile = {
-    name:         document.getElementById('ob-name').value.trim(),
-    age:          getChips('chips-age')[0]   || '',
-    lifeStage:    getChips('chips-stage')[0] || '',
-    primaryField: getChips('chips-field')[0] || '',
-    education:    getChips('chips-edu'),
-    profession:   getChips('chips-work'),
-    hobbies:      getChips('chips-hobby'),
+    name:      document.getElementById('ob-name').value.trim(),
+    lifeStage: getChips('chips-stage')[0] || '',
+    domains:   getChips('chips-domain'),
+    education: getChips('chips-edu'),
+    hobbies:   getChips('chips-hobby'),
   };
   state.onboarded = true;
   saveState();
@@ -1642,8 +1533,8 @@ function init() {
   loadState();
 
   if (!state.onboarded) {
-    ['chips-age','chips-stage','chips-field'].forEach(id => initChips(id, false));
-    ['chips-edu','chips-work','chips-hobby'].forEach(id => initChips(id, true));
+    initChips('chips-stage', false);
+    ['chips-domain','chips-edu','chips-hobby'].forEach(id => initChips(id, true));
     document.getElementById('ob-name').addEventListener('input', validateOb);
     document.getElementById('ob-submit').addEventListener('click', submitOb);
     showScreen('screen-onboarding');
