@@ -962,33 +962,51 @@ function renderBridge(bridgeData) {
   const rc  = bd.rightConcept || '';
   const al  = bd.arcLabel     || '';
 
-  const W = 560, H = 190;
+  const W = 560, H = 200;
   const accent = '#c4460a', ink = '#1a1614', border = '#d4c9b0', paper2 = '#ede8dc';
+
+  // Split concept into two lines if long
+  function conceptLines(s) {
+    if (!s) return ['', ''];
+    const words = s.split(' ');
+    if (s.length <= 16) return [s, ''];
+    let line1 = '', line2 = '';
+    for (const w of words) {
+      if ((line1 + ' ' + w).trim().length <= 18) line1 = (line1 + ' ' + w).trim();
+      else line2 = (line2 + ' ' + w).trim();
+    }
+    if (line2.length > 20) line2 = line2.slice(0, 19) + '…';
+    return [line1, line2];
+  }
+
+  const [lc1, lc2] = conceptLines(lc);
+  const [rc1, rc2] = conceptLines(rc);
   const trunc = (s, n) => s && s.length > n ? s.slice(0, n - 1) + '…' : (s || '');
 
   return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;">
     <defs>
       <style>
         .br-label   { font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:0.12em; text-transform:uppercase; fill:${accent}; }
-        .br-concept { font-family:'Playfair Display',Georgia,serif; font-size:12px; fill:${ink}; font-style:italic; }
+        .br-concept { font-family:'Playfair Display',Georgia,serif; font-size:11.5px; fill:${ink}; font-style:italic; }
         .br-arc     { font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:0.1em; text-transform:uppercase; fill:${accent}; }
       </style>
     </defs>
     <!-- Left node -->
-    <rect x="16" y="72" width="152" height="62" rx="2" fill="${paper2}" stroke="${border}" stroke-width="1"/>
-    <text x="92" y="92" text-anchor="middle" class="br-label">${trunc(ll, 16)}</text>
-    <text x="92" y="114" text-anchor="middle" class="br-concept">${trunc(lc, 18)}</text>
+    <rect x="8" y="68" width="168" height="70" rx="2" fill="${paper2}" stroke="${border}" stroke-width="1"/>
+    <text x="92" y="88" text-anchor="middle" class="br-label">${trunc(ll, 18)}</text>
+    <text x="92" y="108" text-anchor="middle" class="br-concept">${lc1}</text>
+    ${lc2 ? `<text x="92" y="124" text-anchor="middle" class="br-concept">${lc2}</text>` : ''}
     <!-- Right node -->
-    <rect x="392" y="72" width="152" height="62" rx="2" fill="${paper2}" stroke="${border}" stroke-width="1"/>
-    <text x="468" y="92" text-anchor="middle" class="br-label">${trunc(rl, 16)}</text>
-    <text x="468" y="114" text-anchor="middle" class="br-concept">${trunc(rc, 18)}</text>
+    <rect x="384" y="68" width="168" height="70" rx="2" fill="${paper2}" stroke="${border}" stroke-width="1"/>
+    <text x="468" y="88" text-anchor="middle" class="br-label">${trunc(rl, 18)}</text>
+    <text x="468" y="108" text-anchor="middle" class="br-concept">${rc1}</text>
+    ${rc2 ? `<text x="468" y="124" text-anchor="middle" class="br-concept">${rc2}</text>` : ''}
     <!-- Arc -->
-    <path d="M 168 103 Q 280 28 392 103" fill="none" stroke="${accent}" stroke-width="1.5" opacity="0.7"/>
-    <!-- Arc endpoints -->
-    <circle cx="168" cy="103" r="3" fill="${accent}" opacity="0.5"/>
-    <circle cx="392" cy="103" r="3" fill="${accent}" opacity="0.5"/>
+    <path d="M 176 103 Q 280 24 384 103" fill="none" stroke="${accent}" stroke-width="1.5" opacity="0.7"/>
+    <circle cx="176" cy="103" r="3" fill="${accent}" opacity="0.5"/>
+    <circle cx="384" cy="103" r="3" fill="${accent}" opacity="0.5"/>
     <!-- Arc label -->
-    ${al ? `<text x="280" y="50" text-anchor="middle" class="br-arc">${trunc(al, 22)}</text>` : ''}
+    ${al ? `<text x="280" y="46" text-anchor="middle" class="br-arc">${trunc(al, 24)}</text>` : ''}
   </svg>`;
 }
 
@@ -1157,24 +1175,26 @@ INTERESTS: ${hob}
 
 TODAY'S LENS: ${discipline} (Cluster: ${cluster})
 
-The connection must be genuinely surprising and specific to ${p.name}'s world.
+The connection must be genuinely surprising and specific to this person's world.
+
+Address the reader as "you" throughout. Never use their name in the body text. Write as if talking directly to them.
 
 Respond ONLY with valid JSON — no markdown, no code fences, no extra text:
 {
   "title": "Punchy headline, max 8 words, impossible to ignore, NOT the discipline name",
-  "hook": "Did you know that [specific surprising connection] — ${p.name}? One sentence, screenshot-worthy, ends with question mark",
+  "hook": "One sentence, screenshot-worthy, ends with question mark. Address the reader as 'you'. Specific and surprising.",
   "pullQuote": "The single most striking sentence in the insight. Max 20 words. Makes someone stop scrolling.",
-  "para1": "2-3 sentences. Open with a concrete specific real-world moment or example — not a definition. Story first, insight second.",
-  "para2": "2-3 sentences. Go deeper or sideways — counterintuitive implication, unexpected angle. Land it specifically in ${p.name}'s world at the end.",
+  "para1": "2-3 short sentences. Open with something the reader already knows — a moment, a feeling, a situation from their world. Then walk into the unfamiliar. Story first, concept second.",
+  "para2": "2-3 short sentences. Go deeper or sideways — counterintuitive implication, unexpected angle. Land it in the reader's world at the end. Address as 'you'.",
   "bridgeData": {
     "leftLabel": "${discipline}",
     "leftConcept": "3-5 word core principle from this discipline",
     "rightLabel": "${primaryDomain}",
     "rightConcept": "same principle expressed in their world",
     "arcLabel": "2-4 word name for the bridging concept",
-    "caption": "One sentence: what this connection reveals — must be factually grounded"
+    "caption": "One short sentence: what this connection reveals — factually grounded"
   },
-  "whyItMatters": "One sentence. Connects directly and specifically to ${p.name}'s background. Urgent. Make it sting."
+  "whyItMatters": "One punchy sentence addressed to 'you'. Short. Direct. Connects to their background. No em dashes. No filler. Make it land."
 }`;
 }
 
@@ -1285,7 +1305,7 @@ function renderCard(card, discipline) {
       </div>
       ${card.whyItMatters ? `
       <div class="card-why-box">
-        <div class="card-why-label">Why this matters for ${state.profile.name || 'you'}</div>
+        <div class="card-why-label">Why this matters for you</div>
         <div class="card-why-text">${card.whyItMatters}</div>
       </div>` : ''}
       <div class="card-actions">
@@ -1318,7 +1338,9 @@ function renderCard(card, discipline) {
 // SHARE
 // ============================================================
 function shareLinkedIn() {
-  window.open(`https://www.linkedin.com/feed/?shareActive=true&text=${encodeURIComponent(getShareText())}`, '_blank');
+  navigator.clipboard.writeText(getShareText()).catch(() => {});
+  showToast('Text copied — paste it into LinkedIn');
+  setTimeout(() => window.open('https://www.linkedin.com/feed/', '_blank'), 600);
 }
 
 function addToCalendar() {
@@ -1456,8 +1478,7 @@ function renderConstellation() {
     ${centerDot}
   </svg>`;
 
-  const disciplinesExplored = count;
-  const statLine = `<div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:0.1em;text-align:center;margin-top:12px;opacity:0.7;">${disciplinesExplored} of 108 disciplines explored</div>`;
+  const statLine = '';
 
   const preText = count < 3
     ? `<div class="constellation-pre-text">Each cluster you explore lights up. 108 disciplines. 17 clusters. Vast territory ahead.</div>`
