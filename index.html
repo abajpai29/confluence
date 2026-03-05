@@ -1269,7 +1269,7 @@ async function generateCard() {
     const isRateLimit = errMsg.includes('429');
     document.getElementById('generate-area').innerHTML = `
       <div style="padding:20px 0; display:flex; flex-direction:column; gap:12px;">
-        <div style="font-family:'Playfair Display',Georgia,serif; font-size:15px; font-style:italic; color:var(--ink); line-height:1.6;">${isRateLimit ? "Your lens for today has been delivered. Sit with it." : 'Error: ' + errMsg}</div>
+        <div style="font-family:'Playfair Display',Georgia,serif; font-size:15px; font-style:italic; color:var(--ink); line-height:1.6;">${isRateLimit ? "Your lens for today has been delivered." : 'Error: ' + errMsg}</div>
         ${isRateLimit ? '<div style="font-family:\'JetBrains Mono\',monospace; font-size:10px; color:var(--muted); margin-top:6px;">A new one arrives tomorrow morning. \uD83C\uDF05</div>' : '<button class="btn-retry" onclick="generateCard()">Try again</button>'}
       </div>`;
     console.error(e);
