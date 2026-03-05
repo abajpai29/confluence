@@ -4,946 +4,531 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
   <title>Confluence — Think in Systems</title>
-  <meta name="description" content="One insight a day. 100+ disciplines. Become a systems thinker." />
+  <meta name="description" content="One unexpected connection every weekday. Become a polymathic thinker." />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;1,8..60,300;1,8..60,400&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
   <style>
-    /* ===== RESET & ROOT ===== */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --ink: #1a1614;
-      --paper: #f5f0e8;
-      --paper2: #ede8dc;
-      --card: #ffffff;
-      --accent: #c4460a;
-      --muted: #8a7d6b;
-      --warm: #8b6914;
-      --border: #d4c9b0;
-      --gold: #b8860b;
-      --green: #2d6a4f;
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      font-family: 'Source Serif 4', Georgia, serif;
-      background: var(--paper);
-      color: var(--ink);
-      min-height: 100vh;
-      line-height: 1.7;
-      overflow-x: hidden;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
-      pointer-events: none;
-      z-index: 100;
-      opacity: 0.4;
-    }
-
-    .hidden { display: none !important; }
-
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(16px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50%       { opacity: 0.45; }
-    }
-
-    @keyframes shimmer {
-      0%   { opacity: 0.4; }
-      50%  { opacity: 1; }
-      100% { opacity: 0.4; }
-    }
-
-    /* ===== ONBOARDING ===== */
-    #screen-onboarding {
-      min-height: 100vh;
-      display: flex;
-      align-items: flex-start;
-      justify-content: center;
-      padding: 56px 20px 80px;
-      background: var(--paper);
-      position: relative;
-      z-index: 1;
-    }
-
-    .ob-wrap { width: 100%; max-width: 600px; }
-
-    .ob-header {
-      margin-bottom: 40px;
-      text-align: center;
-    }
-
-    .ob-logo {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: 30px;
-      font-weight: 700;
-      letter-spacing: -0.5px;
-      color: var(--ink);
-      margin-bottom: 10px;
-    }
-
-    .ob-logo span { color: var(--accent); }
-
-    .ob-tagline {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px;
-      color: var(--muted);
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      line-height: 1.6;
-    }
-
-    .ob-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 3px;
-      padding: 40px 44px;
-      position: relative;
-    }
-
-    .ob-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0;
-      width: 3px;
-      height: 100%;
-      background: var(--accent);
-      border-radius: 3px 0 0 3px;
-    }
-
-    .ob-section { margin-bottom: 28px; }
-
-    .ob-label {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 10px;
-      font-weight: 400;
-      text-transform: uppercase;
-      letter-spacing: 0.13em;
-      color: var(--muted);
-      margin-bottom: 12px;
-      display: block;
-    }
-
-    .ob-label span {
-      font-family: 'Source Serif 4', Georgia, serif;
-      font-style: italic;
-      text-transform: none;
-      letter-spacing: 0;
-      font-size: 12px;
-    }
-
-    .ob-input {
-      width: 100%;
-      padding: 14px 18px;
-      border: 1px solid var(--border);
-      border-radius: 2px;
-      font-family: 'Source Serif 4', Georgia, serif;
-      font-size: 17px;
-      color: var(--ink);
-      background: white;
-      outline: none;
-      transition: border-color 0.2s;
-    }
-
-    .ob-input:focus { border-color: var(--warm); }
-    .ob-input::placeholder { color: var(--border); font-style: italic; }
-
-    .chips { display: flex; flex-wrap: wrap; gap: 7px; }
-
-    .chip {
-      padding: 7px 14px;
-      border: 1px solid var(--border);
-      border-radius: 2px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px;
-      letter-spacing: 0.05em;
-      cursor: pointer;
-      transition: all 0.15s;
-      background: white;
-      color: var(--muted);
-      user-select: none;
-      line-height: 1;
-    }
-
-    .chip:hover { border-color: var(--ink); color: var(--ink); }
-
-    .chip.selected {
-      background: var(--ink);
-      border-color: var(--ink);
-      color: var(--paper);
-    }
-
-    .ob-divider { height: 1px; background: var(--border); margin: 28px 0; }
-
-    .ob-hero {
-      margin-bottom: 32px;
-      padding: 28px 0 0;
-      text-align: center;
-    }
-    .ob-hero-quote {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: 20px;
-      font-weight: 600;
-      font-style: italic;
-      color: var(--ink);
-      line-height: 1.4;
-      margin-bottom: 16px;
-    }
-    .ob-hero-body {
-      font-size: 14px;
-      color: var(--muted);
-      line-height: 1.7;
-      margin-bottom: 12px;
-    }
-    .ob-hero-cta {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px;
-      color: var(--accent);
-      letter-spacing: 0.03em;
-      line-height: 1.6;
-    }
-
-    #ob-submit, .btn-primary {
-      width: 100%;
-      padding: 16px;
-      background: var(--accent);
-      color: white;
-      border: none;
-      border-radius: 2px;
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: 17px;
-      font-style: italic;
-      cursor: pointer;
-      transition: all 0.15s;
-      margin-top: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-    }
-
-    #ob-submit:hover, .btn-primary:hover { background: #a33a08; }
-    #ob-submit:disabled, .btn-primary:disabled { opacity: 0.35; cursor: not-allowed; }
-
-    /* ===== MAIN APP SCREEN ===== */
-    #screen-app {
-      max-width: 740px;
-      margin: 0 auto;
-      padding: 0 32px 80px;
-      position: relative;
-      z-index: 1;
-    }
-
-    .app-header {
-      padding: 44px 0 28px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 0;
-    }
-
-    .app-logo {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: 26px;
-      font-weight: 700;
-      letter-spacing: -0.5px;
-      color: var(--ink);
-    }
-
-    .app-logo span { color: var(--accent); }
-
-    .header-right { display: flex; align-items: center; gap: 16px; }
-
-    .streak-pill {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px;
-      color: var(--warm);
-      letter-spacing: 0.05em;
-      background: rgba(184, 134, 11, 0.08);
-      padding: 6px 12px;
-      border-radius: 2px;
-      border: 1px solid rgba(184, 134, 11, 0.2);
-    }
-
-    .progress-btn {
-      background: transparent;
-      border: 1px solid var(--border);
-      padding: 7px 16px;
-      border-radius: 2px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      cursor: pointer;
-      color: var(--muted);
-      transition: all 0.15s;
-    }
-
-    .progress-btn:hover { border-color: var(--ink); color: var(--ink); }
-
-    /* ===== TODAY BANNER ===== */
-    .today-banner {
-      padding: 52px 0 40px;
-      border-bottom: 1px solid var(--border);
-      margin-bottom: 36px;
-    }
-
-    .today-meta {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 10px;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 10px;
-    }
-
-    .today-travel-line {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px;
-      letter-spacing: 0.08em;
-      color: var(--muted);
-      margin-bottom: 6px;
-      text-transform: uppercase;
-    }
-
-    .today-discipline {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: clamp(32px, 5vw, 48px);
-      font-weight: 700;
-      letter-spacing: -1px;
-      line-height: 1.1;
-      margin-bottom: 14px;
-      color: var(--ink);
-    }
-
-    .today-cluster {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 28px;
-    }
-
-    .cluster-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 10px;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--muted);
-      padding: 5px 12px;
-      border: 1px solid var(--border);
-      border-radius: 2px;
-      background: var(--paper2);
-    }
-
-    /* Loading state in banner */
-    .loading-state {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .loading-fragment {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 12px;
-      color: var(--muted);
-      letter-spacing: 0.08em;
-      animation: shimmer 1.8s ease-in-out infinite;
-    }
-
-    .loading-dots {
-      display: flex;
-      gap: 6px;
-      align-items: center;
-    }
-
-    .loading-dot {
-      width: 5px;
-      height: 5px;
-      border-radius: 50%;
-      background: var(--accent);
-    }
-
-    .loading-dot:nth-child(1) { animation: pulse 1.4s ease-in-out infinite; }
-    .loading-dot:nth-child(2) { animation: pulse 1.4s ease-in-out infinite 0.25s; }
-    .loading-dot:nth-child(3) { animation: pulse 1.4s ease-in-out infinite 0.5s; }
-
-    /* Error retry button */
-    .btn-retry {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      padding: 14px 32px;
-      background: var(--accent);
-      color: white;
-      border: none;
-      border-radius: 2px;
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: 16px;
-      font-style: italic;
-      cursor: pointer;
-      transition: all 0.15s;
-      margin-top: 8px;
-    }
-
-    .btn-retry:hover { background: #a33a08; }
-
-    .already-generated {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px;
-      color: var(--muted);
-      letter-spacing: 0.05em;
-    }
-
-    .spinner {
-      width: 14px;
-      height: 14px;
-      border: 1.5px solid rgba(245,240,232,0.3);
-      border-top-color: white;
-      border-radius: 50%;
-      animation: spin 0.7s linear infinite;
-      flex-shrink: 0;
-      display: inline-block;
-    }
-
-    /* ===== CARD AREA ===== */
-    #card-area { padding: 0; }
-
-    #progress-teaser {
-      padding: 16px 0;
-      text-align: center;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px;
-      color: var(--muted);
-      letter-spacing: 0.08em;
-      cursor: pointer;
-      transition: color 0.15s;
-      text-transform: uppercase;
-    }
-    #progress-teaser:hover { color: var(--ink); }
-
-    /* ===== MAIN CARD ===== */
-    .card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 3px;
-      padding: 40px 44px;
-      margin-bottom: 20px;
-      position: relative;
-      overflow: hidden;
-      animation: fadeUp 0.5s ease both;
-    }
-
-    .card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0;
-      width: 3px;
-      height: 100%;
-      background: var(--accent);
-    }
-
-    .card-discipline-tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 10px;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--accent);
-      background: rgba(196, 70, 10, 0.06);
-      border: 1px solid rgba(196, 70, 10, 0.2);
-      padding: 5px 12px;
-      border-radius: 2px;
-      margin-bottom: 20px;
-    }
-
-    .card-title {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: clamp(24px, 3.5vw, 36px);
-      font-weight: 700;
-      letter-spacing: -0.5px;
-      line-height: 1.2;
-      margin-bottom: 28px;
-      color: var(--ink);
-    }
-
-    /* Hook section */
-    .card-hook-wrap {
-      margin-bottom: 32px;
-    }
-
-    .card-hook-label {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 9px;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 10px;
-    }
-
-    .card-hook {
-      border-left: 3px solid var(--accent);
-      padding: 18px 24px;
-      background: white;
-      font-family: 'Playfair Display', Georgia, serif;
-      font-style: italic;
-      font-size: 19px;
-      line-height: 1.55;
-      color: var(--ink);
-    }
-
-    /* Body paragraphs */
-    .card-body {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      margin-bottom: 36px;
-    }
-
-    .card-para {
-      font-size: 16px;
-      line-height: 1.9;
-      color: #3a3028;
-      font-weight: 300;
-    }
-
-    /* Visualised section */
-    .visual-wrap {
-      background: var(--paper2);
-      border: 1px solid var(--border);
-      border-radius: 2px;
-      padding: 24px 28px;
-      margin-bottom: 28px;
-    }
-
-    .visual-section-label {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 10px;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 20px;
-    }
-
-    .visual-svg-container {
-      width: 100%;
-      overflow: hidden;
-    }
-
-    /* Why it matters */
-    .card-why-wrap {
-      background: var(--paper2);
-      border: 1px solid var(--border);
-      border-radius: 2px;
-      padding: 22px 24px;
-      margin-bottom: 28px;
-    }
-
-    .card-why-label {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 9px;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--warm);
-      margin-bottom: 12px;
-    }
-
-    .card-why-text {
-      font-size: 15px;
-      line-height: 1.8;
-      color: #3a3028;
-      font-weight: 300;
-    }
-
-    /* Reflection */
-    .card-reflection {
-      border-top: 2px solid var(--ink);
-      padding-top: 22px;
-      margin-bottom: 32px;
-    }
-
-    .card-reflection-label {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 10px;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 12px;
-    }
-
-    .card-reflection-text {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: 18px;
-      font-style: italic;
-      line-height: 1.5;
-      color: var(--ink);
-    }
-
-    /* Actions */
-    .card-actions { display: flex; gap: 10px; flex-wrap: wrap; }
-
-    .btn-action {
-      flex: 1;
-      min-width: 110px;
-      padding: 11px 16px;
-      border-radius: 2px;
-      border: 1px solid var(--border);
-      background: transparent;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      cursor: pointer;
-      color: var(--muted);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 5px;
-      transition: all 0.15s;
-    }
-
-    .btn-action:hover { border-color: var(--ink); color: var(--ink); }
-
-    .btn-action.saved {
-      background: rgba(196,70,10,0.06);
-      border-color: var(--accent);
-      color: var(--accent);
-    }
-
-    /* Cross-discipline tag */
-    .card-cross-tag {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 10px;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 16px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    /* Hook as pull-quote */
-    .card-hook-pullquote {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: 20px;
-      font-style: italic;
-      font-weight: 400;
-      color: var(--ink);
-      line-height: 1.45;
-      margin-bottom: 20px;
-      padding-left: 16px;
-      border-left: 3px solid var(--accent);
-    }
-
-    /* Inline lattice */
-    .lattice-inline-wrap {
-      background: var(--paper2);
-      border: 1px solid var(--border);
-      border-radius: 2px;
-      padding: 20px 16px;
-      margin: 24px 0 0;
-    }
-    .lattice-inline-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      margin-bottom: 16px;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
-    .lattice-label {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: 16px;
-      font-weight: 600;
-      color: var(--ink);
-    }
-    .lattice-stats {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 10px;
-      color: var(--muted);
-      letter-spacing: 0.05em;
-    }
-    #radarCanvasInline {
-      display: block;
-      margin: 0 auto;
-      max-width: 100%;
-    }
-
-    /* ===== PROGRESS SCREEN ===== */
-    #screen-progress {
-      max-width: 740px;
-      margin: 0 auto;
-      padding: 0 32px 80px;
-      position: relative;
-      z-index: 1;
-    }
-
-    .progress-header {
-      padding: 44px 0 28px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 40px;
-    }
-
-    .progress-title {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: 28px;
-      font-weight: 700;
-      letter-spacing: -0.5px;
-      color: var(--ink);
-    }
-
-    .back-btn {
-      background: transparent;
-      border: 1px solid var(--border);
-      padding: 8px 18px;
-      border-radius: 2px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      cursor: pointer;
-      color: var(--muted);
-      transition: all 0.15s;
-    }
-
-    .back-btn:hover { border-color: var(--ink); color: var(--ink); }
-
-    .stats-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 3px;
-      padding: 32px 36px;
-      margin-bottom: 24px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .stats-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0;
-      width: 3px; height: 100%;
-      background: var(--accent);
-    }
-
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1px;
-      background: var(--border);
-      border: 1px solid var(--border);
-      margin-bottom: 36px;
-    }
-
-    .stat {
-      text-align: center;
-      padding: 20px 10px;
-      background: var(--paper2);
-    }
-
-    .stat-value {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: 38px;
-      font-weight: 700;
-      color: var(--ink);
-      line-height: 1;
-      margin-bottom: 6px;
-    }
-
-    .stat-label {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 10px;
-      color: var(--muted);
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-    }
-
-    .radar-section-label {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 10px;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 20px;
-    }
-
-    #radarCanvas {
-      width: 100%;
-      max-width: 420px;
-      display: block;
-      margin: 0 auto 24px;
-    }
-
-    .cluster-legend {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 4px;
-    }
-
-    .cluster-item {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-family: 'Source Serif 4', Georgia, serif;
-      font-size: 12px;
-      color: var(--muted);
-      padding: 6px 0;
-      border-bottom: 1px solid rgba(212,201,176,0.4);
-      font-weight: 300;
-    }
-
-    .cluster-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
-
-    .cluster-count {
-      margin-left: auto;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 10px;
-      color: var(--border);
-      letter-spacing: 0.05em;
-    }
-
-    /* ===== TOAST ===== */
-    .toast {
-      position: fixed;
-      bottom: 32px;
-      left: 50%;
-      transform: translateX(-50%) translateY(80px);
-      background: var(--ink);
-      color: var(--paper);
-      padding: 12px 24px;
-      border-radius: 2px;
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: 14px;
-      font-style: italic;
-      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-      z-index: 9999;
-      white-space: nowrap;
-    }
-
-    .toast.show { transform: translateX(-50%) translateY(0); }
-
-    /* ===== SVG DIAGRAM ANIMATIONS ===== */
-    @keyframes dashFlow {
-      from { stroke-dashoffset: 100; }
-      to   { stroke-dashoffset: 0; }
-    }
-
-    @keyframes travelPulse {
-      0%   { opacity: 0; transform: translateX(0); }
-      20%  { opacity: 1; }
-      80%  { opacity: 1; }
-      100% { opacity: 0; transform: translateX(var(--travel-dist, 100px)); }
-    }
-
-    @keyframes barFill {
-      from { height: 0; y: 100%; }
-      to   { height: var(--fill-h, 60%); }
-    }
-
-    @keyframes thresholdPulse {
-      0%, 100% { opacity: 0.6; }
-      50%       { opacity: 1; }
-    }
-
-    @keyframes cascadeReveal {
-      from { opacity: 0; transform: translateY(8px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes slowSpin {
-      from { transform: rotate(0deg); }
-      to   { transform: rotate(360deg); }
-    }
-
-    @keyframes bridgeBuild {
-      from { stroke-dashoffset: 300; }
-      to   { stroke-dashoffset: 0; }
-    }
-
-    @keyframes vennPulse {
-      0%, 100% { opacity: 0.25; r: 18; }
-      50%       { opacity: 0.55; r: 22; }
-    }
-
-    @keyframes spectrumSlide {
-      0%   { transform: translateX(10%); }
-      50%  { transform: translateX(70%); }
-      100% { transform: translateX(10%); }
-    }
-
-    @keyframes networkPulse {
-      0%   { opacity: 0; r: 3; }
-      50%  { opacity: 0.8; r: 5; }
-      100% { opacity: 0; r: 3; }
-    }
-
-    /* ===== RESPONSIVE ===== */
-    @media (max-width: 600px) {
-      #screen-app, #screen-progress { padding-left: 20px; padding-right: 20px; }
-      .ob-card { padding: 28px 22px; }
-      .card { padding: 28px 22px; }
-      .app-header { padding: 28px 0 20px; }
-      .today-banner { padding: 36px 0 28px; }
-      .stats-card { padding: 24px 20px; }
-      .card-actions { flex-direction: column; }
-      .btn-action { min-width: unset; }
-      .cluster-legend { grid-template-columns: 1fr; }
-      .stats-grid { grid-template-columns: repeat(3, 1fr); }
-      .stat-value { font-size: 28px; }
-      .card-hook { font-size: 16px; }
-    }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --ink: #1a1614;
+  --paper: #f5f0e8;
+  --paper2: #ede8dc;
+  --card: #ffffff;
+  --accent: #c4460a;
+  --muted: #8a7d6b;
+  --warm: #8b6914;
+  --border: #d4c9b0;
+  --gold: #b8860b;
+  --green: #2d6a4f;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Source Serif 4', Georgia, serif;
+  background: var(--paper);
+  color: var(--ink);
+  min-height: 100vh;
+  line-height: 1.75;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none; z-index: 100; opacity: 0.4;
+}
+
+.hidden { display: none !important; }
+
+@keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+@keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+@keyframes spin { to { transform:rotate(360deg); } }
+@keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.4; } }
+@keyframes slowSpin { from { transform:rotate(0deg); } to { transform:rotate(360deg); } }
+@keyframes glowPulse { 0%,100% { opacity:0.3; transform:scale(1); } 50% { opacity:0.6; transform:scale(1.15); } }
+
+/* SVG diagram animations */
+@keyframes dashFlow { from { stroke-dashoffset: 100; } to { stroke-dashoffset: 0; } }
+@keyframes travelPulse { 0% { opacity:0; transform:translateX(0); } 20% { opacity:1; } 80% { opacity:1; } 100% { opacity:0; transform:translateX(var(--travel-dist,100px)); } }
+@keyframes barFill { from { height:0; y:100%; } to { height:var(--fill-h,60%); } }
+@keyframes thresholdPulse { 0%,100% { opacity:0.6; } 50% { opacity:1; } }
+@keyframes cascadeReveal { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+@keyframes bridgeBuild { from { stroke-dashoffset:300; } to { stroke-dashoffset:0; } }
+@keyframes vennPulse { 0%,100% { opacity:0.25; r:18; } 50% { opacity:0.55; r:22; } }
+@keyframes spectrumSlide { 0% { transform:translateX(10%); } 50% { transform:translateX(70%); } 100% { transform:translateX(10%); } }
+@keyframes networkPulse { 0% { opacity:0; r:3; } 50% { opacity:0.8; r:5; } 100% { opacity:0; r:3; } }
+
+/* ===== SHARED LAYOUT ===== */
+.page-wrap {
+  max-width: 680px; margin: 0 auto; padding: 0 24px 80px;
+}
+
+/* ===== APP HEADER ===== */
+.app-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 28px 0 24px; border-bottom: 1px solid var(--border);
+}
+.app-logo {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 20px; font-weight: 700; color: var(--ink); letter-spacing: -0.3px;
+}
+.app-logo span { color: var(--accent); }
+.header-nav { display: flex; gap: 20px; align-items: center; }
+.nav-link {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--muted); background: none; border: none; cursor: pointer;
+  padding: 4px 0; transition: color 0.15s;
+}
+.nav-link:hover { color: var(--accent); }
+
+/* ===== ONBOARDING ===== */
+#screen-onboarding {
+  min-height: 100vh;
+  background: var(--paper); position: relative; z-index: 1;
+}
+
+.ob-hero {
+  max-width: 680px; margin: 0 auto; padding: 72px 24px 56px;
+  border-bottom: 1px solid var(--border);
+}
+.ob-eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 28px;
+}
+.ob-headline {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(32px, 6vw, 52px); font-weight: 700;
+  color: var(--ink); line-height: 1.15; margin-bottom: 32px;
+  letter-spacing: -0.025em;
+}
+.ob-body {
+  font-family: 'Source Serif 4', Georgia, serif;
+  font-size: 16px; font-weight: 300; line-height: 1.9;
+  color: var(--muted); max-width: 540px;
+}
+.ob-body p { margin-bottom: 14px; }
+.ob-body p:last-child { margin-bottom: 0; }
+
+.ob-form-wrap {
+  max-width: 680px; margin: 0 auto; padding: 48px 24px 80px;
+}
+.ob-form-kicker {
+  font-family: 'Source Serif 4', Georgia, serif;
+  font-size: 14px; font-style: italic; font-weight: 300;
+  color: var(--muted); margin-bottom: 32px;
+}
+.ob-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 2px; padding: 36px 32px 32px;
+  box-shadow: 0 2px 24px rgba(26,22,20,0.07);
+}
+.ob-section { margin-bottom: 28px; }
+.ob-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 12px; display: block;
+}
+.ob-label span { font-size: 9px; opacity: 0.7; }
+.ob-input {
+  width: 100%; padding: 12px 14px;
+  font-family: 'Source Serif 4', Georgia, serif;
+  font-size: 16px; color: var(--ink); background: var(--paper);
+  border: 1px solid var(--border); border-radius: 1px; outline: none;
+  transition: border-color 0.2s;
+}
+.ob-input:focus { border-color: var(--accent); }
+.ob-input::placeholder { color: var(--muted); opacity: 0.6; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip {
+  font-family: 'JetBrains Mono', monospace; font-size: 11px;
+  padding: 7px 14px; border: 1px solid var(--border); border-radius: 1px;
+  cursor: pointer; color: var(--muted); background: var(--paper);
+  transition: all 0.15s; letter-spacing: 0.03em; user-select: none;
+}
+.chip:hover { border-color: var(--accent); color: var(--accent); background: var(--paper2); }
+.chip.selected { background: var(--accent); color: #fff; border-color: var(--accent); }
+.ob-divider { height: 1px; background: var(--border); margin: 4px 0 28px; }
+#ob-submit {
+  display: block; width: 100%; margin-top: 32px; padding: 16px 24px;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 17px; font-style: italic; font-weight: 600;
+  color: #fff; background: var(--accent); border: none; border-radius: 1px;
+  cursor: pointer; transition: background 0.2s, transform 0.1s;
+}
+#ob-submit:hover { background: #a33a08; transform: translateY(-1px); }
+#ob-submit:active { transform: translateY(0); }
+#ob-submit:disabled { opacity: 0.35; cursor: not-allowed; transform: none; }
+
+/* ===== WEEKDAY STRIP ===== */
+.weekday-strip { padding: 24px 0 4px; }
+.weekday-strip-inner { display: flex; gap: 20px; align-items: center; }
+.weekday-dot { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.weekday-circle {
+  width: 7px; height: 7px; border-radius: 50%; background: var(--border); transition: all 0.3s;
+}
+.weekday-dot.past .weekday-circle { background: var(--muted); opacity: 0.5; }
+.weekday-dot.active .weekday-circle { background: var(--accent); box-shadow: 0 0 0 3px rgba(196,70,10,0.2); }
+.weekday-day-label {
+  font-family: 'JetBrains Mono', monospace; font-size: 9px;
+  letter-spacing: 0.12em; color: var(--muted);
+}
+.weekday-dot.active .weekday-day-label { color: var(--accent); }
+
+/* ===== TODAY BANNER ===== */
+.today-banner {
+  padding: 36px 0 28px; border-bottom: 1px solid var(--border); margin-bottom: 36px;
+}
+.today-meta {
+  font-family: 'JetBrains Mono', monospace; font-size: 10px;
+  letter-spacing: 0.22em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px;
+}
+.today-cluster-line {
+  font-family: 'JetBrains Mono', monospace; font-size: 12px;
+  color: var(--muted); margin-bottom: 10px;
+}
+.today-discipline-name {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(34px, 7vw, 52px); font-weight: 700;
+  color: var(--ink); letter-spacing: -0.025em; line-height: 1.1;
+}
+
+/* ===== CONNECTION ANIMATION ===== */
+#connection-animation {
+  padding: 28px 0; min-height: 80px;
+  animation: fadeIn 0.3s ease both;
+}
+.conn-anim { display: flex; align-items: center; gap: 12px; }
+.conn-domain, .conn-discipline {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 14px; font-style: italic; white-space: nowrap; flex-shrink: 0;
+}
+.conn-domain { color: var(--muted); }
+.conn-discipline { color: var(--accent); font-weight: 600; opacity: 0; transition: opacity 0.4s; }
+.conn-line-wrap { flex: 1; height: 2px; overflow: hidden; position: relative; }
+.conn-line-inner {
+  height: 100%; background: var(--accent); width: 0%; transition: width 0.6s ease;
+}
+
+/* ===== LOADING ===== */
+.loading-state { padding: 28px 0; }
+.loading-dots { display: flex; gap: 8px; margin-bottom: 16px; }
+.loading-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--accent); animation: pulse 1.4s ease infinite;
+}
+.loading-dot:nth-child(2) { animation-delay: 0.2s; }
+.loading-dot:nth-child(3) { animation-delay: 0.4s; }
+.loading-fragment {
+  font-family: 'Source Serif 4', Georgia, serif;
+  font-size: 15px; font-style: italic; font-weight: 300;
+  color: var(--muted); line-height: 1.6; transition: opacity 0.4s;
+}
+.already-generated {
+  font-family: 'JetBrains Mono', monospace; font-size: 10px;
+  letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); padding: 8px 0;
+}
+.btn-retry {
+  font-family: 'JetBrains Mono', monospace; font-size: 11px;
+  padding: 10px 18px; background: transparent;
+  border: 1px solid var(--accent); color: var(--accent);
+  border-radius: 1px; cursor: pointer; letter-spacing: 0.06em; transition: all 0.15s;
+}
+.btn-retry:hover { background: var(--accent); color: #fff; }
+
+/* ===== INSIGHT CARD ===== */
+.card {
+  background: var(--card); border: 1px solid var(--border);
+  border-left: 4px solid var(--accent); border-radius: 2px;
+  padding: 40px 36px 32px; box-shadow: 0 4px 40px rgba(26,22,20,0.09);
+  position: relative; overflow: hidden; margin-bottom: 0;
+  animation: fadeUp 0.5s ease both;
+}
+.card-watermark {
+  position: absolute; top: -8px; right: -8px;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(70px, 14vw, 100px); font-weight: 700; font-style: italic;
+  color: var(--ink); opacity: 0.04; line-height: 1;
+  pointer-events: none; user-select: none; white-space: nowrap; letter-spacing: -0.03em;
+}
+.card-lens-badge {
+  font-family: 'JetBrains Mono', monospace; font-size: 10px;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 24px;
+}
+.card-hook {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(19px, 3.8vw, 25px); font-style: italic; font-weight: 400;
+  color: var(--ink); line-height: 1.45; margin-bottom: 24px; letter-spacing: -0.01em;
+}
+.card-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(22px, 4.2vw, 30px); font-weight: 700;
+  color: var(--ink); line-height: 1.2; margin-bottom: 0;
+  letter-spacing: -0.02em; padding-top: 22px; border-top: 1px solid var(--border);
+}
+.card-pull-quote {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(19px, 3.5vw, 25px); font-style: italic;
+  color: var(--accent); line-height: 1.45;
+  padding: 28px 0; margin: 24px 0;
+  border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+  letter-spacing: -0.01em;
+}
+.card-body { margin-bottom: 32px; }
+.card-para {
+  font-family: 'Source Serif 4', Georgia, serif;
+  font-size: 16px; font-weight: 300; line-height: 1.9;
+  color: var(--ink); margin-bottom: 18px;
+}
+.card-para:last-child { margin-bottom: 0; }
+.visual-wrap {
+  margin: 0 -36px 28px; padding: 24px 36px;
+  background: var(--paper2);
+  border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+}
+.visual-label {
+  font-family: 'JetBrains Mono', monospace; font-size: 9px;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 16px;
+}
+.visual-svg-container { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.visual-svg-container svg { display: block; max-width: 100%; height: auto; }
+.visual-caption {
+  font-family: 'Source Serif 4', Georgia, serif;
+  font-size: 13px; font-style: italic; font-weight: 300;
+  color: var(--muted); margin-top: 12px; line-height: 1.6;
+}
+.card-why-box {
+  background: var(--paper2); border-left: 3px solid var(--accent);
+  padding: 16px 20px; margin-bottom: 28px; border-radius: 0 1px 1px 0;
+}
+.card-why-label {
+  font-family: 'JetBrains Mono', monospace; font-size: 9px;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 8px;
+}
+.card-why-text {
+  font-family: 'Source Serif 4', Georgia, serif;
+  font-size: 15px; font-weight: 300; line-height: 1.75; color: var(--ink);
+}
+.card-bottom-tag {
+  font-family: 'JetBrains Mono', monospace; font-size: 11px;
+  letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent);
+  margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid var(--border);
+}
+.card-actions { display: flex; flex-direction: column; gap: 10px; margin-bottom: 10px; }
+.btn-linkedin {
+  display: block; width: 100%;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 16px; font-style: italic; font-weight: 600;
+  color: #fff; background: var(--accent); border: none;
+  padding: 15px 20px; border-radius: 1px; cursor: pointer;
+  transition: background 0.2s, transform 0.1s; text-align: center;
+}
+.btn-linkedin:hover { background: #a33a08; transform: translateY(-1px); }
+.btn-linkedin:active { transform: translateY(0); }
+.card-secondary-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.btn-action {
+  font-family: 'JetBrains Mono', monospace; font-size: 10px;
+  letter-spacing: 0.1em; text-transform: uppercase; padding: 9px 16px;
+  background: transparent; border: 1px solid var(--border); color: var(--muted);
+  border-radius: 1px; cursor: pointer; transition: all 0.15s;
+}
+.btn-action:hover { border-color: var(--accent); color: var(--accent); }
+.btn-action.saved { border-color: var(--green); color: var(--green); }
+.btn-calendar {
+  display: block; width: 100%; margin-top: 8px;
+  font-family: 'JetBrains Mono', monospace; font-size: 11px;
+  letter-spacing: 0.1em; text-transform: uppercase; padding: 12px 20px;
+  background: transparent; border: 1px solid var(--border); color: var(--muted);
+  border-radius: 1px; cursor: pointer; transition: all 0.15s; text-align: center;
+}
+.btn-calendar:hover { border-color: var(--muted); color: var(--ink); }
+
+/* ===== TOMORROW ===== */
+.tomorrow-wrap {
+  padding: 44px 0 20px; border-top: 1px solid var(--border); margin-top: 32px;
+  text-align: center; animation: fadeUp 0.5s ease 0.3s both;
+}
+.tomorrow-sunrise { font-size: 28px; margin-bottom: 20px; display: block; animation: pulse 3s ease infinite; }
+.tomorrow-main {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 18px; font-weight: 600; color: var(--ink); margin-bottom: 14px; line-height: 1.4;
+}
+.tomorrow-body {
+  font-family: 'Source Serif 4', Georgia, serif;
+  font-size: 15px; font-weight: 300; color: var(--muted); line-height: 1.8; margin-bottom: 14px;
+}
+.tomorrow-sub {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 15px; font-style: italic; color: var(--muted);
+}
+
+/* ===== LATTICE ===== */
+.lattice-wrap {
+  padding: 36px 0 8px; border-top: 1px solid var(--border); margin-top: 32px;
+  animation: fadeUp 0.4s ease 0.2s both;
+}
+.lattice-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 18px; font-weight: 600; color: var(--ink); margin-bottom: 8px;
+}
+.lattice-label-text {
+  font-family: 'Source Serif 4', Georgia, serif;
+  font-size: 14px; font-weight: 300; color: var(--muted); font-style: italic; line-height: 1.7; margin-bottom: 20px;
+}
+.lattice-pre-text {
+  font-family: 'Source Serif 4', Georgia, serif;
+  font-size: 14px; font-weight: 300; color: var(--muted); font-style: italic; line-height: 1.8;
+}
+
+/* ===== WEEKEND ===== */
+#screen-weekend { animation: fadeUp 0.4s ease both; }
+.weekend-wrap { max-width: 480px; margin: 0 auto; padding: 80px 24px; text-align: center; }
+.weekend-logo {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 18px; font-weight: 700; color: var(--ink); margin-bottom: 48px;
+}
+.weekend-logo span { color: var(--accent); }
+.weekend-main {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(22px, 5vw, 30px); font-weight: 700; font-style: italic;
+  color: var(--ink); line-height: 1.3; margin-bottom: 16px;
+}
+.weekend-body {
+  font-family: 'Source Serif 4', Georgia, serif;
+  font-size: 16px; font-weight: 300; color: var(--muted); margin-bottom: 24px; line-height: 1.8;
+}
+.weekend-teaser {
+  font-family: 'Source Serif 4', Georgia, serif;
+  font-size: 15px; font-weight: 300; color: var(--muted); line-height: 1.8; margin-bottom: 20px;
+}
+.weekend-next {
+  font-family: 'JetBrains Mono', monospace; font-size: 11px;
+  letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 28px;
+}
+.weekend-next span { color: var(--accent); }
+
+/* ===== ABOUT ===== */
+#screen-about { animation: fadeUp 0.3s ease both; }
+.about-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 24px 0; border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; background: var(--paper); z-index: 10;
+}
+.back-btn {
+  font-family: 'JetBrains Mono', monospace; font-size: 11px;
+  letter-spacing: 0.1em; color: var(--muted); background: none;
+  border: none; cursor: pointer; padding: 4px 0; transition: color 0.15s;
+}
+.back-btn:hover { color: var(--accent); }
+.about-wrap { max-width: 580px; margin: 0 auto; padding: 56px 0 80px; }
+.about-eyebrow {
+  font-family: 'JetBrains Mono', monospace; font-size: 11px;
+  letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent); margin-bottom: 20px;
+}
+.about-headline {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(28px, 5vw, 42px); font-weight: 700;
+  color: var(--ink); line-height: 1.2; margin-bottom: 44px; letter-spacing: -0.02em;
+}
+.about-divider { text-align: center; color: var(--accent); font-size: 14px; margin: 36px 0; opacity: 0.5; }
+.about-body {
+  font-family: 'Source Serif 4', Georgia, serif;
+  font-size: 17px; font-weight: 300; line-height: 1.9; color: var(--ink); margin-bottom: 20px;
+}
+.about-body p { margin-bottom: 16px; }
+.about-body p:last-child { margin-bottom: 0; }
+.about-closing { color: var(--muted); }
+.about-pull-quote {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(20px, 3.5vw, 26px); font-style: italic; color: var(--accent);
+  line-height: 1.45; padding: 32px 0; margin: 36px 0;
+  border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+}
+.about-three-grid {
+  display: grid; grid-template-columns: 1fr; gap: 24px;
+  margin-top: 48px; padding-top: 40px; border-top: 1px solid var(--border);
+}
+.about-grid-label {
+  font-family: 'JetBrains Mono', monospace; font-size: 10px;
+  letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); margin-bottom: 10px;
+}
+.about-grid-text {
+  font-family: 'Source Serif 4', Georgia, serif;
+  font-size: 15px; font-weight: 300; line-height: 1.8; color: var(--muted); font-style: italic;
+}
+
+/* ===== APP FOOTER ===== */
+.app-footer {
+  padding: 32px 0 16px; border-top: 1px solid var(--border); margin-top: 24px; text-align: center;
+}
+.footer-link {
+  font-family: 'JetBrains Mono', monospace; font-size: 10px;
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted);
+  background: none; border: none; cursor: pointer; transition: color 0.15s;
+}
+.footer-link:hover { color: var(--accent); }
+
+/* ===== TOAST ===== */
+.toast {
+  position: fixed; bottom: 24px; left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--ink); color: var(--paper);
+  font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 0.08em;
+  padding: 12px 20px; border-radius: 1px; opacity: 0;
+  transition: all 0.3s ease; pointer-events: none; white-space: nowrap; z-index: 999;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* SVG diagram labels */
+.svg-label { font-family: 'JetBrains Mono', monospace; font-size: 11px; fill: #1a1614; }
+.svg-small { font-family: 'JetBrains Mono', monospace; font-size: 9px; fill: #8a7d6b; }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 480px) {
+  .ob-hero { padding: 48px 20px 40px; }
+  .ob-form-wrap { padding: 36px 20px 60px; }
+  .ob-card { padding: 24px 18px; }
+  .card { padding: 28px 20px 24px; }
+  .visual-wrap { margin: 0 -20px 24px; padding: 20px; }
+  .about-wrap { padding: 32px 0 60px; }
+  .page-wrap { padding: 0 20px 80px; }
+  .app-header { padding: 20px 0 18px; }
+  .today-banner { padding: 28px 0 20px; margin-bottom: 28px; }
+}
   </style>
 </head>
 <body>
 
 <!-- ===== ONBOARDING ===== -->
 <div id="screen-onboarding">
-  <div class="ob-wrap">
-    <div class="ob-hero">
-      <div class="ob-hero-quote">"The world's best thinkers stole from disciplines far outside their own."</div>
-      <div class="ob-hero-body">Darwin borrowed from economics. Feynman borrowed from music. Gates borrowed from biology. The pattern is clear: cross-disciplinary thinking is the engine of breakthrough ideas.</div>
-      <div class="ob-hero-cta">Confluence gives you one unexpected insight every day — connecting a distant field to your world. Five minutes. One idea. A new way of seeing.</div>
+  <div class="ob-hero">
+    <div class="ob-eyebrow">A daily practice for restless minds</div>
+    <h1 class="ob-headline">The world is one thing.<br>We just study it in pieces.</h1>
+    <div class="ob-body">
+      <p>Physics, history, biology, economics — learned separately, in silos, for exams. The conversation happening between them? Nobody showed us that.</p>
+      <p>That conversation is where the best thinking lives.</p>
+      <p>Every weekday morning, Confluence brings you one unexpected connection — between a discipline you know and one you'd never think to apply to your world.</p>
+      <p>Five minutes. Something you can't unsee.</p>
     </div>
-    <div class="ob-header">
-      <div class="ob-logo">Confluen<span>ce</span></div>
-      <div class="ob-tagline">One insight a day. 100+ disciplines. Become a systems thinker.</div>
-    </div>
-    <div class="ob-card">
+  </div>
 
+  <div class="ob-form-wrap">
+    <div class="ob-form-kicker">Two minutes. Then we show you something you can't unsee.</div>
+    <div class="ob-card">
       <div class="ob-section">
-        <div class="ob-label">What should we call you?</div>
+        <label class="ob-label">What should we call you?</label>
         <input type="text" class="ob-input" id="ob-name" placeholder="Your name" maxlength="40" />
       </div>
-
       <div class="ob-section">
-        <div class="ob-label">Your age</div>
+        <label class="ob-label">Your age</label>
         <div class="chips" id="chips-age">
           <div class="chip" data-val="18–24">18–24</div>
           <div class="chip" data-val="25–34">25–34</div>
@@ -951,9 +536,8 @@
           <div class="chip" data-val="45+">45+</div>
         </div>
       </div>
-
       <div class="ob-section">
-        <div class="ob-label">You primarily are a…</div>
+        <label class="ob-label">You primarily are a…</label>
         <div class="chips" id="chips-stage">
           <div class="chip" data-val="Student">Student</div>
           <div class="chip" data-val="Working Professional">Working Professional</div>
@@ -962,9 +546,8 @@
           <div class="chip" data-val="Other">Other</div>
         </div>
       </div>
-
       <div class="ob-section">
-        <div class="ob-label">Your primary domain today</div>
+        <label class="ob-label">Your primary domain today</label>
         <div class="chips" id="chips-field">
           <div class="chip" data-val="Technology & Software">Technology</div>
           <div class="chip" data-val="Business & Consulting">Business</div>
@@ -978,14 +561,13 @@
           <div class="chip" data-val="Agriculture & Environment">Agriculture</div>
           <div class="chip" data-val="Engineering">Engineering</div>
           <div class="chip" data-val="Media & Communication">Media</div>
+          <div class="chip" data-val="Public Policy & Governance">Public Policy</div>
           <div class="chip" data-val="Other">Other</div>
         </div>
       </div>
-
       <div class="ob-divider"></div>
-
       <div class="ob-section">
-        <div class="ob-label">What have you studied? <span>(pick all that apply)</span></div>
+        <label class="ob-label">What have you studied? <span>(pick all that apply)</span></label>
         <div class="chips" id="chips-edu">
           <div class="chip" data-val="Engineering & Technology">Engineering</div>
           <div class="chip" data-val="Natural Sciences (Biology / Chemistry / Physics)">Natural Sciences</div>
@@ -1002,9 +584,8 @@
           <div class="chip" data-val="Public Policy & Governance">Public Policy</div>
         </div>
       </div>
-
       <div class="ob-section">
-        <div class="ob-label">Worlds you've worked in <span>(pick all that apply)</span></div>
+        <label class="ob-label">Worlds you've worked in <span>(pick all that apply)</span></label>
         <div class="chips" id="chips-work">
           <div class="chip" data-val="Technology & Software">Technology</div>
           <div class="chip" data-val="Finance & Banking">Finance</div>
@@ -1021,9 +602,8 @@
           <div class="chip" data-val="Creative Industries">Creative</div>
         </div>
       </div>
-
       <div class="ob-section">
-        <div class="ob-label">What lights you up outside work <span>(pick all that apply)</span></div>
+        <label class="ob-label">What lights you up outside work <span>(pick all that apply)</span></label>
         <div class="chips" id="chips-hobby">
           <div class="chip" data-val="Music">Music</div>
           <div class="chip" data-val="Sports & Athletics">Sports</div>
@@ -1041,65 +621,128 @@
           <div class="chip" data-val="Photography">Photography</div>
         </div>
       </div>
-
-      <button class="btn-primary" id="ob-submit" disabled>Enter Confluence →</button>
+      <button id="ob-submit" disabled>Show me what I'm missing →</button>
     </div>
   </div>
 </div>
 
-<!-- ===== MAIN APP ===== -->
+<!-- ===== APP SCREEN ===== -->
 <div id="screen-app" class="hidden">
-  <div class="app-header">
-    <div class="app-logo">Confluen<span>ce</span></div>
-    <div class="header-right">
-      <div class="streak-pill"><span id="streak-count">0</span> day streak</div>
-      <button class="progress-btn" onclick="showProgress()">Progress →</button>
+  <div class="page-wrap">
+    <div class="app-header">
+      <div class="app-logo">Confluen<span>ce</span></div>
+      <div class="header-nav">
+        <button class="nav-link" onclick="showScreen('screen-about')">About</button>
+      </div>
     </div>
-  </div>
 
-  <div class="today-banner">
-    <div class="today-meta">Today's lens</div>
-    <div class="today-travel-line">Today's lens</div>
-    <div class="today-cluster">
-      <div class="cluster-badge" id="today-cluster-badge">—</div>
+    <div class="weekday-strip" id="weekday-strip"></div>
+
+    <div class="today-banner">
+      <div class="today-meta">Today's Lens</div>
+      <div class="today-cluster-line" id="today-cluster-line"></div>
+      <div class="today-discipline-name" id="today-discipline-name"></div>
     </div>
+
+    <div id="connection-animation" class="hidden"></div>
     <div id="generate-area"></div>
-  </div>
+    <div id="card-area"></div>
+    <div id="lattice-area"></div>
+    <div id="tomorrow-area"></div>
 
-  <div id="card-area"></div>
-  <div id="lattice-inline" class="hidden"></div>
-
-  <div id="progress-teaser" class="hidden" onclick="showProgress()">
-    View your lattice of knowledge →
+    <div class="app-footer">
+      <button class="footer-link" onclick="showScreen('screen-about')">About Confluence</button>
+    </div>
   </div>
 </div>
 
-<!-- ===== PROGRESS ===== -->
-<div id="screen-progress" class="hidden">
-  <div class="progress-header">
-    <div class="progress-title">Your Lattice</div>
-    <button class="back-btn" onclick="showApp()">← Back</button>
+<!-- ===== WEEKEND SCREEN ===== -->
+<div id="screen-weekend" class="hidden">
+  <div class="weekend-wrap">
+    <div class="weekend-logo">Confluen<span>ce</span></div>
+    <div class="weekend-main">Rest your eyes on the horizon today.</div>
+    <div class="weekend-body">Your next lens arrives Monday morning.</div>
+    <div class="weekend-teaser" id="weekend-teaser"></div>
+    <div class="weekend-next" id="weekend-next"></div>
+    <button class="btn-calendar" style="max-width:320px; margin:0 auto;" onclick="addToCalendar()">Add to my morning routine →</button>
   </div>
+</div>
 
-  <div class="stats-card">
-    <div class="stats-grid">
-      <div class="stat">
-        <div class="stat-value" id="stat-cards">0</div>
-        <div class="stat-label">Lenses</div>
+<!-- ===== ABOUT SCREEN ===== -->
+<div id="screen-about" class="hidden">
+  <div class="page-wrap">
+    <div class="about-header">
+      <button class="back-btn" onclick="showScreen('screen-app')">← Back</button>
+      <div class="app-logo">Confluen<span>ce</span></div>
+    </div>
+    <div class="about-wrap">
+      <div class="about-eyebrow">Why this exists</div>
+      <h1 class="about-headline">A letter to everyone who<br>was told to pick a lane.</h1>
+      <div class="about-divider">✦</div>
+      <div class="about-body">
+        <p>Dear curious person,</p>
+        <p>I want to tell you something that took a long time to figure out.</p>
+        <p>Everything you've ever studied is connected. Every subject you thought was useless has a direct line to something that matters in your world right now.</p>
+        <p>You just weren't shown the connections.</p>
       </div>
-      <div class="stat">
-        <div class="stat-value" id="stat-streak">0</div>
-        <div class="stat-label">Day Streak</div>
+      <div class="about-divider">✦</div>
+      <div class="about-body">
+        <p>When I started reading philosophy, I noticed something unexpected.</p>
+        <p>The philosophers I was studying weren't just philosophers.</p>
+        <p>They were mathematicians. Scientists. Strategists.</p>
+        <p>Descartes in geometry and philosophy. Leibniz in calculus and metaphysics. Pascal in physics and ethics.</p>
+        <p>They were thinkers — for whom the boundaries between disciplines simply didn't exist.</p>
+        <p>That realisation changed how I saw everything.</p>
       </div>
-      <div class="stat">
-        <div class="stat-value" id="stat-clusters">0</div>
-        <div class="stat-label">Clusters</div>
+      <div class="about-pull-quote">"The people who navigate this world best will be the ones who see more."</div>
+      <div class="about-divider">✦</div>
+      <div class="about-body">
+        <p>That way of seeing — holding multiple disciplines simultaneously and finding the connections between them — it's rare because nobody teaches it deliberately.</p>
+        <p>The people who develop it do so accidentally. Through unusual careers. Through environments that force you to think across everything at once.</p>
+        <p>Most people never get that forcing function.</p>
+        <p>Because nobody ever showed them the conversation happening between the things they already know.</p>
+      </div>
+      <div class="about-divider">✦</div>
+      <div class="about-body">
+        <p>And the cost of that is real.</p>
+        <p>You make decisions with one lens when three would serve you better.</p>
+        <p>You solve problems inside one discipline when the answer was sitting in another.</p>
+        <p>You read widely but the dots never connect.</p>
+        <p>You sense something is missing — you just can't name it.</p>
+      </div>
+      <div class="about-divider">✦</div>
+      <div class="about-body">
+        <p>Then AI arrived.</p>
+        <p>AI is an extraordinary answer machine. It knows more facts than any human ever will.</p>
+        <p>But asking the question nobody thought to ask — finding the connection that lives in the unmapped space between disciplines — that still requires a human mind.</p>
+        <p>The people who navigate this world best will be the ones who see more. Across disciplines, across contexts, across the full map of human knowledge.</p>
+      </div>
+      <div class="about-divider">✦</div>
+      <div class="about-body">
+        <p>Confluence is a daily practice.</p>
+        <p>Five minutes every weekday morning — one unexpected connection between a field of human knowledge and your world.</p>
+        <p>So you make better decisions. So you ask better questions. So you see what others in the room miss. So your thinking compounds — every single day.</p>
+      </div>
+      <div class="about-divider">✦</div>
+      <div class="about-body about-closing">
+        <p>The question is whether you build this deliberately — or wait for an unusual life to give it to you by accident.</p>
+        <p>Welcome to Confluence.</p>
+      </div>
+      <div class="about-three-grid">
+        <div class="about-grid-item">
+          <div class="about-grid-label">The Mission</div>
+          <div class="about-grid-text">"The biggest gap isn't knowledge. It's the connections between knowledge. Confluence exists to close that gap."</div>
+        </div>
+        <div class="about-grid-item">
+          <div class="about-grid-label">The Belief</div>
+          <div class="about-grid-text">"The world's hardest problems don't live inside one discipline. They live at the edges — where biology meets policy, where physics meets strategy, where history meets your next decision."</div>
+        </div>
+        <div class="about-grid-item">
+          <div class="about-grid-label">The Promise</div>
+          <div class="about-grid-text">"Five minutes a day. One unexpected connection. A fundamentally different mind — over time, irreversibly."</div>
+        </div>
       </div>
     </div>
-
-    <div class="radar-section-label">Knowledge Map</div>
-    <canvas id="radarCanvas" width="420" height="420"></canvas>
-    <div class="cluster-legend" id="cluster-legend"></div>
   </div>
 </div>
 
@@ -1197,13 +840,13 @@ function updateStreak() {
 // LOADING FRAGMENTS CYCLER
 // ============================================================
 const LOADING_FRAGMENTS = [
-  'Crossing disciplines...',
-  'Finding the unexpected...',
-  'Connecting the dots...',
-  'Bridging distant worlds...',
-  'Unearthing the pattern...',
-  'Travelling across time...',
-  'Assembling the insight...',
+  "Rummaging through 3,000 years of human thought...",
+  "Finding the one connection you'd never make yourself...",
+  "Somewhere between thermodynamics and your Tuesday meeting...",
+  "The ancient Greeks had something to say about this. So did a biologist in 1972...",
+  "Almost there — this one's genuinely surprising...",
+  "Connecting dots across disciplines you haven't thought about since school...",
+  "Your insight is forming at the intersection of the unexpected..."
 ];
 
 let _fragInterval = null;
@@ -1227,136 +870,73 @@ function stopLoadingFragments() {
 }
 
 // ============================================================
-// PROMPT — new rich JSON structure
+// SAVE
 // ============================================================
-function buildPrompt(discipline, cluster) {
-  const p   = state.profile;
-  const edu  = p.education.join(', ')  || 'not specified';
-  const work = p.profession.join(', ') || 'not specified';
-  const hob  = p.hobbies.join(', ')    || 'not specified';
+function isSaved(key) {
+  return JSON.parse(localStorage.getItem('confluence_saved') || '[]').some(s => s.key === key);
+}
 
-  return `You are a polymathic insight engine. Your singular mission: reveal unexpected, genuinely surprising connections between disciplines that make people see their world differently.
+function toggleSave() {
+  const key   = (state.todayDiscipline || '') + (state.todayDate || '');
+  let saved   = JSON.parse(localStorage.getItem('confluence_saved') || '[]');
+  const idx   = saved.findIndex(s => s.key === key);
+  const btn   = document.getElementById('btn-save');
 
-USER PROFILE:
-- Name: ${p.name}
-- Age: ${p.age}, Life stage: ${p.lifeStage}
-- Primary domain: ${p.primaryField}
-- Educational background: ${edu}
-- Professional experience: ${work}
-- Interests & hobbies: ${hob}
-
-TODAY'S LENS: ${discipline} (Cluster: ${cluster})
-
-WRITING STYLE — non-negotiable:
-Write like a brilliant friend who happens to know everything — not a textbook, not a listicle. Sharp. Surprising. Slightly irreverent. Every sentence earns its place or it dies. The hook must be screenshot-worthy — the kind of line someone shares. Para1 opens with a specific scene or moment, not an abstract claim. No throat-clearing. No "In today's world...". No "In conclusion". Accessible to a 22-year-old, genuinely insightful to a seasoned expert.
-
-CONTENT RULES:
-1. Lead with SURPRISE. The unexpected connection comes first, never a textbook definition.
-2. Use concrete, specific examples — not "like in business" but "like when Toyota discovered..." or "when Darwin noticed..."
-3. No jargon without immediate plain-language explanation in the same breath.
-4. The connection must feel genuinely non-obvious — not things ${p.name} has already consciously associated.
-5. Draw on ${p.name}'s background (${edu}, ${work}, ${hob}) to make examples land personally.
-6. After reading, they should see their own life, work, or decisions differently.
-
-Respond ONLY with valid JSON — no markdown, no code fences, no extra text before or after:
-{
-  "title": "Punchy headline, max 10 words, impossible to ignore. NOT the discipline name.",
-  "hook": "ONE sentence. The unexpected connection, stated baldly. No buildup. Screenshot-worthy.",
-  "para1": "First revelation paragraph. Start with a concrete, specific real-world moment or observation — not a definition. Build to the insight. 3-4 sentences. Flowing prose, not a bullet.",
-  "para2": "Second paragraph. Go deeper or sideways — a surprising historical example, a counter-intuitive implication, something that makes the expert say 'huh'. 3-4 sentences.",
-  "para3": "Third paragraph. Zoom out to the pattern. How does this same structure appear across nature, history, institutions? End by landing it specifically in the reader's context in ${p.primaryField}. 3-4 sentences.",
-  "visualType": "one of: feedback_loop | network | spectrum | threshold | cascade | cycle | bridge | venn",
-  "visualData": {
-    "leftLabel": "${discipline}",
-    "leftConcept": "3-5 word core principle from this discipline",
-    "rightLabel": "${p.primaryField}",
-    "rightConcept": "same principle expressed in their world"
-  },
-  "whyItMatters": "One short paragraph (2-3 sentences). Why does this connection matter right now, in this AI age, for someone building wisdom? Make it urgent."
-}`;
+  if (idx >= 0) {
+    saved.splice(idx, 1);
+    btn.textContent = '⊕ Save';
+    btn.classList.remove('saved');
+    showToast('Removed from saved');
+  } else {
+    saved.push({ key, discipline: state.todayDiscipline, date: state.todayDate, card: state.todayCard });
+    btn.innerHTML = '✓ Saved';
+    btn.classList.add('saved');
+    showToast('Card saved!');
+  }
+  localStorage.setItem('confluence_saved', JSON.stringify(saved));
 }
 
 // ============================================================
-// GENERATE CARD
+// SHARE
 // ============================================================
-async function generateCard() {
-  const today = getTodayStr();
-  // Already generated today — just render it
-  if (state.todayDate === today && state.todayCard) {
-    renderCard(state.todayCard, state.todayDiscipline);
-    return;
-  }
+function getShareText() {
+  const c = state.todayCard;
+  if (!c) return '';
+  return `I just saw my world through the lens of ${state.todayDiscipline} and I can't unsee it.\n\n"${c.hook}"\n\nConfluence does this every weekday morning — one unexpected discipline connected directly to your world.\n\nWorth 5 minutes.\n\nhttps://abajpai29-hash.github.io/Confluence/`;
+}
 
-  const discipline = getTodaysDiscipline();
-  const cluster    = DISC_TO_CLUSTER[discipline];
+function shareWhatsApp() {
+  window.open(`https://wa.me/?text=${encodeURIComponent(getShareText())}`, '_blank');
+}
 
-  // Show loading state in generate-area
-  document.getElementById('generate-area').innerHTML = `
-    <div class="loading-state">
-      <div class="loading-dots">
-        <div class="loading-dot"></div>
-        <div class="loading-dot"></div>
-        <div class="loading-dot"></div>
-      </div>
-      <div class="loading-fragment" id="loading-fragment" style="transition: opacity 0.3s;"></div>
-    </div>`;
+function copyCard() {
+  navigator.clipboard.writeText(getShareText()).then(() => showToast('Copied to clipboard!'));
+}
 
-  startLoadingFragments();
-
-  try {
-    const res = await fetch(WORKER_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-6',
-        max_tokens: 1800,
-        messages: [{ role: 'user', content: buildPrompt(discipline, cluster) }]
-      })
+// ============================================================
+// ONBOARDING CHIPS
+// ============================================================
+function initChips(id, multi = true) {
+  document.getElementById(id).querySelectorAll('.chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      if (!multi) document.getElementById(id).querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
+      chip.classList.toggle('selected');
+      if (!multi && !chip.classList.contains('selected')) chip.classList.add('selected');
+      validateOb();
     });
+  });
+}
 
-    stopLoadingFragments();
+function getChips(id) {
+  return [...document.querySelectorAll(`#${id} .chip.selected`)].map(c => c.dataset.val);
+}
 
-    if (!res.ok) {
-      const errBody = await res.json().catch(() => ({}));
-      throw new Error(`Worker responded ${res.status}: ${errBody?.error || ''}`);
-    }
-    const data = await res.json();
-
-    let text = (data?.content?.[0]?.text || '').trim();
-    // Strip markdown fences if Claude adds them
-    text = text.replace(/^```json\s*/i,'').replace(/^```\s*/i,'').replace(/\s*```$/,'').trim();
-    // Extract JSON object if there's surrounding text
-    const jsonMatch = text.match(/\{[\s\S]*\}/);
-    if (!jsonMatch) throw new Error(`JSON parse failed — response: ${text.slice(0,200)}`);
-
-    const card = JSON.parse(jsonMatch[0]);
-
-    state.todayDate       = today;
-    state.todayCard       = card;
-    state.todayDiscipline = discipline;
-    state.cardCount       = (state.cardCount || 0) + 1;
-    state.clusterProgress[cluster] = (state.clusterProgress[cluster] || 0) + 1;
-    updateStreak();
-    saveState();
-
-    renderCard(card, discipline);
-    document.getElementById('streak-count').textContent = state.streak || 0;
-    if (state.cardCount >= 3) document.getElementById('progress-teaser').classList.remove('hidden');
-
-  } catch(e) {
-    stopLoadingFragments();
-    const errMsg = e?.message || String(e);
-    const isRateLimit = errMsg.includes('429');
-    const msg = isRateLimit
-      ? 'Daily limit reached (3/day). Come back tomorrow.'
-      : `Error: ${errMsg}`;
-    document.getElementById('generate-area').innerHTML = `
-      <div style="display:flex; flex-direction:column; gap:10px;">
-        <div style="font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--muted);">${msg}</div>
-        ${isRateLimit ? '' : `<button class="btn-retry" onclick="generateCard()"><span>✦</span> Try again</button>`}
-      </div>`;
-    console.error(e);
-  }
+function validateOb() {
+  const ok = document.getElementById('ob-name').value.trim()
+    && getChips('chips-age').length
+    && getChips('chips-stage').length
+    && getChips('chips-field').length;
+  document.getElementById('ob-submit').disabled = !ok;
 }
 
 // ============================================================
@@ -1364,9 +944,9 @@ async function generateCard() {
 // ============================================================
 function renderDiagram(visualType, visualData) {
   const vd = visualData || {};
-  const ll = vd.leftLabel  || 'Source';
+  const ll = vd.leftLabel   || 'Source';
   const lc = vd.leftConcept  || '';
-  const rl = vd.rightLabel || 'Target';
+  const rl = vd.rightLabel  || 'Target';
   const rc = vd.rightConcept || '';
 
   const W = 560, H = 200;
@@ -1410,7 +990,6 @@ function renderDiagram(visualType, visualData) {
   }
 
   if (visualType === 'network') {
-    // 5 nodes: left=0, right=4, others unlabeled
     const nodes = [
       { x:100, y:100, labeled:true, side:'left' },
       { x:220, y:50  },
@@ -1597,324 +1176,423 @@ function renderDiagram(visualType, visualData) {
 }
 
 // ============================================================
+// SYSTEM PROMPT & PROMPT BUILDER
+// ============================================================
+const INSIGHT_SYSTEM_PROMPT = `You are the engine behind Confluence — a tool that builds polymathic thinking in people.
+
+Your one job: generate a single cross-disciplinary insight that makes someone stop and think "I can't unsee this."
+
+RULES:
+
+1. The connection must be SPECIFIC and SURPRISING
+   Bad: "Biology connects to business"
+   Good: "The way slime mould finds the shortest path between food sources maps almost exactly onto how Tokyo's rail network was designed — and both outperform human planning"
+
+2. Use the person's EXACT profile
+   Their domain, their problem, their world. A generic insight is a failed insight.
+   If it could apply to anyone, it applies to no one.
+
+3. The discipline must be UNEXPECTED
+   If they work in finance — don't give them economics. Give them mycology. Or military history. Or thermodynamics.
+   The further the discipline, the better the insight — as long as the connection is real.
+
+4. The connection must be INTELLECTUALLY HONEST
+   Don't force a metaphor. Don't stretch a comparison.
+   If the connection isn't genuinely illuminating, pick a different discipline.
+   The user will feel a weak connection immediately.
+
+5. The insight must have DEPTH
+   Surface: "Evolution is like business competition"
+   Depth: "Punctuated equilibrium — the idea that evolution happens in sudden bursts after long stability — maps precisely onto how industries transform. And the organisms/companies that survive aren't the ones that adapted during the burst. They're the ones that built optionality during the quiet."
+
+6. TONE
+   Brilliant friend. Not professor. Excited about ideas. Not performing excitement.
+   Direct. Warm. Never condescending. Talks to them like they're intelligent — because they are.`;
+
+function buildPrompt(discipline, cluster) {
+  const p = state.profile;
+  const edu  = p.education.join(', ')  || 'not specified';
+  const work = p.profession.join(', ') || 'not specified';
+  const hob  = p.hobbies.join(', ')    || 'not specified';
+
+  return `Generate a cross-disciplinary insight for this person:
+
+NAME: ${p.name}
+AGE: ${p.age} | LIFE STAGE: ${p.lifeStage}
+PRIMARY DOMAIN: ${p.primaryField}
+EDUCATION: ${edu}
+WORK EXPERIENCE: ${work}
+INTERESTS: ${hob}
+
+TODAY'S LENS: ${discipline} (Cluster: ${cluster})
+
+The connection must be genuinely surprising and specific to ${p.name}'s world in ${p.primaryField}.
+
+Respond ONLY with valid JSON — no markdown, no code fences, no extra text:
+{
+  "title": "Punchy headline, max 8 words, impossible to ignore, NOT the discipline name",
+  "hook": "Did you know that [specific surprising connection] — ${p.name}? One sentence, screenshot-worthy, ends with question mark",
+  "pullQuote": "The single most striking sentence in the insight. Max 20 words. Makes someone stop scrolling.",
+  "para1": "2-3 sentences. Open with a concrete specific real-world moment or example — not a definition. Story first, insight second.",
+  "para2": "2-3 sentences. Go deeper or sideways — counterintuitive implication, unexpected angle. Land it specifically in ${p.name}'s world (${p.primaryField}) at the end.",
+  "visualType": "one of: feedback_loop | network | spectrum | threshold | cascade | cycle | bridge | venn",
+  "visualData": {
+    "leftLabel": "${discipline}",
+    "leftConcept": "3-5 word core principle from this discipline",
+    "rightLabel": "${p.primaryField}",
+    "rightConcept": "same principle expressed in their world",
+    "caption": "One sentence: what this diagram reveals about the connection"
+  },
+  "whyItMatters": "One sentence. Connects directly and specifically to ${p.name}'s background. Urgent. Make it sting."
+}`;
+}
+
+// ============================================================
+// GENERATE CARD
+// ============================================================
+async function generateCard() {
+  const today = getTodayStr();
+  if (state.todayDate === today && state.todayCard) {
+    renderCard(state.todayCard, state.todayDiscipline);
+    renderLattice();
+    renderTomorrow(state.todayDiscipline);
+    return;
+  }
+
+  const discipline = getTodaysDiscipline();
+  const cluster    = DISC_TO_CLUSTER[discipline];
+
+  document.getElementById('generate-area').innerHTML = `
+    <div class="loading-state">
+      <div class="loading-dots">
+        <div class="loading-dot"></div><div class="loading-dot"></div><div class="loading-dot"></div>
+      </div>
+      <div class="loading-fragment" id="loading-fragment" style="transition:opacity 0.3s;"></div>
+    </div>`;
+  startLoadingFragments();
+
+  try {
+    const res = await fetch(WORKER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 1800,
+        system: INSIGHT_SYSTEM_PROMPT,
+        messages: [{ role: 'user', content: buildPrompt(discipline, cluster) }]
+      })
+    });
+
+    stopLoadingFragments();
+
+    if (!res.ok) {
+      const errBody = await res.json().catch(() => ({}));
+      throw new Error(`Worker responded ${res.status}: ${errBody?.error || ''}`);
+    }
+
+    const data = await res.json();
+    let text = (data?.content?.[0]?.text || '').trim();
+    text = text.replace(/^```json\s*/i,'').replace(/^```\s*/i,'').replace(/\s*```$/,'').trim();
+    const jsonMatch = text.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) throw new Error(`JSON parse failed: ${text.slice(0,200)}`);
+    const card = JSON.parse(jsonMatch[0]);
+
+    state.todayDate       = today;
+    state.todayCard       = card;
+    state.todayDiscipline = discipline;
+    state.cardCount       = (state.cardCount || 0) + 1;
+    state.clusterProgress[cluster] = (state.clusterProgress[cluster] || 0) + 1;
+    updateStreak();
+    saveState();
+
+    document.getElementById('generate-area').innerHTML = '';
+    showConnectionAnimation(discipline, state.profile.primaryField || 'Your World', () => {
+      renderCard(card, discipline);
+      renderLattice();
+      renderTomorrow(discipline);
+    });
+
+  } catch(e) {
+    stopLoadingFragments();
+    const errMsg = e?.message || String(e);
+    const isRateLimit = errMsg.includes('429');
+    document.getElementById('generate-area').innerHTML = `
+      <div style="padding:20px 0; display:flex; flex-direction:column; gap:12px;">
+        <div style="font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--muted);">${isRateLimit ? 'Daily limit reached. Come back tomorrow.' : 'Error: ' + errMsg}</div>
+        ${isRateLimit ? '' : '<button class="btn-retry" onclick="generateCard()">Try again</button>'}
+      </div>`;
+    console.error(e);
+  }
+}
+
+// ============================================================
 // RENDER CARD
 // ============================================================
 function renderCard(card, discipline) {
-  const savedKey = discipline + (state.todayDate || '');
+  const savedKey    = discipline + (state.todayDate || '');
   const alreadySaved = isSaved(savedKey);
-
-  const vt = card.visualType || 'venn';
   const vd = (card.visualData && typeof card.visualData === 'object') ? card.visualData : {};
-
-  const svgDiagram = renderDiagram(vt, vd);
+  const svgDiagram  = renderDiagram(card.visualType || 'venn', vd);
+  const caption     = vd.caption || '';
+  const clusterEmoji = CLUSTERS[DISC_TO_CLUSTER[discipline]]?.emoji || '✦';
 
   document.getElementById('card-area').innerHTML = `
     <div class="card">
-      <div class="card-cross-tag">✦ ${discipline} × ${state.profile.primaryField || 'Your World'}</div>
-
-      <div class="card-hook-pullquote">${card.hook || ''}</div>
-
+      <div class="card-watermark">${discipline}</div>
+      <div class="card-lens-badge">${clusterEmoji} ${discipline}</div>
+      <div class="card-hook">${card.hook || ''}</div>
       <div class="card-title">${card.title || ''}</div>
-
+      ${card.pullQuote ? `<div class="card-pull-quote">"${card.pullQuote}"</div>` : ''}
       <div class="card-body">
         ${card.para1 ? `<p class="card-para">${card.para1}</p>` : ''}
         ${card.para2 ? `<p class="card-para">${card.para2}</p>` : ''}
-        ${card.para3 ? `<p class="card-para">${card.para3}</p>` : ''}
       </div>
-
       <div class="visual-wrap">
-        <div class="visual-section-label">Visualised</div>
+        <div class="visual-label">The Pattern</div>
         <div class="visual-svg-container">${svgDiagram}</div>
+        ${caption ? `<div class="visual-caption">${caption}</div>` : ''}
       </div>
-
       ${card.whyItMatters ? `
-      <div class="card-why-wrap">
-        <div class="card-why-label">Why This Matters</div>
+      <div class="card-why-box">
+        <div class="card-why-label">Why this matters for you</div>
         <div class="card-why-text">${card.whyItMatters}</div>
       </div>` : ''}
-
+      <div class="card-bottom-tag">✦ ${discipline} × ${state.profile.primaryField || 'Your World'}</div>
       <div class="card-actions">
-        <button class="btn-action ${alreadySaved ? 'saved' : ''}" id="btn-save" onclick="toggleSave()">
-          ${alreadySaved ? '✓ Saved' : '🔖 Save'}
-        </button>
-        <button class="btn-action" onclick="shareLinkedIn()">🔗 LinkedIn</button>
-        <button class="btn-action" onclick="shareWhatsApp()">💬 WhatsApp</button>
-        <button class="btn-action" onclick="copyCard()">📋 Copy</button>
+        <button class="btn-linkedin" onclick="shareLinkedIn()">Share on LinkedIn</button>
+        <div class="card-secondary-actions">
+          <button class="btn-action" onclick="shareWhatsApp()">WhatsApp</button>
+          <button class="btn-action" onclick="copyCard()">Copy</button>
+          <button class="btn-action ${alreadySaved ? 'saved' : ''}" id="btn-save" onclick="toggleSave()">
+            ${alreadySaved ? '✓ Saved' : '⊕ Save'}
+          </button>
+        </div>
       </div>
+      <button class="btn-calendar" onclick="addToCalendar()">Add to my morning routine →</button>
     </div>`;
 
   document.getElementById('generate-area').innerHTML =
-    '<p class="already-generated">✓ Today\'s card is ready. Come back tomorrow for a new lens.</p>';
-
-  // Show inline lattice if enough lenses
-  if ((state.cardCount || 0) >= 3) {
-    const latticeEl = document.getElementById('lattice-inline');
-    if (latticeEl) {
-      latticeEl.classList.remove('hidden');
-      latticeEl.innerHTML = `
-        <div class="lattice-inline-wrap">
-          <div class="lattice-inline-header">
-            <span class="lattice-label">Your Lattice</span>
-            <span class="lattice-stats">${state.cardCount} Lenses · ${state.streak || 0} Day Streak · ${Object.values(state.clusterProgress||{}).filter(v=>v>0).length} Clusters</span>
-          </div>
-          <canvas id="radarCanvasInline" width="320" height="320"></canvas>
-        </div>`;
-      drawRadarInline();
-    }
-  }
-}
-
-// ============================================================
-// SAVE
-// ============================================================
-function isSaved(key) {
-  return JSON.parse(localStorage.getItem('confluence_saved') || '[]').some(s => s.key === key);
-}
-
-function toggleSave() {
-  const key   = (state.todayDiscipline || '') + (state.todayDate || '');
-  let saved   = JSON.parse(localStorage.getItem('confluence_saved') || '[]');
-  const idx   = saved.findIndex(s => s.key === key);
-  const btn   = document.getElementById('btn-save');
-
-  if (idx >= 0) {
-    saved.splice(idx, 1);
-    btn.textContent = '🔖 Save';
-    btn.classList.remove('saved');
-    showToast('Removed from saved');
-  } else {
-    saved.push({ key, discipline: state.todayDiscipline, date: state.todayDate, card: state.todayCard });
-    btn.innerHTML = '✓ Saved';
-    btn.classList.add('saved');
-    showToast('Card saved!');
-  }
-  localStorage.setItem('confluence_saved', JSON.stringify(saved));
+    '<p class="already-generated">✓ Today\'s lens is ready.</p>';
 }
 
 // ============================================================
 // SHARE
 // ============================================================
-function getShareText() {
-  const c = state.todayCard;
-  if (!c) return '';
-  return `${c.title}\n\n"${c.hook}"\n\nLens: ${state.todayDiscipline} × ${state.profile.primaryField}\n\nBuilding polymathic thinking with Confluence\nhttps://abajpai29-hash.github.io/Confluence/\n#SystemsThinking #Polymath #LifelongLearning`;
-}
-
 function shareLinkedIn() {
   window.open(`https://www.linkedin.com/shareArticle?mini=true&summary=${encodeURIComponent(getShareText())}`, '_blank');
 }
 
-function shareWhatsApp() {
-  window.open(`https://wa.me/?text=${encodeURIComponent(getShareText())}`, '_blank');
-}
-
-function copyCard() {
-  navigator.clipboard.writeText(getShareText()).then(() => showToast('Copied to clipboard!'));
-}
-
-// ============================================================
-// PROGRESS
-// ============================================================
-function showProgress() {
-  document.getElementById('screen-app').classList.add('hidden');
-  document.getElementById('screen-progress').classList.remove('hidden');
-  document.getElementById('stat-cards').textContent  = state.cardCount  || 0;
-  document.getElementById('stat-streak').textContent = state.streak     || 0;
-  const explored = Object.values(state.clusterProgress || {}).filter(v => v > 0).length;
-  document.getElementById('stat-clusters').textContent = explored;
-  drawRadar();
-  renderClusterLegend();
-}
-
-function showApp() {
-  document.getElementById('screen-progress').classList.add('hidden');
-  document.getElementById('screen-app').classList.remove('hidden');
+function addToCalendar() {
+  const text    = encodeURIComponent('Your Confluence lens is ready');
+  const details = encodeURIComponent('https://abajpai29-hash.github.io/Confluence/');
+  window.open(`https://calendar.google.com/calendar/r/eventedit?text=${text}&details=${details}&recur=RRULE:FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR`, '_blank');
 }
 
 // ============================================================
-// RADAR — shared drawing logic + per-canvas wrappers
+// CONNECTION ANIMATION
 // ============================================================
-function drawRadarOnCanvas(canvas, size) {
-  const ctx = canvas.getContext('2d');
-  const W = size, H = size;
-  const cx = W / 2, cy = H / 2;
-  const maxR = Math.min(cx, cy) * 0.62;
-  const labelOffset = size * 0.086; // proportional label distance
-
-  ctx.clearRect(0, 0, W, H);
-
-  const names = Object.keys(CLUSTERS);
-  const n = names.length;
-  const angle = i => (i / n) * Math.PI * 2 - Math.PI / 2;
-
-  // Progress polygon values
-  const prog = names.map(c => {
-    const count = (state.clusterProgress || {})[c] || 0;
-    const total = CLUSTERS[c].disciplines.length;
-    return Math.min(count / Math.max(total * 0.25, 1), 1);
-  });
-
-  function drawFrame(t) {
-    ctx.clearRect(0, 0, W, H);
-
-    // Background polygon at 25%
-    ctx.beginPath();
-    names.forEach((_, i) => {
-      const r = maxR * 0.25;
-      const x = cx + r * Math.cos(angle(i));
-      const y = cy + r * Math.sin(angle(i));
-      i === 0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
-    });
-    ctx.closePath();
-    ctx.fillStyle = 'rgba(212,201,176,0.18)';
-    ctx.fill();
-    ctx.strokeStyle = 'rgba(212,201,176,0.5)';
-    ctx.lineWidth = 1;
-    ctx.stroke();
-
-    // Grid rings
-    [1,2,3,4].forEach(ring => {
-      ctx.beginPath();
-      names.forEach((_, i) => {
-        const r = (maxR * ring) / 4;
-        const x = cx + r * Math.cos(angle(i));
-        const y = cy + r * Math.sin(angle(i));
-        i === 0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
-      });
-      ctx.closePath();
-      ctx.strokeStyle = '#d4c9b0';
-      ctx.lineWidth = 1;
-      ctx.stroke();
-    });
-
-    // Spokes
-    names.forEach((cluster, i) => {
-      const a = angle(i);
-      ctx.beginPath();
-      ctx.moveTo(cx, cy);
-      ctx.lineTo(cx + maxR * Math.cos(a), cy + maxR * Math.sin(a));
-      ctx.strokeStyle = '#d4c9b0';
-      ctx.lineWidth = 1;
-      ctx.stroke();
-    });
-
-    // Labels
-    const fontSize = Math.max(7, Math.round(size * 0.021));
-    names.forEach((cluster, i) => {
-      const a = angle(i);
-      const labelR = maxR + labelOffset;
-      const lx = cx + labelR * Math.cos(a);
-      const ly = cy + labelR * Math.sin(a);
-      const abbrev = cluster.length > 11 ? cluster.slice(0, 10) + '…' : cluster;
-      ctx.save();
-      ctx.font = `600 ${fontSize}px "JetBrains Mono", monospace`;
-      ctx.fillStyle = (state.clusterProgress?.[cluster] || 0) > 0 ? '#c4460a' : '#8a7d6b';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      const words = abbrev.split(' ');
-      if (words.length > 1 && abbrev.length > 9) {
-        ctx.fillText(words[0], lx, ly - 6);
-        ctx.fillText(words.slice(1).join(' '), lx, ly + 6);
-      } else {
-        ctx.fillText(abbrev, lx, ly);
-      }
-      ctx.restore();
-    });
-
-    // Animated progress polygon
-    ctx.beginPath();
-    names.forEach((_, i) => {
-      const r = maxR * Math.max(prog[i], 0.05) * t;
-      const x = cx + r * Math.cos(angle(i));
-      const y = cy + r * Math.sin(angle(i));
-      i === 0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
-    });
-    ctx.closePath();
-    ctx.fillStyle = 'rgba(196,70,10,0.12)';
-    ctx.fill();
-    ctx.strokeStyle = '#c4460a';
-    ctx.lineWidth = 2;
-    ctx.stroke();
-
-    // Dots
-    names.forEach((cluster, i) => {
-      const r = maxR * Math.max(prog[i], 0.05) * t;
-      const dx = cx + r * Math.cos(angle(i));
-      const dy = cy + r * Math.sin(angle(i));
-      const explored = (state.clusterProgress?.[cluster] || 0) > 0;
-      ctx.beginPath();
-      ctx.arc(dx, dy, 5, 0, Math.PI*2);
-      if (explored) {
-        ctx.fillStyle = '#c4460a';
-        ctx.fill();
-      } else {
-        ctx.fillStyle = 'white';
-        ctx.fill();
-        ctx.strokeStyle = '#d4c9b0';
-        ctx.lineWidth = 1.5;
-        ctx.stroke();
-      }
-    });
-  }
-
-  let t = 0;
-  function animateRadar() {
-    t = Math.min(t + 0.04, 1);
-    drawFrame(t);
-    if (t < 1) requestAnimationFrame(animateRadar);
-  }
-  requestAnimationFrame(animateRadar);
-}
-
-function drawRadar() {
-  const canvas = document.getElementById('radarCanvas');
-  if (!canvas) return;
-  drawRadarOnCanvas(canvas, 420);
-}
-
-function drawRadarInline() {
-  const canvas = document.getElementById('radarCanvasInline');
-  if (!canvas) return;
-  drawRadarOnCanvas(canvas, 320);
-}
-
-function renderClusterLegend() {
-  document.getElementById('cluster-legend').innerHTML = Object.entries(CLUSTERS).map(([c, d]) => {
-    const count = (state.clusterProgress || {})[c] || 0;
-    return `<div class="cluster-item">
-      <div class="cluster-dot" style="background:${d.color}"></div>
-      <span>${d.emoji} ${c}</span>
-      <span class="cluster-count">${count}/${d.disciplines.length}</span>
+function showConnectionAnimation(discipline, userDomain, callback) {
+  const el = document.getElementById('connection-animation');
+  el.classList.remove('hidden');
+  el.innerHTML = `
+    <div class="conn-anim">
+      <div class="conn-domain">${userDomain}</div>
+      <div class="conn-line-wrap"><div class="conn-line-inner" id="conn-line-inner"></div></div>
+      <div class="conn-discipline" id="conn-disc">${discipline}</div>
     </div>`;
-  }).join('');
+  setTimeout(() => {
+    const l = document.getElementById('conn-line-inner');
+    if (l) l.style.width = '100%';
+  }, 150);
+  setTimeout(() => {
+    const d = document.getElementById('conn-disc');
+    if (d) d.style.opacity = '1';
+  }, 820);
+  setTimeout(() => {
+    el.classList.add('hidden');
+    callback();
+  }, 1500);
 }
 
 // ============================================================
-// ONBOARDING
+// TOMORROW SECTION
 // ============================================================
-function initChips(id, multi = true) {
-  document.getElementById(id).querySelectorAll('.chip').forEach(chip => {
-    chip.addEventListener('click', () => {
-      if (!multi) document.getElementById(id).querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
-      chip.classList.toggle('selected');
-      if (!multi && !chip.classList.contains('selected')) chip.classList.add('selected');
-      validateOb();
-    });
+function getNextWeekdayDiscipline() {
+  const today = new Date();
+  let next = new Date(today);
+  next.setDate(today.getDate() + 1);
+  while (next.getDay() === 0 || next.getDay() === 6) next.setDate(next.getDate() + 1);
+  const epoch = new Date('2024-01-01');
+  const dayIdx = Math.floor((next - epoch) / 86400000);
+  return ALL_DISCIPLINES[((dayIdx % ALL_DISCIPLINES.length) + ALL_DISCIPLINES.length) % ALL_DISCIPLINES.length];
+}
+
+function renderTomorrow(todayDiscipline) {
+  const nextDisc = getNextWeekdayDiscipline();
+  const name     = state.profile.name || 'Friend';
+  document.getElementById('tomorrow-area').innerHTML = `
+    <div class="tomorrow-wrap">
+      <span class="tomorrow-sunrise">🌅</span>
+      <div class="tomorrow-main">${name}, that's your ${todayDiscipline} lens unlocked.</div>
+      <div class="tomorrow-body">Tomorrow we go somewhere completely different.<br>${nextDisc} sees something in your world that today's insight couldn't reach.</div>
+      <div class="tomorrow-sub">See you in the morning.</div>
+    </div>`;
+}
+
+// ============================================================
+// LATTICE (D3)
+// ============================================================
+const CLUSTER_COLORS = {
+  'Natural Sciences':'#3B82F6','Chemistry':'#10B981','Mathematics':'#8B5CF6',
+  'Life Sciences':'#EF4444','Earth & Space':'#F59E0B','Social Sciences':'#6B7280',
+  'Economics':'#14B8A6','Governance & Law':'#F97316','History & Philosophy':'#A855F7',
+  'Arts & Design':'#EC4899','Engineering':'#64748B','Computer Science':'#0EA5E9',
+  'Business & Strategy':'#EAB308','Health & Medicine':'#06B6D4',
+  'Sports & Performance':'#F97316','Eastern & Classical':'#8B5CF6','Complex Systems':'#6366F1'
+};
+
+function renderLattice() {
+  const el = document.getElementById('lattice-area');
+  if (!el) return;
+  const count   = state.cardCount || 0;
+  const name    = state.profile?.name || 'Friend';
+  const clusters = Object.values(state.clusterProgress || {}).filter(v => v > 0).length;
+  const explored = Object.entries(state.clusterProgress || {}).filter(([,v]) => v > 0).map(([k]) => k);
+
+  let label = '';
+  if (count >= 100) label = `${name}, this is what a polymathic mind looks like.`;
+  else if (count >= 30) label = `You've crossed ${count} disciplines. Most people never leave one.`;
+  else if (count >= 7)  label = `${count} disciplines. ${clusters} clusters. You're starting to see the shape of things.`;
+
+  if (count < 3) {
+    el.innerHTML = `
+      <div class="lattice-wrap">
+        <div class="lattice-title">Your Lattice</div>
+        <div class="lattice-pre-text">Your thinking lattice is just beginning.<br>Every insight adds a node. Every connection adds an edge.</div>
+      </div>`;
+    return;
+  }
+
+  el.innerHTML = `
+    <div class="lattice-wrap">
+      <div class="lattice-title">Your Lattice</div>
+      ${label ? `<div class="lattice-label-text">${label}</div>` : ''}
+      <div id="lattice-svg-container"></div>
+    </div>`;
+
+  const W = Math.min((el.clientWidth || 320) - 0, 520);
+  const H = 260;
+
+  const nodes = [
+    { id: 'you', label: name, type: 'center', r: 13 },
+    ...explored.map(c => ({
+      id: c, label: c.length > 13 ? c.slice(0,12)+'…' : c,
+      type: 'cluster', color: CLUSTER_COLORS[c] || '#8a7d6b', r: 7
+    }))
+  ];
+  const links = explored.map(c => ({ source: 'you', target: c }));
+
+  const svg = d3.select('#lattice-svg-container')
+    .append('svg').attr('width', W).attr('height', H)
+    .attr('viewBox', `0 0 ${W} ${H}`).style('overflow','visible');
+
+  const sim = d3.forceSimulation(nodes)
+    .force('link', d3.forceLink(links).id(d => d.id).distance(85))
+    .force('charge', d3.forceManyBody().strength(-110))
+    .force('center', d3.forceCenter(W/2, H/2))
+    .force('collision', d3.forceCollide().radius(d => d.r + 18));
+
+  const link = svg.append('g').selectAll('line').data(links).join('line')
+    .attr('stroke','#d4c9b0').attr('stroke-width',1.5).attr('opacity',0.7);
+
+  const node = svg.append('g').selectAll('g').data(nodes).join('g');
+
+  node.filter(d => d.type === 'center').append('circle')
+    .attr('r', d => d.r + 7).attr('fill','none')
+    .attr('stroke','#c4460a').attr('stroke-width',1).attr('opacity',0.25)
+    .style('animation','glowPulse 2.5s ease infinite');
+
+  node.append('circle')
+    .attr('r', d => d.r)
+    .attr('fill', d => d.type === 'center' ? '#c4460a' : d.color)
+    .attr('opacity', 0.9)
+    .attr('stroke','#f5f0e8').attr('stroke-width',2);
+
+  node.append('text')
+    .attr('dy', d => d.type === 'center' ? -18 : d.r + 13)
+    .attr('text-anchor','middle')
+    .attr('font-family',"'JetBrains Mono', monospace")
+    .attr('font-size', d => d.type === 'center' ? 10 : 9)
+    .attr('fill','#8a7d6b').attr('letter-spacing','0.04em')
+    .text(d => d.label);
+
+  sim.on('tick', () => {
+    link
+      .attr('x1', d => d.source.x).attr('y1', d => d.source.y)
+      .attr('x2', d => d.target.x).attr('y2', d => d.target.y);
+    node.attr('transform', d =>
+      `translate(${Math.max(d.r+4, Math.min(W-d.r-4, d.x))},${Math.max(d.r+4, Math.min(H-d.r-4, d.y))})`);
   });
 }
 
-function getChips(id) {
-  return [...document.querySelectorAll(`#${id} .chip.selected`)].map(c => c.dataset.val);
+// ============================================================
+// WEEKDAY STRIP
+// ============================================================
+function renderWeekdayStrip() {
+  const labels = ['M','T','W','T','F'];
+  const dow = new Date().getDay();
+  const todayIdx = (dow >= 1 && dow <= 5) ? dow - 1 : -1;
+  const el = document.getElementById('weekday-strip');
+  if (!el) return;
+  el.innerHTML = `<div class="weekday-strip-inner">${labels.map((d,i) => `
+    <div class="weekday-dot ${i === todayIdx ? 'active' : i < todayIdx ? 'past' : ''}">
+      <div class="weekday-circle"></div>
+      <div class="weekday-day-label">${d}</div>
+    </div>`).join('')}</div>`;
 }
 
-function validateOb() {
-  const ok = document.getElementById('ob-name').value.trim()
-    && getChips('chips-age').length
-    && getChips('chips-stage').length
-    && getChips('chips-field').length;
-  document.getElementById('ob-submit').disabled = !ok;
+// ============================================================
+// SCREEN MANAGEMENT
+// ============================================================
+function showScreen(id) {
+  ['screen-onboarding','screen-app','screen-weekend','screen-about'].forEach(s => {
+    const el = document.getElementById(s);
+    if (el) el.classList.add('hidden');
+  });
+  const t = document.getElementById(id);
+  if (t) { t.classList.remove('hidden'); window.scrollTo(0,0); }
 }
 
+function isWeekend() {
+  const d = new Date().getDay();
+  return d === 0 || d === 6;
+}
+
+// ============================================================
+// INIT APP
+// ============================================================
+function initApp() {
+  const discipline = getTodaysDiscipline();
+  const cluster    = DISC_TO_CLUSTER[discipline];
+
+  renderWeekdayStrip();
+  document.getElementById('today-cluster-line').textContent =
+    `${CLUSTERS[cluster]?.emoji || ''} ${cluster}`;
+  document.getElementById('today-discipline-name').textContent = discipline;
+
+  const today = getTodayStr();
+  if (state.todayDate === today && state.todayCard) {
+    renderCard(state.todayCard, state.todayDiscipline);
+    renderLattice();
+    renderTomorrow(state.todayDiscipline);
+  } else {
+    generateCard();
+  }
+}
+
+// ============================================================
+// ONBOARDING SUBMIT
+// ============================================================
 function submitOb() {
   state.profile = {
     name:         document.getElementById('ob-name').value.trim(),
@@ -1927,33 +1605,30 @@ function submitOb() {
   };
   state.onboarded = true;
   saveState();
-  document.getElementById('screen-onboarding').classList.add('hidden');
-  document.getElementById('screen-app').classList.remove('hidden');
+  showScreen('screen-app');
   initApp();
-  // Auto-generate immediately after onboarding
-  generateCard();
 }
 
 // ============================================================
-// INIT APP
+// WEEKEND SCREEN
 // ============================================================
-function initApp() {
-  const discipline = getTodaysDiscipline();
-  const cluster    = DISC_TO_CLUSTER[discipline];
+function showWeekendScreen() {
+  const name  = state.profile?.name || 'Friend';
+  const count = state.cardCount || 0;
 
-  document.getElementById('today-cluster-badge').textContent =
-    `${CLUSTERS[cluster]?.emoji || ''} ${cluster}`;
-  document.getElementById('streak-count').textContent = state.streak || 0;
+  const today = new Date();
+  let monday = new Date(today);
+  while (monday.getDay() !== 1) monday.setDate(monday.getDate() + 1);
+  const epoch  = new Date('2024-01-01');
+  const dayIdx = Math.floor((monday - epoch) / 86400000);
+  const mondayDisc = ALL_DISCIPLINES[((dayIdx % ALL_DISCIPLINES.length) + ALL_DISCIPLINES.length) % ALL_DISCIPLINES.length];
 
-  const today = getTodayStr();
-  if (state.todayDate === today && state.todayCard) {
-    // Already have card — render it directly, no generation needed
-    renderCard(state.todayCard, state.todayDiscipline);
-    if (state.cardCount >= 3) document.getElementById('progress-teaser').classList.remove('hidden');
-  } else {
-    // Auto-generate for returning users
-    generateCard();
-  }
+  document.getElementById('weekend-teaser').textContent =
+    `${name}, you've seen ${count} connection${count !== 1 ? 's' : ''} so far. The lattice grows again on Monday.`;
+  document.getElementById('weekend-next').innerHTML =
+    `Monday: <span>${mondayDisc}</span>`;
+
+  showScreen('screen-weekend');
 }
 
 // ============================================================
@@ -1971,9 +1646,11 @@ function init() {
     ['chips-edu','chips-work','chips-hobby'].forEach(id => initChips(id, true));
     document.getElementById('ob-name').addEventListener('input', validateOb);
     document.getElementById('ob-submit').addEventListener('click', submitOb);
+    showScreen('screen-onboarding');
+  } else if (isWeekend()) {
+    showWeekendScreen();
   } else {
-    document.getElementById('screen-onboarding').classList.add('hidden');
-    document.getElementById('screen-app').classList.remove('hidden');
+    showScreen('screen-app');
     initApp();
   }
 }

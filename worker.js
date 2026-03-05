@@ -9,7 +9,7 @@
 //
 // That's it. No token needed in the HTML.
 
-const MAX_REQUESTS_PER_IP_PER_DAY = 3;  // generous for daily habit app
+const MAX_REQUESTS_PER_IP_PER_DAY = 10; // generous for daily habit app
 const MAX_TOKENS_CAP = 1800;            // hard ceiling — cannot be overridden by client
 const MAX_PROMPT_CHARS = 8000;          // prevent absurdly large prompts
 
@@ -88,6 +88,11 @@ export default {
         content: body.messages[0].content.slice(0, MAX_PROMPT_CHARS),
       }],
     };
+
+    // Pass through system prompt if provided (capped at MAX_PROMPT_CHARS)
+    if (body.system && typeof body.system === 'string') {
+      safePayload.system = body.system.slice(0, MAX_PROMPT_CHARS);
+    }
 
     // ── Forward to Anthropic ───────────────────────────────────
     let anthropicRes;
