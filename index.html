@@ -710,70 +710,62 @@ body::before {
       <div class="app-logo">✦ Confluence</div>
     </div>
     <div class="about-wrap">
-      <div class="about-eyebrow">Why this exists</div>
-      <h1 class="about-headline">A letter to everyone who<br>was told to pick a lane.</h1>
+      <div class="about-eyebrow">Why Confluence exists</div>
+      <h1 class="about-headline">A letter to every curious mind.</h1>
       <div class="about-divider">✦</div>
       <div class="about-body">
-        <p>Dear curious person,</p>
-        <p>I want to tell you something that took a long time to figure out.</p>
-        <p>Everything you've ever studied is connected. Every subject you thought was useless has a direct line to something that matters in your world right now.</p>
-        <p>You just weren't shown the connections.</p>
+        <p id="about-dear">Dear curious person,</p>
+        <p>I come from an engineering background.<br>Equations. Systems. Proofs.</p>
+        <p>Then I started reading philosophy.</p>
+        <p>And I kept bumping into familiar names.<br>Descartes. Leibniz. Pascal.</p>
+        <p>I knew them from mathematics and physics.<br>But here they were again, at the heart of philosophy.</p>
+        <p>That's when something clicked.</p>
+        <p>These weren't people who happened to know other things. They thought across everything naturally, as if the boundaries between subjects simply didn't exist.</p>
+        <p>And I started wondering.<br>When did we stop doing that?</p>
       </div>
       <div class="about-divider">✦</div>
       <div class="about-body">
-        <p>When I started reading philosophy, I noticed something unexpected.</p>
-        <p>The philosophers I was studying weren't just philosophers.</p>
-        <p>They were mathematicians. Scientists. Strategists.</p>
-        <p>Descartes in geometry and philosophy. Leibniz in calculus and metaphysics. Pascal in physics and ethics.</p>
-        <p>They were thinkers — for whom the boundaries between disciplines simply didn't exist.</p>
-        <p>That realisation changed how I saw everything.</p>
-      </div>
-      <div class="about-pull-quote">"The people who navigate this world best will be the ones who see more."</div>
-      <div class="about-divider">✦</div>
-      <div class="about-body">
-        <p>That way of seeing — holding multiple disciplines simultaneously and finding the connections between them — it's rare because nobody teaches it deliberately.</p>
-        <p>The people who develop it do so accidentally. Through unusual careers. Through environments that force you to think across everything at once.</p>
-        <p>Most people never get that forcing function.</p>
-        <p>Because nobody ever showed them the conversation happening between the things they already know.</p>
+        <p>Somewhere along the way, education became about preparation.</p>
+        <p>Deep knowledge in one place.<br>Nothing connecting the places.</p>
+        <p>We learned subjects.<br>We never learned how they talk to each other.</p>
+        <p>And that conversation — the one happening between disciplines — that's where some of the most interesting thinking lives.</p>
       </div>
       <div class="about-divider">✦</div>
       <div class="about-body">
+        <p>The people who see that conversation tend to notice things others miss.</p>
+        <p>They ask different questions.<br>They find solutions in unexpected places.</p>
+        <p>Most of them got there by accident.<br>An unusual career. A wandering curiosity.<br>A teacher who connected things nobody else connected.</p>
+        <p>Most people never get that accident.</p>
         <p>And the cost of that is real.</p>
         <p>You make decisions with one lens when three would serve you better.</p>
         <p>You solve problems inside one discipline when the answer was sitting in another.</p>
         <p>You read widely but the dots never connect.</p>
-        <p>You sense something is missing — you just can't name it.</p>
+        <p>You sense something is missing.<br>You just can't name it.</p>
       </div>
       <div class="about-divider">✦</div>
       <div class="about-body">
         <p>Then AI arrived.</p>
-        <p>AI is an extraordinary answer machine. It knows more facts than any human ever will.</p>
-        <p>But asking the question nobody thought to ask — finding the connection that lives in the unmapped space between disciplines — that still requires a human mind.</p>
+        <p>AI is an extraordinary answer machine.<br>It knows more facts than any human ever will.</p>
+        <p>But asking the question nobody thought to ask. Finding the connection that lives in the unmapped space between disciplines. That still requires a human mind.</p>
         <p>The people who navigate this world best will be the ones who see more. Across disciplines, across contexts, across the full map of human knowledge.</p>
       </div>
       <div class="about-divider">✦</div>
       <div class="about-body">
-        <p>Confluence is a daily practice.</p>
-        <p>Five minutes every weekday morning — one unexpected connection between a field of human knowledge and your world.</p>
-        <p>So you make better decisions. So you ask better questions. So you see what others in the room miss. So your thinking compounds — every single day.</p>
+        <p>That felt like a gap worth closing.</p>
+        <p>Confluence is one small attempt at that.</p>
+        <p>Every weekday morning, one unexpected connection between a subject you know and a perspective you've never thought to apply to your world.</p>
+        <p>Read it in five minutes.<br>Carry it all day.</p>
+        <p>Come curious. Leave seeing differently.</p>
       </div>
       <div class="about-divider">✦</div>
-      <div class="about-body about-closing">
-        <p>The question is whether you build this deliberately — or wait for an unusual life to give it to you by accident.</p>
-        <p>Welcome to Confluence.</p>
-      </div>
       <div class="about-three-grid">
         <div class="about-grid-item">
           <div class="about-grid-label">The Mission</div>
-          <div class="about-grid-text">"The biggest gap isn't knowledge. It's the connections between knowledge. Confluence exists to close that gap."</div>
-        </div>
-        <div class="about-grid-item">
-          <div class="about-grid-label">The Belief</div>
-          <div class="about-grid-text">"The world's hardest problems don't live inside one discipline. They live at the edges — where biology meets policy, where physics meets strategy, where history meets your next decision."</div>
+          <div class="about-grid-text">The biggest gap isn't knowledge. It's the connections between knowledge. Confluence exists to close that gap. One connection at a time.</div>
         </div>
         <div class="about-grid-item">
           <div class="about-grid-label">The Promise</div>
-          <div class="about-grid-text">"Five minutes a day. One unexpected connection. A fundamentally different mind — over time, irreversibly."</div>
+          <div class="about-grid-text">Five minutes a day. One unexpected connection. A fundamentally different mind. Over time, irreversibly.</div>
         </div>
       </div>
     </div>
@@ -1552,6 +1544,13 @@ function showScreen(id) {
   });
   const t = document.getElementById(id);
   if (t) { t.classList.remove('hidden'); window.scrollTo(0,0); }
+  if (id === 'screen-about') {
+    const dearEl = document.getElementById('about-dear');
+    if (dearEl) {
+      const name = state?.profile?.name;
+      dearEl.textContent = name ? `Dear ${name},` : 'Dear curious person,';
+    }
+  }
 }
 
 function isWeekend() {
