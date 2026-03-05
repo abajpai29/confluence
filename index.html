@@ -526,22 +526,47 @@ body::before {
 
 /* ===== CONSTELLATION ===== */
 .constellation-wrap {
-  padding: 36px 0 8px; border-top: 1px solid var(--border); margin-top: 32px;
+  padding: 36px 0 8px; margin-top: 32px;
   animation: fadeUp 0.4s ease 0.2s both;
 }
 .constellation-title {
   font-family: 'Playfair Display', Georgia, serif;
-  font-size: 18px; font-weight: 600; color: var(--ink); margin-bottom: 8px;
+  font-size: 18px; font-weight: 600; color: var(--ink); margin-bottom: 6px;
 }
 .constellation-pre-text {
   font-family: 'Source Serif 4', Georgia, serif;
-  font-size: 14px; font-weight: 300; color: var(--muted); font-style: italic;
-  line-height: 1.8; margin-bottom: 20px;
+  font-size: 13px; font-weight: 300; color: var(--muted); font-style: italic;
+  line-height: 1.7; margin-bottom: 14px;
 }
-.constellation-label-text {
+.constellation-progress {
   font-family: 'Source Serif 4', Georgia, serif;
-  font-size: 14px; font-weight: 300; color: var(--muted); font-style: italic;
-  line-height: 1.7; margin-bottom: 20px;
+  font-size: 13px; font-weight: 300; color: var(--muted); font-style: italic;
+  margin-top: 12px; min-height: 20px;
+}
+.constellation-notify {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px; color: #ffd97d; letter-spacing: 0.05em;
+  margin-top: 10px; opacity: 0;
+  animation: notifyFade 3.5s ease forwards;
+}
+@keyframes notifyFade {
+  0%   { opacity: 0; transform: translateY(4px); }
+  15%  { opacity: 1; transform: translateY(0); }
+  75%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+@keyframes twinkle {
+  0%, 100% { opacity: 0.85; }
+  50%       { opacity: 0.25; }
+}
+@keyframes centerPulse {
+  0%, 100% { opacity: 0.2; }
+  50%       { opacity: 0.5; }
+}
+@keyframes starAppear {
+  0%   { opacity: 0; }
+  50%  { opacity: 1; }
+  100% { opacity: 0.9; }
 }
 
 /* ===== BRIDGE ARC ===== */
@@ -813,6 +838,7 @@ let state = {
   streak: 0,
   lastCardDate: null,
   clusterProgress: {},
+  exploredDisciplines: [],
 };
 
 const STORAGE_KEY = 'confluence_v3';
@@ -1253,13 +1279,15 @@ async function generateCard() {
     state.todayDiscipline = discipline;
     state.cardCount       = (state.cardCount || 0) + 1;
     state.clusterProgress[cluster] = (state.clusterProgress[cluster] || 0) + 1;
+    const isNewDiscipline = !state.exploredDisciplines.includes(discipline);
+    if (isNewDiscipline) state.exploredDisciplines.push(discipline);
     updateStreak();
     saveState();
 
     document.getElementById('generate-area').innerHTML = '';
     showConnectionAnimation(discipline, (state.profile.domains || [])[0] || 'Your World', () => {
       renderCard(card, discipline);
-      renderConstellation();
+      renderConstellation(isNewDiscipline ? discipline : null);
       renderTomorrow(discipline);
     });
 
@@ -1412,84 +1440,121 @@ const CLUSTER_COLORS = {
   'Sports & Performance':'#F97316','Eastern & Classical':'#8B5CF6','Mind & Society':'#6366F1'
 };
 
-function renderConstellation() {
+function renderConstellation(newDiscipline) {
   const el = document.getElementById('lattice-area');
   if (!el) return;
 
-  const progress     = state.clusterProgress || {};
-  const clusterNames = Object.keys(CLUSTERS);
-  const explored     = clusterNames.filter(k => (progress[k] || 0) > 0);
+  const explored = state.exploredDisciplines || [];
+  const name     = (state.profile && state.profile.name) || 'You';
+  const n        = explored.length;
 
-  const W = 520, H = 260;
+  const W = 560, H = 300;
   const cx = W / 2, cy = H / 2;
 
-  // Organic node positions using golden angle spiral — consistent per session
-  const golden = 2.399; // golden angle in radians
+  // Decorative background stars — fixed seeded positions
+  const bgStars = [
+    [42,18],[498,22],[18,180],[540,160],[80,290],[480,285],[300,12],[260,295],
+    [140,45],[420,38],[55,110],[510,95],[170,270],[390,260],[310,280],[230,30],
+    [470,210],[90,240],[340,55],[160,200],[440,130],[70,155],[520,240],[200,80],
+    [360,290],[130,130],[490,55],[240,250],[380,20],[100,200],[460,175],[290,45],
+    [150,300],[410,300],[50,60],[530,120],[320,190],[200,160],[440,280],[280,130]
+  ];
+  const bgSvg = bgStars.map(([x,y], i) => {
+    const r = 0.8 + (i % 3) * 0.35;
+    const op = 0.2 + (i % 4) * 0.08;
+    const dur = 2.5 + (i % 5) * 0.7;
+    const delay = (i % 7) * 0.4;
+    return `<circle cx="${x}" cy="${y}" r="${r}" fill="#ffffff" opacity="${op.toFixed(2)}" style="animation:twinkle ${dur}s ease-in-out ${delay}s infinite"/>`;
+  }).join('');
+
+  // Center star (user profile)
+  const centerSvg = `
+    <circle cx="${cx}" cy="${cy}" r="18" fill="#ffd97d" opacity="0.15" style="animation:centerPulse 3s ease-in-out infinite"/>
+    <circle cx="${cx}" cy="${cy}" r="9" fill="#ffd97d" opacity="0.95" stroke="#fff8e7" stroke-width="1.5"/>
+    <circle cx="${cx}" cy="${cy}" r="3" fill="#ffffff" opacity="0.9"/>`;
+
+  // Discipline star positions — golden angle spiral
+  const golden = 2.399;
   const positions = {};
-  clusterNames.forEach((name, i) => {
-    const r     = 30 + (i / clusterNames.length) * 85;
+  explored.forEach((disc, i) => {
+    const r     = 38 + Math.min(i, 15) * 7;
     const angle = i * golden;
-    positions[name] = {
-      x: Math.max(28, Math.min(W - 28, cx + r * Math.cos(angle))),
-      y: Math.max(22, Math.min(H - 22, cy + r * Math.sin(angle)))
+    positions[disc] = {
+      x: Math.max(32, Math.min(W - 32, cx + r * Math.cos(angle))),
+      y: Math.max(18, Math.min(H - 18, cy + r * Math.sin(angle)))
     };
   });
 
-  // Ghost nodes — all clusters shown faintly, even unexplored
-  const ghostSvg = clusterNames.map(name => {
-    const { x, y } = positions[name];
-    return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="5" fill="none" stroke="#c4460a" stroke-width="1" opacity="0.15"/>`;
-  }).join('');
-
-  if (explored.length === 0) {
-    el.innerHTML = `<div class="constellation-wrap">
-      <div class="constellation-title">Your Knowledge Lattice</div>
-      <svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:520px;height:auto;display:block;margin:0 auto;">${ghostSvg}</svg>
-      <div class="constellation-pre-text">Every insight adds a thread. Watch it grow.</div>
-    </div>`;
-    return;
-  }
-
-  // Edges: connect each explored node to its 2 nearest explored neighbours
+  // Edges — each star connects to nearest explored neighbour
   const edgeSet = new Set();
-  const edges   = [];
-  explored.forEach(name => {
-    const pos    = positions[name];
-    const nearest = explored
-      .filter(n => n !== name)
-      .map(n => ({ n, d: Math.hypot(positions[n].x - pos.x, positions[n].y - pos.y) }))
-      .sort((a, b) => a.d - b.d)
-      .slice(0, 2);
-    nearest.forEach(({ n }) => {
-      const key = [name, n].sort().join('|');
-      if (!edgeSet.has(key)) {
-        edgeSet.add(key);
-        edges.push({ x1: pos.x, y1: pos.y, x2: positions[n].x, y2: positions[n].y });
-      }
-    });
-  });
-
-  const edgeSvg = edges.map(e =>
-    `<line x1="${e.x1.toFixed(1)}" y1="${e.y1.toFixed(1)}" x2="${e.x2.toFixed(1)}" y2="${e.y2.toFixed(1)}" stroke="#c8a96e" stroke-width="1" opacity="0.5"/>`
-  ).join('');
-
-  const nodeSvg = explored.map(name => {
-    const { x, y } = positions[name];
-    return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="10" fill="#c4460a" opacity="0.1"/>
-      <circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="5.5" fill="#c4460a" opacity="0.9" stroke="#f5f0e8" stroke-width="1.5"/>`;
+  const edgeSvg = explored.map(disc => {
+    const pos = positions[disc];
+    // also connect to center if first few stars
+    const targets = [...explored.filter(d => d !== disc)];
+    const nearest = targets
+      .map(d => ({ d, dist: Math.hypot(positions[d].x - pos.x, positions[d].y - pos.y) }))
+      .sort((a, b) => a.dist - b.dist)
+      .slice(0, 1);
+    return nearest.map(({ d }) => {
+      const key = [disc, d].sort().join('|');
+      if (edgeSet.has(key)) return '';
+      edgeSet.add(key);
+      return `<line x1="${pos.x.toFixed(1)}" y1="${pos.y.toFixed(1)}" x2="${positions[d].x.toFixed(1)}" y2="${positions[d].y.toFixed(1)}" stroke="#9b8fd4" stroke-width="0.6" opacity="0.35"/>`;
+    }).join('');
   }).join('');
 
-  const svgContent = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:520px;height:auto;display:block;margin:0 auto;">
-    ${ghostSvg}
-    ${edgeSvg}
-    ${nodeSvg}
-  </svg>`;
+  // Lines from each star to center
+  const centerLinesSvg = explored.map(disc => {
+    const { x, y } = positions[disc];
+    return `<line x1="${x.toFixed(1)}" y1="${y.toFixed(1)}" x2="${cx}" y2="${cy}" stroke="#9b8fd4" stroke-width="0.5" opacity="0.2"/>`;
+  }).join('');
+
+  // Discipline star nodes + labels
+  const nodeSvg = explored.map((disc, i) => {
+    const { x, y } = positions[disc];
+    const isNew    = disc === newDiscipline;
+    const anim     = isNew
+      ? `style="animation:starAppear 1.2s ease forwards"`
+      : `style="animation:twinkle ${2 + (i % 4) * 0.6}s ease-in-out ${(i % 5) * 0.3}s infinite"`;
+    // Label offset — push away from center
+    const dx = x - cx, dy = y - cy;
+    const len = Math.hypot(dx, dy) || 1;
+    const lx = Math.max(6, Math.min(W - 6, x + (dx / len) * 10));
+    const ly = Math.max(8, Math.min(H - 4, y + (dy / len) * 10));
+    const anchor = lx < W / 2 ? 'end' : 'start';
+    return `
+      <circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="10" fill="#dce8ff" opacity="0.08" ${anim}/>
+      <circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="4" fill="#dce8ff" opacity="0.9" stroke="#ffffff" stroke-width="0.8" ${anim}/>
+      <text x="${lx.toFixed(1)}" y="${(ly + 3).toFixed(1)}" font-family="'JetBrains Mono',monospace" font-size="6.5" fill="#8ab0cc" opacity="0.8" text-anchor="${anchor}">${disc}</text>`;
+  }).join('');
+
+  const progressCopy = n === 0
+    ? 'Your constellation is forming.'
+    : n <= 3
+      ? 'Your constellation is forming.'
+      : n <= 7
+        ? 'The shape is emerging. Keep exploring.'
+        : n <= 15
+          ? 'A rare constellation. Most people never get here.'
+          : `${name}, this is what a polymathic mind looks like.`;
+
+  const notifyHtml = newDiscipline
+    ? `<div class="constellation-notify">✦ ${newDiscipline} added to your constellation</div>`
+    : '';
 
   el.innerHTML = `
     <div class="constellation-wrap">
-      <div class="constellation-title">Your Knowledge Lattice</div>
-      <div class="constellation-pre-text">Every insight adds a thread.</div>
-      ${svgContent}
+      <div class="constellation-title">Your Constellation</div>
+      <div class="constellation-pre-text">Every discipline you explore becomes a star. The connections between them are yours alone.</div>
+      <svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:560px;height:auto;display:block;margin:0 auto;border-radius:8px;background:#0d0d1a;">
+        ${bgSvg}
+        ${centerLinesSvg}
+        ${edgeSvg}
+        ${centerSvg}
+        ${nodeSvg}
+      </svg>
+      <div class="constellation-progress">${progressCopy}</div>
+      ${notifyHtml}
     </div>`;
 }
 
