@@ -955,59 +955,30 @@ function validateOb() {
 // BRIDGE VISUAL RENDERER
 // ============================================================
 function renderBridge(bridgeData) {
-  const bd  = bridgeData || {};
-  const ll  = bd.leftLabel    || 'Discipline';
-  const lc  = bd.leftConcept  || '';
-  const rl  = bd.rightLabel   || 'Your World';
-  const rc  = bd.rightConcept || '';
-  const al  = bd.arcLabel     || '';
+  const bd = bridgeData || {};
+  const ll = bd.leftLabel    || 'Discipline';
+  const lc = bd.leftConcept  || '';
+  const rl = bd.rightLabel   || 'Your World';
+  const rc = bd.rightConcept || '';
+  const al = bd.arcLabel     || '';
 
-  const W = 560, H = 200;
-  const accent = '#c4460a', ink = '#1a1614', border = '#d4c9b0', paper2 = '#ede8dc';
-
-  // Split concept into two lines if long
-  function conceptLines(s) {
-    if (!s) return ['', ''];
-    const words = s.split(' ');
-    if (s.length <= 16) return [s, ''];
-    let line1 = '', line2 = '';
-    for (const w of words) {
-      if ((line1 + ' ' + w).trim().length <= 18) line1 = (line1 + ' ' + w).trim();
-      else line2 = (line2 + ' ' + w).trim();
-    }
-    if (line2.length > 20) line2 = line2.slice(0, 19) + '…';
-    return [line1, line2];
-  }
-
-  const [lc1, lc2] = conceptLines(lc);
-  const [rc1, rc2] = conceptLines(rc);
-  const trunc = (s, n) => s && s.length > n ? s.slice(0, n - 1) + '…' : (s || '');
-
-  return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block;">
-    <defs>
-      <style>
-        .br-label   { font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:0.12em; text-transform:uppercase; fill:${accent}; }
-        .br-concept { font-family:'Playfair Display',Georgia,serif; font-size:11.5px; fill:${ink}; font-style:italic; }
-        .br-arc     { font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:0.1em; text-transform:uppercase; fill:${accent}; }
-      </style>
-    </defs>
-    <!-- Left node -->
-    <rect x="8" y="68" width="168" height="70" rx="2" fill="${paper2}" stroke="${border}" stroke-width="1"/>
-    <text x="92" y="88" text-anchor="middle" class="br-label">${trunc(ll, 18)}</text>
-    <text x="92" y="108" text-anchor="middle" class="br-concept">${lc1}</text>
-    ${lc2 ? `<text x="92" y="124" text-anchor="middle" class="br-concept">${lc2}</text>` : ''}
-    <!-- Right node -->
-    <rect x="384" y="68" width="168" height="70" rx="2" fill="${paper2}" stroke="${border}" stroke-width="1"/>
-    <text x="468" y="88" text-anchor="middle" class="br-label">${trunc(rl, 18)}</text>
-    <text x="468" y="108" text-anchor="middle" class="br-concept">${rc1}</text>
-    ${rc2 ? `<text x="468" y="124" text-anchor="middle" class="br-concept">${rc2}</text>` : ''}
-    <!-- Arc -->
-    <path d="M 176 103 Q 280 24 384 103" fill="none" stroke="${accent}" stroke-width="1.5" opacity="0.7"/>
-    <circle cx="176" cy="103" r="3" fill="${accent}" opacity="0.5"/>
-    <circle cx="384" cy="103" r="3" fill="${accent}" opacity="0.5"/>
-    <!-- Arc label -->
-    ${al ? `<text x="280" y="46" text-anchor="middle" class="br-arc">${trunc(al, 24)}</text>` : ''}
-  </svg>`;
+  return `<div style="display:flex;align-items:center;gap:0;width:100%;box-sizing:border-box;padding:8px 0;">
+    <div style="flex:1;min-width:0;border:1px solid #d4c9b0;background:#ede8dc;border-radius:3px;padding:14px 16px;text-align:center;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:#c4460a;margin-bottom:8px;">${ll}</div>
+      <div style="font-family:'Playfair Display',Georgia,serif;font-size:13px;font-style:italic;color:#1a1614;line-height:1.4;">${lc}</div>
+    </div>
+    <div style="flex:0 0 auto;display:flex;flex-direction:column;align-items:center;padding:0 10px;min-width:80px;">
+      ${al ? `<div style="font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.1em;text-transform:uppercase;color:#c4460a;text-align:center;margin-bottom:6px;white-space:nowrap;">${al}</div>` : ''}
+      <div style="display:flex;align-items:center;width:100%;">
+        <div style="flex:1;height:1px;background:#c4460a;opacity:0.6;"></div>
+        <div style="color:#c4460a;font-size:14px;opacity:0.8;margin-left:2px;">→</div>
+      </div>
+    </div>
+    <div style="flex:1;min-width:0;border:1px solid #d4c9b0;background:#ede8dc;border-radius:3px;padding:14px 16px;text-align:center;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:#c4460a;margin-bottom:8px;">${rl}</div>
+      <div style="font-family:'Playfair Display',Georgia,serif;font-size:13px;font-style:italic;color:#1a1614;line-height:1.4;">${rc}</div>
+    </div>
+  </div>`;
 }
 
 // Legacy shim — kept for any cached cards that might still have visualType
@@ -1156,7 +1127,15 @@ RULES:
    Not entertainment. A new way of seeing.
 
    Ask yourself: will this person think differently tomorrow because of this card?
-   If the answer is no — go deeper.`;
+   If the answer is no — go deeper.
+
+12. WRITE TO BE UNDERSTOOD IMMEDIATELY
+
+   A smart 22-year-old with zero background in this discipline must understand every sentence on first read.
+   Technical terms are fine — they add precision — but the sentence around them must carry the meaning.
+   Never make the reader work to decode what you're saying.
+   If you use a jargon word, the next clause or sentence must make it obvious what it means.
+   Clarity is not simplification. It is respect.`;
 
 function buildPrompt(discipline, cluster) {
   const p    = state.profile;
@@ -1179,15 +1158,15 @@ The connection must be genuinely surprising and specific to this person's world.
 
 The insight can land anywhere in their life — their profession, something they studied, or something they love. Don't default to the first domain. Pick wherever the connection is most surprising and resonant. A game theory insight landing in cricket can hit harder than game theory landing in finance.
 
-Address the reader as "you" throughout. Never use their name in the body text. Write as if talking directly to them.
+Use ${p.name} once — in the hook — to make it personal. After that, write as narrative: stories, facts, observations. "You" should appear at most 2-3 times in the entire card. The reader should feel like someone brilliant is sharing something fascinating with them, not poking at them repeatedly.
 
 Respond ONLY with valid JSON — no markdown, no code fences, no extra text:
 {
   "title": "Punchy headline, max 8 words, impossible to ignore, NOT the discipline name",
-  "hook": "One sentence, screenshot-worthy, ends with question mark. Address the reader as 'you'. Specific and surprising.",
+  "hook": "Start with 'Did you know that [surprising connection], ${p.name}?' One sentence. Screenshot-worthy. Ends with question mark. The 'Did you know' opener is mandatory — it's the pull.",
   "pullQuote": "The single most striking sentence in the insight. Max 20 words. Makes someone stop scrolling.",
-  "para1": "2-3 short sentences. Open with something the reader already knows — a moment, a feeling, a situation from their world. Then walk into the unfamiliar. Story first, concept second.",
-  "para2": "2-3 short sentences. Go deeper or sideways — counterintuitive implication, unexpected angle. Land it in the reader's world at the end — their work, their studies, or something they love. Address as 'you'.",
+  "para1": "2-3 short sentences. Open with a concrete story, fact, or moment — not about the reader, but about the idea itself. Walk into the discipline through narrative. Story first, concept second.",
+  "para2": "2-3 short sentences. Deepen or surprise. One 'you' is fine here to land it in their world — but write mostly as observation and story. End with the insight, not with the reader.",
   "bridgeData": {
     "leftLabel": "${discipline}",
     "leftConcept": "3-5 word core principle from this discipline",
@@ -1196,7 +1175,7 @@ Respond ONLY with valid JSON — no markdown, no code fences, no extra text:
     "arcLabel": "2-4 word name for the bridging concept",
     "caption": "One short sentence: what this connection reveals — factually grounded"
   },
-  "whyItMatters": "One punchy sentence addressed to 'you'. Short. Direct. Connects to their background. No em dashes. No filler. Make it land."
+  "whyItMatters": "One short sentence. One 'you'. Direct. Connects to their background. No em dashes. No filler."
 }`;
 }
 
@@ -1418,80 +1397,72 @@ function renderConstellation() {
   const el = document.getElementById('lattice-area');
   if (!el) return;
 
-  const count       = state.cardCount || 0;
-  const profileName = state.profile?.name || 'Friend';
-  const progress    = state.clusterProgress || {};
-  const explored    = new Set(Object.keys(progress).filter(k => (progress[k] || 0) > 0));
+  const progress     = state.clusterProgress || {};
   const clusterNames = Object.keys(CLUSTERS);
+  const explored     = clusterNames.filter(k => (progress[k] || 0) > 0);
 
-  let label = '';
-  if (count >= 100) label = `${profileName}, this is what a polymathic mind looks like.`;
-  else if (count >= 30) label = `You've crossed ${count} disciplines. Most people never leave one.`;
-  else if (count >= 7)  label = `${count} disciplines. ${explored.size} clusters. You're starting to see the shape of things.`;
-
-  const W = 520, H = 300;
+  const W = 520, H = 260;
   const cx = W / 2, cy = H / 2;
-  const R  = 118;
 
-  const dots = clusterNames.map((clName, i) => {
-    const angle   = (i / clusterNames.length) * 2 * Math.PI - Math.PI / 2;
-    const x       = cx + R * Math.cos(angle);
-    const y       = cy + R * Math.sin(angle);
-    const isExp   = explored.has(clName);
-    const cnt     = progress[clName] || 0;
-    const r       = Math.min(5 + cnt * 0.7, 10);
-    const color   = CLUSTER_COLORS[clName] || '#8a7d6b';
-    const shortName = clName.length > 13 ? clName.slice(0, 12) + '…' : clName;
-
-    // Label position: push outward from center
-    const lx = cx + (R + 20) * Math.cos(angle);
-    const ly = cy + (R + 20) * Math.sin(angle);
-    const anchor = Math.cos(angle) > 0.1 ? 'start' : Math.cos(angle) < -0.1 ? 'end' : 'middle';
-
-    if (isExp) {
-      return `
-        <circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${(r + 5).toFixed(1)}" fill="${color}" opacity="0.12"/>
-        <circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${r.toFixed(1)}" fill="${color}" opacity="0.9" stroke="#f5f0e8" stroke-width="1.5"/>
-        <text x="${lx.toFixed(1)}" y="${(ly + 3).toFixed(1)}" text-anchor="${anchor}" style="font-family:'JetBrains Mono',monospace;font-size:8px;fill:${color};letter-spacing:0.04em;opacity:0.9;">${shortName}</text>`;
-    } else {
-      return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="3.5" fill="#8a7d6b" opacity="0.2"/>`;
-    }
+  // Organic node positions using golden angle spiral — consistent per session
+  const golden = 2.399; // golden angle in radians
+  const positions = {};
+  clusterNames.forEach((name, i) => {
+    const r     = 30 + (i / clusterNames.length) * 85;
+    const angle = i * golden;
+    positions[name] = {
+      x: Math.max(28, Math.min(W - 28, cx + r * Math.cos(angle))),
+      y: Math.max(22, Math.min(H - 22, cy + r * Math.sin(angle)))
+    };
   });
 
-  const lines = clusterNames.filter(n => explored.has(n)).map((clName, i) => {
-    const idx   = clusterNames.indexOf(clName);
-    const angle = (idx / clusterNames.length) * 2 * Math.PI - Math.PI / 2;
-    const x     = cx + R * Math.cos(angle);
-    const y     = cy + R * Math.sin(angle);
-    return `<line x1="${cx}" y1="${cy}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" stroke="#d4c9b0" stroke-width="1" opacity="0.35"/>`;
+  if (explored.length === 0) {
+    el.innerHTML = `<div class="constellation-wrap">
+      <div class="constellation-title">Your Knowledge Lattice</div>
+      <div class="constellation-pre-text">Every insight adds a thread. Watch it grow.</div>
+    </div>`;
+    return;
+  }
+
+  // Edges: connect each explored node to its 2 nearest explored neighbours
+  const edgeSet = new Set();
+  const edges   = [];
+  explored.forEach(name => {
+    const pos    = positions[name];
+    const nearest = explored
+      .filter(n => n !== name)
+      .map(n => ({ n, d: Math.hypot(positions[n].x - pos.x, positions[n].y - pos.y) }))
+      .sort((a, b) => a.d - b.d)
+      .slice(0, 2);
+    nearest.forEach(({ n }) => {
+      const key = [name, n].sort().join('|');
+      if (!edgeSet.has(key)) {
+        edgeSet.add(key);
+        edges.push({ x1: pos.x, y1: pos.y, x2: positions[n].x, y2: positions[n].y });
+      }
+    });
   });
 
-  const centerDot = `
-    <circle cx="${cx}" cy="${cy}" r="20" fill="none" stroke="#c4460a" stroke-width="1" opacity="0.15">
-      <animate attributeName="opacity" values="0.1;0.25;0.1" dur="3s" repeatCount="indefinite"/>
-      <animate attributeName="r" values="18;23;18" dur="3s" repeatCount="indefinite"/>
-    </circle>
-    <circle cx="${cx}" cy="${cy}" r="7" fill="#c4460a" opacity="0.9" stroke="#f5f0e8" stroke-width="2"/>
-    <text x="${cx}" y="${cy + 20}" text-anchor="middle" style="font-family:'JetBrains Mono',monospace;font-size:9px;fill:#c4460a;letter-spacing:0.08em;">${profileName.slice(0, 10)}</text>`;
+  const edgeSvg = edges.map(e =>
+    `<line x1="${e.x1.toFixed(1)}" y1="${e.y1.toFixed(1)}" x2="${e.x2.toFixed(1)}" y2="${e.y2.toFixed(1)}" stroke="#c8a96e" stroke-width="1" opacity="0.5"/>`
+  ).join('');
 
-  const svgContent = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:520px;height:auto;display:block;margin:0 auto;overflow:visible;">
-    ${lines.join('')}
-    ${dots.join('')}
-    ${centerDot}
+  const nodeSvg = explored.map(name => {
+    const { x, y } = positions[name];
+    return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="10" fill="#c4460a" opacity="0.1"/>
+      <circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="5.5" fill="#c4460a" opacity="0.9" stroke="#f5f0e8" stroke-width="1.5"/>`;
+  }).join('');
+
+  const svgContent = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:520px;height:auto;display:block;margin:0 auto;">
+    ${edgeSvg}
+    ${nodeSvg}
   </svg>`;
-
-  const statLine = '';
-
-  const preText = count < 3
-    ? `<div class="constellation-pre-text">Each cluster you explore lights up. 108 disciplines. 17 clusters. Vast territory ahead.</div>`
-    : (label ? `<div class="constellation-label-text">${label}</div>` : '');
 
   el.innerHTML = `
     <div class="constellation-wrap">
-      <div class="constellation-title">Your Knowledge Map</div>
-      ${preText}
+      <div class="constellation-title">Your Knowledge Lattice</div>
+      <div class="constellation-pre-text">Every insight adds a thread.</div>
       ${svgContent}
-      ${statLine}
     </div>`;
 }
 
