@@ -1564,9 +1564,21 @@ function showWeekendScreen() {
 // BOOTSTRAP
 // ============================================================
 function init() {
-  if (new URLSearchParams(location.search).has('reset')) {
+  const params = new URLSearchParams(location.search);
+  if (params.has('reset')) {
     localStorage.removeItem(STORAGE_KEY);
     localStorage.removeItem('confluence_saved');
+  } else if (params.has('newcard')) {
+    // Clear only today's card — keeps profile intact
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        const s = JSON.parse(raw);
+        s.todayCard = null;
+        s.todayDate = null;
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(s));
+      }
+    } catch(e) {}
   }
   loadState();
 
