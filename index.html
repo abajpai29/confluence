@@ -6,7 +6,7 @@
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-  <title>Confluence — Think in Systems</title>
+  <title>Confluence: Think in Systems</title>
   <meta name="description" content="One unexpected connection every weekday. Become a polymathic thinker." />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;1,8..60,300;1,8..60,400&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
@@ -341,11 +341,12 @@ body::before {
 .card-actions { margin-bottom: 10px; }
 .share-row { display: flex; gap: 8px; margin-bottom: 8px; align-items: stretch; }
 .share-btn {
-  flex: 1; height: 42px; border: 1px solid var(--border); border-radius: 2px;
+  display: block; width: 100%; box-sizing: border-box;
+  height: 42px; border: 1px solid var(--border); border-radius: 2px;
   font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 400;
   letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
   transition: all 0.15s; background: transparent; color: var(--muted);
+  margin-bottom: 8px;
 }
 .share-btn:hover { border-color: var(--accent); color: var(--accent); }
 .btn-action {
@@ -579,7 +580,7 @@ body::before {
     <div class="ob-body">
       <p>Physics, Chemistry, History, Mathematics, Biology, Economics, Geography, English Literature, Political Science. Studied separately, each in its own world. The conversation happening between them? Nobody showed us that.</p>
       <p>That conversation is where the best thinking lives.</p>
-      <p>Every weekday morning, Confluence brings you one unexpected connection — from across the full map of human knowledge.</p>
+      <p>Every weekday morning, Confluence brings you one unexpected connection, from across the full map of human knowledge.</p>
       <p>Read in five minutes. Something you can't unsee.</p>
     </div>
   </div>
@@ -895,32 +896,6 @@ function stopLoadingFragments() {
   if (_fragInterval) { clearInterval(_fragInterval); _fragInterval = null; }
 }
 
-// ============================================================
-// SAVE
-// ============================================================
-function isSaved(key) {
-  return JSON.parse(localStorage.getItem('confluence_saved') || '[]').some(s => s.key === key);
-}
-
-function toggleSave() {
-  const key   = (state.todayDiscipline || '') + (state.todayDate || '');
-  let saved   = JSON.parse(localStorage.getItem('confluence_saved') || '[]');
-  const idx   = saved.findIndex(s => s.key === key);
-  const btn   = document.getElementById('btn-save');
-
-  if (idx >= 0) {
-    saved.splice(idx, 1);
-    btn.textContent = '⊕ Save';
-    btn.classList.remove('saved');
-    showToast('Removed from saved');
-  } else {
-    saved.push({ key, discipline: state.todayDiscipline, date: state.todayDate, card: state.todayCard });
-    btn.innerHTML = '✓ Saved';
-    btn.classList.add('saved');
-    showToast('Card saved!');
-  }
-  localStorage.setItem('confluence_saved', JSON.stringify(saved));
-}
 
 // ============================================================
 // SHARE
@@ -928,7 +903,7 @@ function toggleSave() {
 function getShareText() {
   const c = state.todayCard;
   if (!c) return '';
-  return `I just saw my world through the lens of ${state.todayDiscipline} and I can't unsee it.\n\n"${c.hook}"\n\nConfluence does this every weekday morning — one unexpected discipline connected directly to your world.\n\nWorth 5 minutes.\n\nhttps://abajpai29-hash.github.io/Confluence/`;
+  return `I just saw my world through the lens of ${state.todayDiscipline} and I can't unsee it.\n\n"${c.hook}"\n\nConfluence does this every weekday morning. One unexpected discipline connected directly to your world.\n\nWorth 5 minutes.\n\nhttps://abajpai29-hash.github.io/Confluence/`;
 }
 
 function shareWhatsApp() {
@@ -1302,8 +1277,6 @@ async function generateCard() {
 // RENDER CARD
 // ============================================================
 function renderCard(card, discipline) {
-  const savedKey     = discipline + (state.todayDate || '');
-  const alreadySaved = isSaved(savedKey);
   const bd           = (card.bridgeData && typeof card.bridgeData === 'object') ? card.bridgeData
                      : (card.visualData  && typeof card.visualData  === 'object') ? card.visualData : {};
   const caption      = bd.caption || '';
@@ -1329,10 +1302,7 @@ function renderCard(card, discipline) {
         <div class="card-why-text">${card.whyItMatters}</div>
       </div>` : ''}
       <div class="card-actions">
-        <div class="share-row">
-          <button class="share-btn share-copy" onclick="shareCard()">Share</button>
-          <button class="btn-action ${alreadySaved ? 'saved' : ''}" id="btn-save" onclick="toggleSave()">${alreadySaved ? '✓ Saved' : '⊕ Save'}</button>
-        </div>
+        <button class="share-btn" onclick="shareCard()">Share</button>
         <button class="btn-calendar" onclick="addToCalendar()">Add to my morning routine →</button>
       </div>
     </div>`;
@@ -1346,15 +1316,25 @@ function renderCard(card, discipline) {
 // ============================================================
 function shareCard() {
   const text = getShareText();
-  if (navigator.share) {
-    navigator.share({ text }).catch(() => {});
+  const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+  if (isMobile && navigator.share) {
+    navigator.share({ text }).catch(() => {
+      navigator.clipboard.writeText(text).then(() => showToast('Copied to clipboard!'));
+    });
   } else {
-    navigator.clipboard.writeText(text).then(() => showToast('Copied to clipboard!'));
+    navigator.clipboard.writeText(text)
+      .then(() => showToast('Copied to clipboard!'))
+      .catch(() => {
+        const ta = document.createElement('textarea');
+        ta.value = text; document.body.appendChild(ta); ta.select();
+        document.execCommand('copy'); document.body.removeChild(ta);
+        showToast('Copied to clipboard!');
+      });
   }
 }
 
 function addToCalendar() {
-  const text    = encodeURIComponent('Confluence — your daily lens');
+  const text    = encodeURIComponent('Confluence: your daily lens');
   const details = encodeURIComponent('Your daily cross-disciplinary insight.\nhttps://abajpai29-hash.github.io/Confluence/');
   window.open(`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${text}&details=${details}&recur=RRULE:FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR`, '_blank');
 }
