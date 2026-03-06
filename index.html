@@ -625,7 +625,9 @@ body::before {
         <label class="ob-label">What have you studied? <span>(pick all that apply)</span></label>
         <div class="chips" id="chips-edu">
           <div class="chip" data-val="Engineering & Technology">Engineering</div>
-          <div class="chip" data-val="Natural Sciences (Biology / Chemistry / Physics)">Natural Sciences</div>
+          <div class="chip" data-val="Physics">Physics</div>
+          <div class="chip" data-val="Chemistry">Chemistry</div>
+          <div class="chip" data-val="Biology">Biology</div>
           <div class="chip" data-val="Mathematics & Statistics">Mathematics</div>
           <div class="chip" data-val="Medicine & Health">Medicine</div>
           <div class="chip" data-val="Economics & Commerce">Economics</div>
@@ -668,6 +670,7 @@ body::before {
   <div class="page-wrap">
     <div class="app-header">
       <div class="app-logo">✦ Confluence</div>
+      <div class="ob-wordmark-tagline">see through every lens</div>
     </div>
 
     <div class="weekday-strip" id="weekday-strip"></div>
@@ -708,6 +711,7 @@ body::before {
     <div class="about-header">
       <button class="back-btn" onclick="showScreen('screen-app')">← Back</button>
       <div class="app-logo">✦ Confluence</div>
+      <div class="ob-wordmark-tagline">see through every lens</div>
     </div>
     <div class="about-wrap">
       <div class="about-eyebrow">Why Confluence exists</div>
@@ -785,23 +789,25 @@ const WORKER_URL = 'https://confluence-proxy.abajpai29.workers.dev';
 // DISCIPLINES — 108 across 17 clusters
 // ============================================================
 const CLUSTERS = {
-  'Natural Sciences':     { emoji:'⚛️',  color:'#3B82F6', disciplines:['Quantum Mechanics','Thermodynamics','Fluid Dynamics','Electromagnetism','Optics','Statistical Mechanics','Acoustics'] },
-  'Chemistry':            { emoji:'⚗️',  color:'#10B981', disciplines:['Organic Chemistry','Biochemistry','Physical Chemistry','Materials Chemistry'] },
-  'Mathematics':          { emoji:'∑',   color:'#8B5CF6', disciplines:['Game Theory','Topology','Number Theory','Chaos Theory','Probability Theory','Operations Research','Graph Theory','Statistics'] },
-  'Life Sciences':        { emoji:'🧬',  color:'#EF4444', disciplines:['Evolutionary Biology','Neuroscience','Genetics','Immunology','Microbiology','Ecology','Epidemiology','Ethology'] },
-  'Earth & Space':        { emoji:'🌍',  color:'#F59E0B', disciplines:['Geology','Astronomy','Oceanography','Climate Science','Meteorology','Geophysics','Geography'] },
-  'Social Sciences':      { emoji:'🏛️', color:'#6B7280', disciplines:['Sociology','Anthropology','Psychology','Social Psychology','Linguistics','Criminology','Demography','Political Science'] },
-  'Economics':            { emoji:'📊',  color:'#14B8A6', disciplines:['Behavioural Economics','Development Economics','Agricultural Economics','Financial Markets','Microfinance','Network Economics','Public Finance'] },
-  'Governance & Law':     { emoji:'⚖️', color:'#F97316', disciplines:['Political Philosophy','Constitutional Law','Geopolitics','Military Strategy','Public Policy','International Relations','Public Administration','Diplomacy'] },
-  'History & Philosophy': { emoji:'📜',  color:'#A855F7', disciplines:['Philosophy','Ethics','Philosophy of Science','History','Mythology','Logic','Theology','Stoicism','Archaeology'] },
-  'Arts & Design':        { emoji:'🎨',  color:'#EC4899', disciplines:['Music','Architecture','Urban Planning','Film Studies','English Literature','Typography','Cultural Studies'] },
-  'Engineering':          { emoji:'⚙️', color:'#64748B', disciplines:['Materials Science','Mechanical Engineering','Electrical Engineering','Structural Engineering','Civil Engineering','Biomedical Engineering','Chemical Engineering'] },
-  'Computer Science':     { emoji:'💻',  color:'#0EA5E9', disciplines:['Computer Science','Information Theory','Cryptography','Artificial Intelligence','Human-Computer Interaction','Network Science'] },
-  'Business & Strategy':  { emoji:'💡',  color:'#EAB308', disciplines:['Organisational Behaviour','Business Strategy','Consumer Psychology','Entrepreneurship','Supply Chain Management','Risk Management','Management'] },
-  'Health & Medicine':    { emoji:'🏥',  color:'#06B6D4', disciplines:['Public Health','Psychiatry','Medicine','Bioethics','Medical Anthropology','Pharmacology','Sleep Science'] },
-  'Sports & Performance': { emoji:'🏃',  color:'#F97316', disciplines:['Sports Psychology','Biomechanics','Exercise Science','Sports Analytics','Sports Medicine'] },
-  'Eastern & Classical':  { emoji:'☯️', color:'#8B5CF6', disciplines:['Vedic Philosophy','Buddhist Philosophy','Taoism','Ayurveda','Islamic Philosophy','Classical Rhetoric','Confucianism'] },
-  'Mind & Society':       { emoji:'🕸️', color:'#6366F1', disciplines:['Cognitive Science','Environmental Science'] },
+  'Physics':               { emoji:'⚛️',  color:'#3B82F6', disciplines:['Quantum Mechanics','Thermodynamics','Fluid Dynamics','Electromagnetism','Optics','Statistical Mechanics','Acoustics','Relativity','Particle Physics'] },
+  'Chemistry':             { emoji:'⚗️',  color:'#10B981', disciplines:['Organic Chemistry','Biochemistry','Physical Chemistry','Materials Chemistry'] },
+  'Mathematics':           { emoji:'∑',   color:'#8B5CF6', disciplines:['Game Theory','Topology','Number Theory','Chaos Theory','Probability Theory','Graph Theory','Statistics'] },
+  'Biology':               { emoji:'🧬',  color:'#EF4444', disciplines:['Evolutionary Biology','Neuroscience','Genetics','Immunology','Microbiology','Epidemiology'] },
+  'Earth & Space':         { emoji:'🌍',  color:'#F59E0B', disciplines:['Geology','Astronomy','Oceanography','Climate Science','Meteorology','Geophysics','Geography'] },
+  'Environment':           { emoji:'🌿',  color:'#22C55E', disciplines:['Ecology','Environmental Science','Sustainability','Conservation Biology'] },
+  'Social Sciences':       { emoji:'🏛️', color:'#6B7280', disciplines:['Sociology','Anthropology','Psychology','Social Psychology','Linguistics','Criminology','Demography','Political Science'] },
+  'Economics':             { emoji:'📊',  color:'#14B8A6', disciplines:['Behavioural Economics','Development Economics','Agricultural Economics','Financial Markets','Microfinance','Public Finance'] },
+  'Governance & Law':      { emoji:'⚖️', color:'#F97316', disciplines:['Political Philosophy','Constitutional Law','Geopolitics','Military Strategy','Public Policy','International Relations','Public Administration','Diplomacy'] },
+  'History & Philosophy':  { emoji:'📜',  color:'#A855F7', disciplines:['Philosophy','Ethics','Philosophy of Science','History','Logic','Stoicism','Archaeology'] },
+  'Mythology & Theology':  { emoji:'🔱',  color:'#D97706', disciplines:['Mythology','Theology','Comparative Religion','Symbolism'] },
+  'Arts & Design':         { emoji:'🎨',  color:'#EC4899', disciplines:['Music','Architecture','Urban Planning','Film Studies','English Literature','Typography','Cultural Studies'] },
+  'Engineering':           { emoji:'⚙️', color:'#64748B', disciplines:['Materials Science','Mechanical Engineering','Electrical Engineering','Structural Engineering','Civil Engineering','Biomedical Engineering','Chemical Engineering'] },
+  'Technology & Computing':{ emoji:'💻',  color:'#0EA5E9', disciplines:['Computer Science','Information Theory','Cryptography','Artificial Intelligence','Human-Computer Interaction','Network Science'] },
+  'Business & Strategy':   { emoji:'💡',  color:'#EAB308', disciplines:['Organisational Behaviour','Business Strategy','Consumer Psychology','Entrepreneurship','Supply Chain Management','Risk Management','Marketing'] },
+  'Health & Medicine':     { emoji:'🏥',  color:'#06B6D4', disciplines:['Public Health','Psychiatry','Medicine','Bioethics','Medical Anthropology','Pharmacology','Sleep Science'] },
+  'Sports & Performance':  { emoji:'🏃',  color:'#F97316', disciplines:['Sports Psychology','Biomechanics','Exercise Science','Sports Analytics','Sports Medicine'] },
+  'Eastern & Classical':   { emoji:'☯️', color:'#8B5CF6', disciplines:['Vedic Philosophy','Buddhist Philosophy','Taoism','Ayurveda','Islamic Philosophy','Classical Rhetoric','Confucianism'] },
+  'Mind & Cognition':      { emoji:'🕸️', color:'#6366F1', disciplines:['Cognitive Science','Behavioural Science','Decision Theory','Consciousness Studies','Ethology'] },
 };
 
 const ALL_DISCIPLINES = [];
