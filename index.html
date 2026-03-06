@@ -1323,12 +1323,11 @@ function renderCard(card, discipline) {
   const caption      = bd.caption || '';
   const clusterEmoji = CLUSTERS[DISC_TO_CLUSTER[discipline]]?.emoji || '✦';
 
-  const primaryDomain = (state.profile.domains || [])[0] || 'Your World';
   document.getElementById('card-area').innerHTML = `
     <div class="card">
       <div class="card-watermark">${discipline}</div>
       <div class="card-hook">${card.hook || ''}</div>
-      <div class="card-disc-tag">${clusterEmoji} ${discipline} × ${primaryDomain}</div>
+      <div class="card-disc-tag">${clusterEmoji} ${discipline} × Your World</div>
       <div class="card-body">
         ${card.para1 ? `<p class="card-para">${card.para1}</p>` : ''}
         ${card.para2 ? `<p class="card-para">${card.para2}</p>` : ''}
