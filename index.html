@@ -785,23 +785,23 @@ const WORKER_URL = 'https://confluence-proxy.abajpai29.workers.dev';
 // DISCIPLINES — 108 across 17 clusters
 // ============================================================
 const CLUSTERS = {
-  'Natural Sciences':     { emoji:'⚛️',  color:'#3B82F6', disciplines:['Quantum Mechanics','Thermodynamics','Fluid Dynamics','Electromagnetism','Optics','Statistical Mechanics'] },
+  'Natural Sciences':     { emoji:'⚛️',  color:'#3B82F6', disciplines:['Quantum Mechanics','Thermodynamics','Fluid Dynamics','Electromagnetism','Optics','Statistical Mechanics','Acoustics'] },
   'Chemistry':            { emoji:'⚗️',  color:'#10B981', disciplines:['Organic Chemistry','Biochemistry','Physical Chemistry','Materials Chemistry'] },
   'Mathematics':          { emoji:'∑',   color:'#8B5CF6', disciplines:['Game Theory','Topology','Number Theory','Chaos Theory','Probability Theory','Operations Research','Graph Theory','Statistics'] },
   'Life Sciences':        { emoji:'🧬',  color:'#EF4444', disciplines:['Evolutionary Biology','Neuroscience','Genetics','Immunology','Microbiology','Ecology','Epidemiology','Ethology'] },
-  'Earth & Space':        { emoji:'🌍',  color:'#F59E0B', disciplines:['Geology','Astronomy','Oceanography','Climate Science','Meteorology','Geophysics'] },
-  'Social Sciences':      { emoji:'🏛️', color:'#6B7280', disciplines:['Sociology','Anthropology','Psychology','Social Psychology','Linguistics','Criminology','Demography'] },
+  'Earth & Space':        { emoji:'🌍',  color:'#F59E0B', disciplines:['Geology','Astronomy','Oceanography','Climate Science','Meteorology','Geophysics','Geography'] },
+  'Social Sciences':      { emoji:'🏛️', color:'#6B7280', disciplines:['Sociology','Anthropology','Psychology','Social Psychology','Linguistics','Criminology','Demography','Political Science'] },
   'Economics':            { emoji:'📊',  color:'#14B8A6', disciplines:['Behavioural Economics','Development Economics','Agricultural Economics','Financial Markets','Microfinance','Network Economics','Public Finance'] },
   'Governance & Law':     { emoji:'⚖️', color:'#F97316', disciplines:['Political Philosophy','Constitutional Law','Geopolitics','Military Strategy','Public Policy','International Relations','Public Administration','Diplomacy'] },
-  'History & Philosophy': { emoji:'📜',  color:'#A855F7', disciplines:['Philosophy','Ethics','Philosophy of Science','History','Mythology','Logic','Theology','Stoicism'] },
-  'Arts & Design':        { emoji:'🎨',  color:'#EC4899', disciplines:['Music','Architecture','Urban Planning','Film Studies','English Literature','Typography','Acoustics','Cultural Studies'] },
+  'History & Philosophy': { emoji:'📜',  color:'#A855F7', disciplines:['Philosophy','Ethics','Philosophy of Science','History','Mythology','Logic','Theology','Stoicism','Archaeology'] },
+  'Arts & Design':        { emoji:'🎨',  color:'#EC4899', disciplines:['Music','Architecture','Urban Planning','Film Studies','English Literature','Typography','Cultural Studies'] },
   'Engineering':          { emoji:'⚙️', color:'#64748B', disciplines:['Materials Science','Mechanical Engineering','Electrical Engineering','Structural Engineering','Civil Engineering','Biomedical Engineering','Chemical Engineering'] },
   'Computer Science':     { emoji:'💻',  color:'#0EA5E9', disciplines:['Computer Science','Information Theory','Cryptography','Artificial Intelligence','Human-Computer Interaction','Network Science'] },
   'Business & Strategy':  { emoji:'💡',  color:'#EAB308', disciplines:['Organisational Behaviour','Business Strategy','Consumer Psychology','Entrepreneurship','Supply Chain Management','Risk Management','Management'] },
   'Health & Medicine':    { emoji:'🏥',  color:'#06B6D4', disciplines:['Public Health','Psychiatry','Medicine','Bioethics','Medical Anthropology','Pharmacology','Sleep Science'] },
   'Sports & Performance': { emoji:'🏃',  color:'#F97316', disciplines:['Sports Psychology','Biomechanics','Exercise Science','Sports Analytics','Sports Medicine'] },
   'Eastern & Classical':  { emoji:'☯️', color:'#8B5CF6', disciplines:['Vedic Philosophy','Buddhist Philosophy','Taoism','Ayurveda','Islamic Philosophy','Classical Rhetoric','Confucianism'] },
-  'Mind & Society':       { emoji:'🕸️', color:'#6366F1', disciplines:['Cognitive Science','Archaeology','Cultural Studies','Demography','Public Administration'] },
+  'Mind & Society':       { emoji:'🕸️', color:'#6366F1', disciplines:['Cognitive Science','Environmental Science'] },
 };
 
 const ALL_DISCIPLINES = [];
@@ -1302,7 +1302,8 @@ function renderCard(card, discipline) {
         <div class="card-why-text">${card.whyItMatters}</div>
       </div>` : ''}
       <div class="card-actions">
-        <button class="share-btn" onclick="shareCard()">Share</button>
+        <button class="share-btn" onclick="shareWhatsApp()">Share on WhatsApp</button>
+        <button class="share-btn" onclick="copyCard()">Copy text</button>
         <button class="btn-calendar" onclick="addToCalendar()">Add to my morning routine →</button>
       </div>
     </div>`;
