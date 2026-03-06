@@ -903,7 +903,7 @@ function stopLoadingFragments() {
 function getShareText() {
   const c = state.todayCard;
   if (!c) return '';
-  return `I just saw my world through the lens of ${state.todayDiscipline} and I can't unsee it.\n\n"${c.hook}"\n\nConfluence does this every weekday morning. One unexpected discipline connected directly to your world.\n\nWorth 5 minutes.\n\nhttps://abajpai29-hash.github.io/Confluence/`;
+  return `I just saw my world through the lens of ${state.todayDiscipline} and I can't unsee it.\n\n"${c.hook}"\n\nConfluence does this every weekday morning. One unexpected discipline connected directly to your world.\n\nWorth 5 minutes.\n\nhttps://abajpai29.github.io/confluence/`;
 }
 
 function shareWhatsApp() {
@@ -1335,7 +1335,7 @@ function shareCard() {
 
 function addToCalendar() {
   const text    = encodeURIComponent('Confluence: your daily lens');
-  const details = encodeURIComponent('Your daily cross-disciplinary insight.\nhttps://abajpai29-hash.github.io/Confluence/');
+  const details = encodeURIComponent('Your daily cross-disciplinary insight.\nhttps://abajpai29.github.io/confluence/');
   window.open(`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${text}&details=${details}&recur=RRULE:FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR`, '_blank');
 }
 
