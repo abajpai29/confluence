@@ -704,6 +704,7 @@ body::before {
   <div class="weekend-wrap">
     <div class="app-logo">✦ Confluence</div>
     <div class="ob-wordmark-tagline">see through every lens</div>
+    <div class="weekend-main" id="weekend-greeting"></div>
     <div class="weekend-main">Rest on weekends.</div>
     <div class="weekend-body">See you Monday with a fresh lens.</div>
     <div class="weekend-teaser" id="weekend-teaser"></div>
@@ -1637,8 +1638,9 @@ function showWeekendScreen() {
   const name  = state.profile?.name || 'Friend';
   const count = state.cardCount || 0;
 
+  document.getElementById('weekend-greeting').textContent = `${name}.`;
   document.getElementById('weekend-teaser').textContent =
-    `${name}, you've seen ${count} connection${count !== 1 ? 's' : ''} so far. The lattice grows again on Monday.`;
+    `You've seen ${count} connection${count !== 1 ? 's' : ''} so far. The lattice grows again on Monday.`;
   document.getElementById('weekend-next').innerHTML = '';
 
   showScreen('screen-weekend');
