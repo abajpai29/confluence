@@ -577,6 +577,58 @@ body::before {
 
 /* ===== BRIDGE ARC ===== */
 @keyframes arcFlow { from { stroke-dashoffset: 110; } to { stroke-dashoffset: 0; } }
+
+/* ===== SAMPLE LENS ===== */
+.sample-lens-wrap {
+  max-width: 680px; margin: 0 auto; padding: 48px 24px 0;
+  border-bottom: 1px solid var(--border);
+}
+.sample-lens-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 20px; opacity: 0.7;
+}
+.sample-lens-cta {
+  display: block; width: 100%; margin-top: 20px; padding: 16px 24px;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 17px; font-style: italic; font-weight: 600;
+  color: #fff; background: var(--accent); border: none; border-radius: 1px;
+  cursor: pointer; transition: background 0.2s, transform 0.1s; text-align: center;
+}
+.sample-lens-cta:hover { background: #a33a08; transform: translateY(-1px); }
+.sample-lens-note {
+  font-family: 'Source Serif 4', Georgia, serif;
+  font-size: 13px; font-style: italic; font-weight: 300;
+  color: var(--muted); text-align: center; margin-top: 10px; padding-bottom: 48px;
+}
+
+/* ===== FEEDBACK ===== */
+.card-feedback { margin-bottom: 24px; }
+.card-feedback-label {
+  font-family: 'JetBrains Mono', monospace; font-size: 9px;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 10px;
+}
+.card-feedback-btns { display: flex; gap: 8px; }
+.feedback-btn {
+  flex: 1; padding: 10px 12px; border: 1px solid var(--border);
+  background: transparent; border-radius: 1px; cursor: pointer;
+  font-family: 'JetBrains Mono', monospace; font-size: 10px;
+  letter-spacing: 0.06em; color: var(--muted); transition: all 0.15s; text-align: center;
+}
+.feedback-btn:hover { border-color: var(--accent); color: var(--accent); }
+.card-feedback-thanks {
+  font-family: 'Source Serif 4', Georgia, serif;
+  font-size: 14px; font-style: italic; font-weight: 300; color: var(--muted);
+}
+
+/* ===== STREAK ===== */
+.streak-badge {
+  margin-left: auto;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--accent); opacity: 0.8;
+}
   </style>
 </head>
 <body>
@@ -598,7 +650,27 @@ body::before {
     </div>
   </div>
 
-  <div class="ob-form-wrap">
+  <!-- SAMPLE LENS -->
+  <div class="sample-lens-wrap">
+    <div class="sample-lens-label">Here's what a lens looks like</div>
+    <div class="card" style="animation:none;">
+      <div class="card-watermark">Economics</div>
+      <div class="card-hook">In September 1838, Charles Darwin picked up an economics essay for fun. It changed biology forever.</div>
+      <div class="card-disc-tag">📊 Economics × Biology</div>
+      <div class="card-body">
+        <p class="card-para">Darwin was stuck. He had years of observations from the Beagle voyage. Species changed over time. He could see it. But he could not explain the mechanism. Then he read Thomas Malthus, a clergyman writing about poverty and grain prices. Malthus argued that human populations grow faster than food supply, creating relentless competition for survival.</p>
+        <p class="card-para">Darwin saw it instantly. That same pressure applied to every living species. Organisms multiply faster than resources allow. The ones with favourable variations survive. The rest don't. He wrote in his notebook that he had "at last got a theory by which to work." Natural selection. The most transformative idea in biology. It did not come from biology. It came from a book about economics that he picked up for amusement.</p>
+      </div>
+      <div class="card-why-box">
+        <div class="card-why-label">Why this matters</div>
+        <div class="card-why-text">Your next breakthrough is probably not in your field. It is sitting in a book you would never normally pick up.</div>
+      </div>
+    </div>
+    <button class="sample-lens-cta" onclick="document.getElementById('ob-form-wrap').scrollIntoView({behavior:'smooth'})">Get yours personalized. Takes 30 seconds.</button>
+    <div class="sample-lens-note">Yours is connected to your specific world.</div>
+  </div>
+
+  <div class="ob-form-wrap" id="ob-form-wrap">
     <div class="ob-card">
       <div class="ob-section">
         <label class="ob-label">What should we call you?</label>
@@ -1190,7 +1262,7 @@ NO EM DASHES — ever. Not a single one. This is a hard rule.
 
    "A nurse noticed more soldiers were dying from preventable diseases than battle wounds during the Crimean War. She had the data. Nobody was listening. So she turned the numbers into a picture. Colour coded. Visual. Impossible to ignore. The British government acted. Death rates fell from 42% to 2%. Florence Nightingale did not save those lives by caring harder. She saved them by making the truth impossible to look away from. The insight did not come from medicine. It came from statistics."
 
-   That is the standard. Specific person. Real moment. Surprising discipline crossing. Universal conclusion. This is not a template — it is a quality bar.
+   This is an example of a historical parallel — a real person, a real moment, where the answer came from an unexpected discipline. The 7 connection types above are all equally valid. Whatever type you choose, the depth and specificity must be at this level. This is not a template. It is a quality bar.
 
 14. WHEN THE DISCIPLINE FEELS CLOSE TO THE USER'S WORLD
 
@@ -1320,6 +1392,7 @@ async function generateCard() {
     if (isNewDiscipline) state.exploredDisciplines.push(discipline);
     updateStreak();
     saveState();
+    renderWeekdayStrip();
 
     document.getElementById('generate-area').innerHTML = '';
     showConnectionAnimation(discipline, (state.profile.domains || [])[0] || 'Your World', () => {
@@ -1369,6 +1442,18 @@ function renderCard(card, discipline) {
         <div class="card-why-label">Why this matters for you</div>
         <div class="card-why-text">${card.whyItMatters}</div>
       </div>` : ''}
+      ${(() => {
+        const hasFeedback = (state.feedback || []).some(f => f.date === getTodayStr());
+        return hasFeedback
+          ? `<div class="card-feedback"><div class="card-feedback-thanks">Thanks for the signal.</div></div>`
+          : `<div class="card-feedback" id="card-feedback">
+          <div class="card-feedback-label">Did this change how you see something?</div>
+          <div class="card-feedback-btns">
+            <button class="feedback-btn" onclick="submitFeedback('yes','${discipline}')">Made me think differently</button>
+            <button class="feedback-btn" onclick="submitFeedback('no','${discipline}')">Not for me</button>
+          </div>
+        </div>`;
+      })()}
       <div class="card-actions">
         <button class="share-btn" onclick="shareWhatsApp()">Share on WhatsApp</button>
         <button class="share-btn" onclick="copyCard()">Copy text</button>
@@ -1407,6 +1492,18 @@ function addToCalendar() {
   const text    = encodeURIComponent('Confluence: your daily lens');
   const details = encodeURIComponent('Your daily cross-disciplinary insight.\nhttps://abajpai29.github.io/confluence/');
   window.open(`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${text}&details=${details}&recur=RRULE:FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR`, '_blank');
+}
+
+// ============================================================
+// FEEDBACK
+// ============================================================
+function submitFeedback(response, discipline) {
+  gtag('event', 'feedback_submitted', { discipline, response });
+  state.feedback = state.feedback || [];
+  state.feedback.push({ discipline, response, date: getTodayStr() });
+  saveState();
+  const el = document.getElementById('card-feedback');
+  if (el) el.innerHTML = '<div class="card-feedback-thanks">Thanks for the signal.</div>';
 }
 
 // ============================================================
@@ -1452,11 +1549,12 @@ function getNextWeekdayDiscipline() {
 function renderTomorrow(todayDiscipline) {
   const nextDisc = getNextWeekdayDiscipline();
   const name     = state.profile.name || 'Friend';
+  const isFriday = new Date().getDay() === 5;
   document.getElementById('tomorrow-area').innerHTML = `
     <div class="tomorrow-wrap">
       <span class="tomorrow-sunrise">🌅</span>
       <div class="tomorrow-main">${name}, that's today's ${todayDiscipline} lens.</div>
-      <div class="tomorrow-sub">${new Date().getDay() === 5 ? 'See you Monday with a fresh lens.' : 'See you tomorrow with a fresh lens.'}</div>
+      <div class="tomorrow-sub">${isFriday ? 'Monday' : 'Tomorrow'}: <em>${nextDisc}</em>. See you then.</div>
     </div>`;
 }
 
@@ -1577,11 +1675,12 @@ function renderWeekdayStrip() {
   const todayIdx = (dow >= 1 && dow <= 5) ? dow - 1 : -1;
   const el = document.getElementById('weekday-strip');
   if (!el) return;
+  const streakHtml = state.streak > 0 ? `<div class="streak-badge">Day ${state.streak}</div>` : '';
   el.innerHTML = `<div class="weekday-strip-inner">${labels.map((d,i) => `
     <div class="weekday-dot ${i === todayIdx ? 'active' : i < todayIdx ? 'past' : ''}">
       <div class="weekday-circle"></div>
       <div class="weekday-day-label">${d}</div>
-    </div>`).join('')}</div>`;
+    </div>`).join('')}${streakHtml}</div>`;
 }
 
 // ============================================================

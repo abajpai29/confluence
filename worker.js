@@ -81,7 +81,7 @@ export default {
     // Client cannot override model, cannot request > MAX_TOKENS_CAP,
     // and prompt is capped at MAX_PROMPT_CHARS.
     const safePayload = {
-      model: 'claude-sonnet-4-6',
+      model: 'claude-opus-4-6',
       max_tokens: MAX_TOKENS_CAP,
       messages: [{
         role: 'user',
