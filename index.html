@@ -622,6 +622,22 @@ body::before {
   font-size: 14px; font-style: italic; font-weight: 300; color: var(--muted);
 }
 
+/* ===== THINKING PROMPT ===== */
+.card-thinking {
+  border-top: 1px solid var(--border);
+  padding: 20px 0 24px; margin-bottom: 24px;
+}
+.card-thinking-label {
+  font-family: 'JetBrains Mono', monospace; font-size: 9px;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 10px; opacity: 0.8;
+}
+.card-thinking-prompt {
+  font-family: 'Source Serif 4', Georgia, serif;
+  font-size: 15px; font-weight: 300; line-height: 1.8;
+  color: var(--ink); font-style: italic;
+}
+
 /* ===== STREAK ===== */
 .streak-badge {
   margin-left: auto;
@@ -916,12 +932,16 @@ let state = {
   todayDate: null,
   todayCard: null,
   todayDiscipline: null,
+  todayThinkingType: null,
   cardCount: 0,
   streak: 0,
   lastCardDate: null,
   clusterProgress: {},
   exploredDisciplines: [],
+  exploredThinkingTypes: {},
 };
+
+const THINKING_TYPES = ['polymathic', 'critical', 'systems', 'structured', 'creative', 'metacognitive', 'probabilistic'];
 
 const STORAGE_KEY = 'confluence_v3';
 function saveState() { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e){} }
@@ -1286,14 +1306,52 @@ NO EM DASHES — ever. Not a single one. This is a hard rule.
    No sentence should trail off or end mid-thought.
    No missing full stops. No double full stops. No comma splices.
    Before you output, re-read each sentence. If it sounds wrong aloud — fix it.
-   A punctuation error is as serious as a factual error. Both destroy trust.`;
+   A punctuation error is as serious as a factual error. Both destroy trust.
 
-function buildPrompt(discipline, cluster) {
+16. EVERY CARD NEEDS A QUOTABLE SENTENCE
+
+   One sentence so sharp the reader remembers it an hour later.
+   Not a slogan. A genuine insight compressed into one line.
+   "Florence Nightingale did not save those lives by caring harder" is that sentence in the benchmark.
+   If no sentence in the card passes this test, the card is not finished.
+
+17. THE BAD CARD PROBLEM
+
+   Quality is not about the average card. It is about the worst card.
+   If someone gets four great cards and one mediocre card, they remember the mediocre one.
+   AI-generated content has one specific failure mode: fluent emptiness. It sounds good but says nothing.
+   If the connection between the discipline and this person's world is not genuinely surprising, find a different angle.
+   A well-written generic connection is worse than an imperfect surprising one.
+
+BANNED PHRASES — never use any of these:
+   "In today's fast-paced world" / "Let's dive in" / "Here's the thing" / "It turns out" /
+   "Interestingly" / "In fact" / "It's worth noting" / "At its core" / "The reality is" /
+   "What's fascinating is" / "reveals" / "illuminates" / "underscores" / "highlights" / "showcases"
+   If a phrase sounds like a LinkedIn post, rewrite it.`;
+
+function buildPrompt(discipline, cluster, todayType) {
   const p    = state.profile;
   const edu  = (p.education || []).join(', ')  || 'not specified';
   const hob  = (p.hobbies   || []).join(', ')  || 'not specified';
   const doms = (p.domains   || []).join(', ')  || 'not specified';
-  const primaryDomain = (p.domains || [])[0] || 'their world';
+
+  const lifeStageAnchor = {
+    'Working Professional': 'Anchor the insight to their role, industry, and daily work decisions.',
+    'Entrepreneur':         'Anchor to the venture they are building. Frame connections as opportunities, risks, or strategic angles.',
+    'Consultant':           'Anchor to client work. Frame connections as novel frameworks or analytical angles that differentiate their advice.',
+    'Student':              'Anchor to their studies and emerging interests. Frame connections as ways to see their subjects differently.',
+    'Researcher':           'Anchor to their research domain. Frame connections as methodological insights or cross-field hypotheses.',
+  }[p.lifeStage] || 'Anchor the insight to what matters most in their world right now.';
+
+  const thinkingTypeGuide = {
+    'polymathic':    'Ask the user to extend the connection to yet another field entirely. What other discipline does this same pattern appear in?',
+    'critical':      'Ask the user to find the strongest argument against the insight\'s core claim. What assumption is hidden here?',
+    'systems':       'Ask the user to map what breaks if this pattern accelerates. What is the feedback loop?',
+    'structured':    'Ask the user to decompose the insight into its three core claims and identify the weakest one.',
+    'creative':      'Ask the user to combine this insight with something completely unrelated in their personal life. What solution emerges?',
+    'metacognitive': 'Ask the user to examine their own reaction to the insight. What does their default response reveal about their thinking patterns?',
+    'probabilistic': 'Ask the user to rate their confidence in the core claim on a scale of 1-10. What single piece of evidence would move that number most?',
+  }[todayType] || 'Ask the user to think further about the insight.';
 
   return `Generate a cross-disciplinary insight for this person:
 
@@ -1304,28 +1362,38 @@ EDUCATION: ${edu}
 INTERESTS: ${hob}
 
 TODAY'S LENS: ${discipline} (Cluster: ${cluster})
+LIFE STAGE FOCUS: ${lifeStageAnchor}
 
 The connection must be genuinely surprising and specific to this person's world.
 
-The insight can land anywhere in their life — their profession, something they studied, or something they love. Don't default to the first domain. Pick wherever the connection is most surprising and resonant. A game theory insight landing in cricket can hit harder than game theory landing in finance.
+The insight can land anywhere in their life — their profession, something they studied, or something they love. Don't default to the first domain. Pick wherever the connection is most surprising and resonant.
 
-Use ${p.name} once — in the hook — to make it personal. After that, write as narrative: stories, facts, observations. "You" should appear at most 2-3 times in the entire card. The reader should feel like someone brilliant is sharing something fascinating with them, not poking at them repeatedly.
+Use ${p.name} at most once in the card — woven naturally into a statement, not as a greeting. Write as narrative: stories, facts, observations. "You" should appear at most 2-3 times in the entire card.
+
+THINKING PROMPT TYPE FOR TODAY: ${todayType}
+What this demands: ${thinkingTypeGuide}
+The thinking prompt must be specific to THIS insight. A generic prompt that could apply to any card is a failure. It must create productive discomfort — the user should feel they don't have a ready answer.
 
 Respond ONLY with valid JSON — no markdown, no code fences, no extra text:
 {
   "title": "Punchy headline, max 8 words, impossible to ignore, NOT the discipline name",
-  "hook": "Start with '${p.name}, did you know that [surprising connection]?' Name always first, never at the end. One sentence. Screenshot-worthy. Ends with question mark.",
-  "para1": "2-3 short sentences. Open with a concrete story, fact, or moment — not about the reader, but about the idea itself. Walk into the discipline through narrative. Story first, concept second.",
-  "para2": "2-3 short sentences. Deepen or surprise. One 'you' is fine here to land it in their world — but write mostly as observation and story. End with the insight, not with the reader.",
+  "hook": "One provocative statement that stops the reader. NEVER a question. NEVER 'Did you know'. Specific — a real person, year, number, or event. Creates an information gap. Can include ${p.name} woven naturally, not as a greeting. Ends with a period, never a question mark.",
+  "para1": "2-3 short sentences. Open with a concrete story, fact, or moment. Walk into the discipline through narrative. Story first, concept second.",
+  "para2": "2-3 short sentences. Deepen or surprise. End with the insight, not with the reader.",
   "bridgeData": {
     "leftLabel": "${discipline}",
     "leftConcept": "3-5 word core principle from this discipline",
-    "rightLabel": "the part of their world where this lands best — profession, education, or hobby",
+    "rightLabel": "the part of their world where this lands best",
     "rightConcept": "same principle expressed in that world",
     "arcLabel": "2-4 word name for the bridging concept",
     "caption": "One short sentence: what this connection reveals — factually grounded"
   },
-  "whyItMatters": "One short sentence. One 'you'. Direct. Connects to their background. No em dashes. No filler."
+  "whyItMatters": "One short sentence. Direct. Personal. No em dashes. No filler.",
+  "thinkingPrompt": {
+    "type": "${todayType}",
+    "prompt": "2-3 sentences. Specific to THIS insight. Creates productive discomfort. A question or challenge the user cannot answer immediately.",
+    "label": "2-4 word label: e.g. 'Test the assumption' / 'Map the system' / 'Check your confidence'"
+  }
 }`;
 }
 
@@ -1343,6 +1411,7 @@ async function generateCard() {
 
   const discipline = getTodaysDiscipline();
   const cluster    = DISC_TO_CLUSTER[discipline];
+  const todayType  = THINKING_TYPES[(state.cardCount || 0) % 7];
 
   document.getElementById('generate-area').innerHTML = `
     <div class="loading-state">
@@ -1361,7 +1430,7 @@ async function generateCard() {
         model: 'claude-sonnet-4-6',
         max_tokens: 1800,
         system: INSIGHT_SYSTEM_PROMPT,
-        messages: [{ role: 'user', content: buildPrompt(discipline, cluster) }]
+        messages: [{ role: 'user', content: buildPrompt(discipline, cluster, todayType) }]
       })
     });
 
@@ -1381,12 +1450,14 @@ async function generateCard() {
     // Strip em dashes from all text fields
     const stripEm = s => typeof s === 'string' ? s.replace(/\s*—\s*/g, ', ').replace(/,\s*,/g, ',') : s;
     ['hook','title','para1','para2','whyItMatters'].forEach(f => { if (card[f]) card[f] = stripEm(card[f]); });
-    if (card.hook) card.hook = card.hook.replace(/[.!,…]+$/, '?');
 
-    state.todayDate       = today;
-    state.todayCard       = card;
-    state.todayDiscipline = discipline;
-    state.cardCount       = (state.cardCount || 0) + 1;
+    state.todayDate          = today;
+    state.todayCard          = card;
+    state.todayDiscipline    = discipline;
+    state.todayThinkingType  = todayType;
+    state.cardCount          = (state.cardCount || 0) + 1;
+    state.exploredThinkingTypes = state.exploredThinkingTypes || {};
+    state.exploredThinkingTypes[todayType] = (state.exploredThinkingTypes[todayType] || 0) + 1;
     state.clusterProgress[cluster] = (state.clusterProgress[cluster] || 0) + 1;
     const isNewDiscipline = !state.exploredDisciplines.includes(discipline);
     if (isNewDiscipline) state.exploredDisciplines.push(discipline);
@@ -1441,6 +1512,11 @@ function renderCard(card, discipline) {
       <div class="card-why-box">
         <div class="card-why-label">Why this matters for you</div>
         <div class="card-why-text">${card.whyItMatters}</div>
+      </div>` : ''}
+      ${card.thinkingPrompt ? `
+      <div class="card-thinking">
+        <div class="card-thinking-label">${card.thinkingPrompt.label || 'Think further'}</div>
+        <div class="card-thinking-prompt">${card.thinkingPrompt.prompt}</div>
       </div>` : ''}
       ${(() => {
         const hasFeedback = (state.feedback || []).some(f => f.date === getTodayStr());
