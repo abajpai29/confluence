@@ -787,8 +787,8 @@ body::before {
     <div id="connection-animation" class="hidden"></div>
     <div id="generate-area"></div>
     <div id="card-area"></div>
-    <div id="lattice-area"></div>
     <div id="tomorrow-area"></div>
+    <div id="lattice-area"></div>
 
     <div class="app-footer">
       <button class="footer-link" onclick="showScreen('screen-about')">About Confluence</button>
@@ -1202,6 +1202,22 @@ DISCIPLINE NAMES — use only names from this list:
    If you are not confident in the accuracy of a specific claim, choose a different example. Never fabricate or approximate a fact to make the insight work.
    A slightly less surprising true insight is infinitely better than a compelling false one.
 
+FACTUAL ACCURACY — ADDITIONAL RULES:
+   When citing a specific person, date, or study, you must be certain it is accurate.
+   If you are not 100% certain of a name, year, or specific claim, DO NOT INCLUDE IT.
+   Instead, describe the discovery or insight without false attribution.
+   "Computer scientists discovered" is always better than a fabricated name.
+   "In the mid-20th century" is always better than a guessed year.
+   An insight without a name is honest. An insight with a wrong name is a lie.
+   NEVER invent a person, date, study, or specific claim to make the card sound more authoritative.
+
+STORY SELECTION:
+   Prefer well-documented, widely-known examples and stories.
+   A famous example told from a surprising angle is BETTER than an obscure example that might be inaccurate.
+   The Darwin-Malthus connection is the model: a well-known figure, a verifiable event, presented in a way that reveals something unexpected.
+   Do NOT reach for obscure names or studies to sound impressive. That is where hallucination lives.
+   The most powerful insights use stories everyone can verify but nobody has seen from this angle.
+
 9. WRITE LIKE A HUMAN, NOT LIKE A REPORT
 
    Keep sentences short. Vary the rhythm. One idea per sentence.
@@ -1300,6 +1316,37 @@ NO EM DASHES — ever. Not a single one. This is a hard rule.
    If the discipline is close to their world — go deeper, not wider.
    Find the hidden angle. The one that makes even an expert stop.
 
+CONNECTION DEPTH RULE:
+
+   The test for every card is: would this person have made this connection on their own?
+   If yes, the card fails. If no, the card works. Discipline distance is irrelevant.
+   Connection novelty is everything.
+
+   TWO PATHS, BOTH VALID:
+
+   1. CLOSE DISCIPLINE, DEEP CONNECTION:
+      When the discipline is close to the user's world, the bar for depth is HIGHER.
+      The connection must be something they would never have seen despite knowing both fields.
+
+      Bad: "Computer science techniques are used in finance." (Obvious to anyone in tech+finance.)
+      Good: "Generational garbage collection predicts the exact failure mode of uniform risk
+      surveillance — both waste resources treating old survivors the same as new arrivals."
+      (Non-obvious structural parallel even for someone who knows both fields.)
+
+   2. FAR DISCIPLINE, CLEAR CONNECTION:
+      When the discipline is far from the user's world, the bar for clarity is HIGHER.
+      The connection must be explained well enough that the user genuinely understands
+      the foreign concept and sees the structural parallel.
+
+      Bad: "Entomology has lessons for business." (Vague. No mechanism.)
+      Good: "Ant colonies solved the resource allocation problem your risk team is struggling
+      with. They audit new foraging paths daily and ignore established ones — the same
+      generational logic that garbage collectors use."
+      (Clear, specific, the user learns something and sees the pattern.)
+
+   Both paths are valid. The connection must be non-obvious regardless of discipline distance.
+   Do not prefer far disciplines over close ones. Prefer surprising connections over predictable ones.
+
 15. GRAMMAR AND PUNCTUATION ARE NON-NEGOTIABLE
 
    Every sentence must be grammatically complete and correctly punctuated.
@@ -1327,7 +1374,14 @@ BANNED PHRASES — never use any of these:
    "In today's fast-paced world" / "Let's dive in" / "Here's the thing" / "It turns out" /
    "Interestingly" / "In fact" / "It's worth noting" / "At its core" / "The reality is" /
    "What's fascinating is" / "reveals" / "illuminates" / "underscores" / "highlights" / "showcases"
-   If a phrase sounds like a LinkedIn post, rewrite it.`;
+   If a phrase sounds like a LinkedIn post, rewrite it.
+
+BEFORE FINALIZING YOUR OUTPUT:
+   Review every named person, specific date, and factual claim in your response.
+   For each one, ask: am I certain this is accurate?
+   If there is ANY doubt, remove the name or date and describe the insight without attribution.
+   Do not guess. Do not approximate. Do not invent.
+   A great card with no names is better than a good card with one wrong name.`;
 
 function buildPrompt(discipline, cluster, todayType) {
   const p    = state.profile;
@@ -1531,9 +1585,11 @@ function renderCard(card, discipline) {
         </div>`;
       })()}
       <div class="card-actions">
-        <button class="share-btn" onclick="shareWhatsApp()">Share on WhatsApp</button>
-        <button class="share-btn" onclick="copyCard()">Copy text</button>
         <button class="btn-calendar" onclick="addToCalendar()">Add to my morning routine</button>
+        <div class="share-row">
+          <button class="share-btn" onclick="shareWhatsApp()">Share on WhatsApp</button>
+          <button class="share-btn" onclick="copyCard()">Copy text</button>
+        </div>
       </div>
     </div>`;
 
@@ -1653,6 +1709,13 @@ function renderConstellation(newDiscipline) {
   const explored = state.exploredDisciplines || [];
   const name     = (state.profile && state.profile.name) || 'You';
   const n        = explored.length;
+
+  if (n < 2) {
+    el.style.display = 'none';
+    return;
+  }
+  el.style.display = '';
+
   const initial  = name.charAt(0).toUpperCase();
 
   const W = 520, H = 260;
@@ -1713,15 +1776,13 @@ function renderConstellation(newDiscipline) {
     <circle cx="${cx}" cy="${cy}" r="9" fill="#c4460a" opacity="0.95" stroke="#f5f0e8" stroke-width="2"/>
     <text x="${cx}" y="${cy + 4}" font-family="'JetBrains Mono',monospace" font-size="9" fill="#f5f0e8" text-anchor="middle" font-weight="bold">${initial}</text>`;
 
-  const progressCopy = n === 0
-    ? 'Your knowledge lattice is forming.'
-    : n <= 3
-      ? 'Your knowledge lattice is forming.'
-      : n <= 7
-        ? 'The shape is emerging. Keep exploring.'
-        : n <= 15
-          ? 'A rare lattice. Most people never get here.'
-          : `${name}, this is what a polymathic mind looks like.`;
+  const progressCopy = n <= 3
+    ? `${n} of 121 disciplines explored. The lattice grows every day.`
+    : n <= 7
+      ? 'The shape is emerging. Keep exploring.'
+      : n <= 15
+        ? 'A rare lattice. Most people never get here.'
+        : `${name}, this is what a polymathic mind looks like.`;
 
   const notifyHtml = newDiscipline
     ? `<div class="constellation-notify">✦ ${newDiscipline} added to your lattice</div>`
