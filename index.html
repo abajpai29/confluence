@@ -1870,7 +1870,7 @@ function init() {
     document.getElementById('ob-name').addEventListener('input', validateOb);
     document.getElementById('ob-submit').addEventListener('click', submitOb);
     showScreen('screen-onboarding');
-  } else if (isWeekend()) {
+  } else if (isWeekend() && !params.has('test')) {
     showWeekendScreen();
   } else {
     showScreen('screen-app');
