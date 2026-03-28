@@ -1779,6 +1779,7 @@ function showScreen(id) {
 }
 
 function isWeekend() {
+  if (new URLSearchParams(location.search).has('test')) return false;
   const d = new Date().getDay();
   return d === 0 || d === 6;
 }
@@ -1870,7 +1871,7 @@ function init() {
     document.getElementById('ob-name').addEventListener('input', validateOb);
     document.getElementById('ob-submit').addEventListener('click', submitOb);
     showScreen('screen-onboarding');
-  } else if (isWeekend() && !params.has('test')) {
+  } else if (isWeekend()) {
     showWeekendScreen();
   } else {
     showScreen('screen-app');
