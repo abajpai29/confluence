@@ -167,6 +167,15 @@ body::before {
 .ob-hero {
   max-width: 680px; margin: 0 auto; padding: 36px 24px 48px;
   border-bottom: 1px solid var(--border);
+  position: relative; overflow: hidden;
+}
+.ob-hero-illustration {
+  width: 100%; display: block;
+  margin: 32px 0 0;
+  opacity: 0.11;
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 40%, transparent 100%);
+  mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 40%, transparent 100%);
+  pointer-events: none;
 }
 .ob-eyebrow {
   font-family: 'JetBrains Mono', monospace;
@@ -740,6 +749,7 @@ body::before {
       <p>Every weekday morning, Confluence brings you one unexpected connection, from across the full map of human knowledge.</p>
       <p>Read in five minutes. Something you can't unsee.</p>
     </div>
+    <img class="ob-hero-illustration" src="https://lh3.googleusercontent.com/aida/ADBb0uiVtk88afAxkmarCiWkBnYc7Kf6ez67Iws-yJuxmJPGFZfUeKshgiUlfZMP-DgsUOa0RNAvww4nMXaytmIYRuknS0yYAIwz87g34Fq-O9oHY_9ZvYNadToZ6lJfMvu0MTpyvvuSdzwJDWS2U9lnwI5QNy6MZf30aNSS9_JNrTNxp-Fj7awnu8LD_fz6tQAeXuzZ5qELwib50hmaVt3N5zaJdnGxJVrytN0a3eF4qEYRfR2CSqBNsm4OHaw" alt="" aria-hidden="true" />
   </div>
 
   <!-- SAMPLE LENS -->
