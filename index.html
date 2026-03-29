@@ -111,23 +111,6 @@ body::before {
 .bottom-nav-btn.active { color: var(--accent); border-top: 2px solid var(--accent); margin-top: -1px; }
 .bottom-nav-btn:hover { color: var(--ink); }
 
-/* ===== MARGIN DECORATIONS (desktop only) ===== */
-.margin-deco { display: none; }
-@media (min-width: 900px) {
-  .margin-deco {
-    display: block; position: fixed; top: 0; height: 100%;
-    width: calc((100vw - 840px) / 2);
-    overflow: hidden; pointer-events: none; z-index: 0;
-  }
-  .margin-deco-left { left: 0; }
-  .margin-deco-right { right: 0; }
-  .margin-deco-img {
-    position: absolute; height: auto;
-    opacity: 0.28;
-    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 10%, black 85%, transparent 100%);
-    mask-image: linear-gradient(to bottom, transparent 0%, black 10%, black 85%, transparent 100%);
-  }
-}
 
 /* ===== ARCHIVE SCREEN ===== */
 .archive-header { padding: 40px 0 32px; border-bottom: 1px solid var(--border); margin-bottom: 8px; }
@@ -707,40 +690,44 @@ body::before {
 </head>
 <body>
 
-<!-- Constellation — margin edges only (x < 15% or x > 85%) -->
-<svg id="constellation-bg" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:0.18;">
-  <line x1="8%" y1="12%" x2="13%" y2="31%" stroke="#8a6f52" stroke-width="0.5"/>
-  <line x1="6%" y1="58%" x2="11%" y2="74%" stroke="#8a6f52" stroke-width="0.5"/>
-  <line x1="11%" y1="74%" x2="7%" y2="89%" stroke="#8a6f52" stroke-width="0.5"/>
-  <line x1="9%" y1="42%" x2="6%" y2="58%" stroke="#8a6f52" stroke-width="0.5"/>
-  <line x1="87%" y1="8%" x2="93%" y2="27%" stroke="#8a6f52" stroke-width="0.5"/>
-  <line x1="93%" y1="27%" x2="88%" y2="51%" stroke="#8a6f52" stroke-width="0.5"/>
-  <line x1="86%" y1="63%" x2="94%" y2="78%" stroke="#8a6f52" stroke-width="0.5"/>
-  <line x1="94%" y1="78%" x2="89%" y2="92%" stroke="#8a6f52" stroke-width="0.5"/>
-  <line x1="91%" y1="38%" x2="86%" y2="63%" stroke="#8a6f52" stroke-width="0.5"/>
-  <circle cx="8%" cy="12%" r="2.5" fill="#c4460a"/>
-  <circle cx="13%" cy="31%" r="1.5" fill="#8a6f52"/>
-  <circle cx="6%" cy="58%" r="2" fill="#8a6f52"/>
-  <circle cx="11%" cy="74%" r="1.5" fill="#8a6f52"/>
-  <circle cx="7%" cy="89%" r="2" fill="#8a6f52"/>
-  <circle cx="9%" cy="42%" r="1.5" fill="#8a6f52"/>
-  <circle cx="87%" cy="8%" r="2" fill="#8a6f52"/>
-  <circle cx="93%" cy="27%" r="2.5" fill="#c4460a"/>
-  <circle cx="88%" cy="51%" r="1.5" fill="#8a6f52"/>
-  <circle cx="86%" cy="63%" r="2.5" fill="#c4460a"/>
-  <circle cx="94%" cy="78%" r="2" fill="#8a6f52"/>
-  <circle cx="89%" cy="92%" r="1.5" fill="#8a6f52"/>
-  <circle cx="91%" cy="38%" r="1.5" fill="#8a6f52"/>
-</svg>
-
-<!-- Margin decorations — desktop only, fixed to viewport sides -->
-<div class="margin-deco margin-deco-left" aria-hidden="true">
-  <img class="margin-deco-img" style="top:6%;width:95%;left:-2%;transform:rotate(3deg);" src="https://lh3.googleusercontent.com/aida/ADBb0ugdNtinNRnPzmINSsajNP8_jROCRxELkzXsP4rXtTDcgK3J4lT9JDoEjZzvn1jLyyXwqB9LNKCtHO9j-Z69tGyxv6urG4JJGgANlf-ZvWfyB7sJ1BXbKzNNBoNOxKR49gl7eE96GcYyJk_hiin55URgkh1iTZvqAEKuHvBXG6XELW64L8RUeqK5LriwJsZ883ekhxUzqQ3_NIXwZCEnBF1Fup9seczdYk7fcWKKtHEQu5qwKpLhHz96Mg" alt="" />
-  <img class="margin-deco-img" style="top:58%;width:60%;left:15%;transform:rotate(-2.5deg);opacity:0.22;" src="https://lh3.googleusercontent.com/aida/ADBb0uiVtk88afAxkmarCiWkBnYc7Kf6ez67Iws-yJuxmJPGFZfUeKshgiUlfZMP-DgsUOa0RNAvww4nMXaytmIYRuknS0yYAIwz87g34Fq-O9oHY_9ZvYNadToZ6lJfMvu0MTpyvvuSdzwJDWS2U9lnwI5QNy6MZf30aNSS9_JNrTNxp-Fj7awnu8LD_fz6tQAeXuzZ5qELwib50hmaVt3N5zaJdnGxJVrytN0a3eF4qEYRfR2CSqBNsm4OHaw" alt="" />
-</div>
-<div class="margin-deco margin-deco-right" aria-hidden="true">
-  <img class="margin-deco-img" style="top:15%;width:60%;left:6%;transform:rotate(-3.5deg);" src="https://lh3.googleusercontent.com/aida/ADBb0uhtg7zk84LSTf2sl8AMTwe-DRrNeBFrXDO1_88ZboFnLK3_eQ5OvCbtAp4Mcpt910H_vP3PoRlJdcnLVMV7g248jdLGicV4h0R2CIM10NVBVtJu2qM1Y7KBpCNtwbSrIsToiEg_5MqU7-HZfVeiVeKYoXyxT4wj2WWt_jKiywbTDMQWVq9u263SHHUmVGziZ57Ue19nTrgb1yJsj2--9a1CXqtNha3ZRJngQnJQO1aWUODRVsaMxolY9w" alt="" />
-  <img class="margin-deco-img" style="top:52%;width:92%;left:-4%;transform:rotate(2deg);opacity:0.25;" src="https://lh3.googleusercontent.com/aida/ADBb0uiQS6rpWKwUI_-1WTppueHO7i3vUXanqMEgH9OsmQ_trkkQiP0HbPx_DOc6DuZtnurF-0clSG14jWtFEMLjmxJzxeAptvaAJeU3PEf_dniGpY7vW_DEAgXW91Bi-Bb766_4KhAFOEnfXksEWF5gT1om7zIMhmxxBNSYC7kpAxWglUxcVUzHCeqGJXsiFd4aU0c45ealvtBYvwKjY-jMMUQpj0SnuB8DVGocAQJUms4p-cCSMwQ8T0LwNRM" alt="" />
+<!-- Full-page watermark — illustrations + constellation scattered behind all content -->
+<div id="watermark-bg" aria-hidden="true" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;overflow:hidden;">
+  <!-- Constellation dots + lines -->
+  <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" style="position:absolute;top:0;left:0;opacity:0.18;">
+    <line x1="5%" y1="10%" x2="12%" y2="28%" stroke="#8a6f52" stroke-width="0.5"/>
+    <line x1="12%" y1="28%" x2="7%" y2="52%" stroke="#8a6f52" stroke-width="0.5"/>
+    <line x1="7%" y1="52%" x2="10%" y2="72%" stroke="#8a6f52" stroke-width="0.5"/>
+    <line x1="88%" y1="8%" x2="94%" y2="30%" stroke="#8a6f52" stroke-width="0.5"/>
+    <line x1="94%" y1="30%" x2="89%" y2="55%" stroke="#8a6f52" stroke-width="0.5"/>
+    <line x1="89%" y1="55%" x2="93%" y2="80%" stroke="#8a6f52" stroke-width="0.5"/>
+    <line x1="35%" y1="15%" x2="48%" y2="8%" stroke="#8a6f52" stroke-width="0.5"/>
+    <line x1="62%" y1="85%" x2="74%" y2="92%" stroke="#8a6f52" stroke-width="0.5"/>
+    <circle cx="5%" cy="10%" r="2.5" fill="#c4460a"/>
+    <circle cx="12%" cy="28%" r="1.5" fill="#8a6f52"/>
+    <circle cx="7%" cy="52%" r="2" fill="#8a6f52"/>
+    <circle cx="10%" cy="72%" r="1.5" fill="#8a6f52"/>
+    <circle cx="88%" cy="8%" r="2" fill="#8a6f52"/>
+    <circle cx="94%" cy="30%" r="2.5" fill="#c4460a"/>
+    <circle cx="89%" cy="55%" r="1.5" fill="#8a6f52"/>
+    <circle cx="93%" cy="80%" r="2.5" fill="#c4460a"/>
+    <circle cx="35%" cy="15%" r="1.5" fill="#8a6f52"/>
+    <circle cx="48%" cy="8%" r="2" fill="#8a6f52"/>
+    <circle cx="62%" cy="85%" r="1.5" fill="#8a6f52"/>
+    <circle cx="74%" cy="92%" r="2" fill="#8a6f52"/>
+  </svg>
+  <!-- Scattered illustration watermarks — all pages, behind all content -->
+  <!-- Top-left: Lit×Bio, large, tilted -->
+  <img style="position:absolute;top:3%;left:1%;width:22vw;max-width:280px;transform:rotate(4deg);opacity:0.08;" src="https://lh3.googleusercontent.com/aida/ADBb0ugdNtinNRnPzmINSsajNP8_jROCRxELkzXsP4rXtTDcgK3J4lT9JDoEjZzvn1jLyyXwqB9LNKCtHO9j-Z69tGyxv6urG4JJGgANlf-ZvWfyB7sJ1BXbKzNNBoNOxKR49gl7eE96GcYyJk_hiin55URgkh1iTZvqAEKuHvBXG6XELW64L8RUeqK5LriwJsZ883ekhxUzqQ3_NIXwZCEnBF1Fup9seczdYk7fcWKKtHEQu5qwKpLhHz96Mg" alt="" />
+  <!-- Top-right: Geo×Physics, medium, tilted opposite -->
+  <img style="position:absolute;top:6%;right:2%;width:18vw;max-width:220px;transform:rotate(-3deg);opacity:0.08;" src="https://lh3.googleusercontent.com/aida/ADBb0uhtg7zk84LSTf2sl8AMTwe-DRrNeBFrXDO1_88ZboFnLK3_eQ5OvCbtAp4Mcpt910H_vP3PoRlJdcnLVMV7g248jdLGicV4h0R2CIM10NVBVtJu2qM1Y7KBpCNtwbSrIsToiEg_5MqU7-HZfVeiVeKYoXyxT4wj2WWt_jKiywbTDMQWVq9u263SHHUmVGziZ57Ue19nTrgb1yJsj2--9a1CXqtNha3ZRJngQnJQO1aWUODRVsaMxolY9w" alt="" />
+  <!-- Mid-left: Triptych, small -->
+  <img style="position:absolute;top:38%;left:-2%;width:16vw;max-width:200px;transform:rotate(-5deg);opacity:0.07;" src="https://lh3.googleusercontent.com/aida/ADBb0uiVtk88afAxkmarCiWkBnYc7Kf6ez67Iws-yJuxmJPGFZfUeKshgiUlfZMP-DgsUOa0RNAvww4nMXaytmIYRuknS0yYAIwz87g34Fq-O9oHY_9ZvYNadToZ6lJfMvu0MTpyvvuSdzwJDWS2U9lnwI5QNy6MZf30aNSS9_JNrTNxp-Fj7awnu8LD_fz6tQAeXuzZ5qELwib50hmaVt3N5zaJdnGxJVrytN0a3eF4qEYRfR2CSqBNsm4OHaw" alt="" />
+  <!-- Mid-right: Chem×PolSci, large -->
+  <img style="position:absolute;top:42%;right:0%;width:24vw;max-width:300px;transform:rotate(3.5deg);opacity:0.08;" src="https://lh3.googleusercontent.com/aida/ADBb0uiQS6rpWKwUI_-1WTppueHO7i3vUXanqMEgH9OsmQ_trkkQiP0HbPx_DOc6DuZtnurF-0clSG14jWtFEMLjmxJzxeAptvaAJeU3PEf_dniGpY7vW_DEAgXW91Bi-Bb766_4KhAFOEnfXksEWF5gT1om7zIMhmxxBNSYC7kpAxWglUxcVUzHCeqGJXsiFd4aU0c45ealvtBYvwKjY-jMMUQpj0SnuB8DVGocAQJUms4p-cCSMwQ8T0LwNRM" alt="" />
+  <!-- Bottom-left: Geo×Physics repeat, small -->
+  <img style="position:absolute;bottom:8%;left:3%;width:14vw;max-width:180px;transform:rotate(6deg);opacity:0.07;" src="https://lh3.googleusercontent.com/aida/ADBb0uhtg7zk84LSTf2sl8AMTwe-DRrNeBFrXDO1_88ZboFnLK3_eQ5OvCbtAp4Mcpt910H_vP3PoRlJdcnLVMV7g248jdLGicV4h0R2CIM10NVBVtJu2qM1Y7KBpCNtwbSrIsToiEg_5MqU7-HZfVeiVeKYoXyxT4wj2WWt_jKiywbTDMQWVq9u263SHHUmVGziZ57Ue19nTrgb1yJsj2--9a1CXqtNha3ZRJngQnJQO1aWUODRVsaMxolY9w" alt="" />
+  <!-- Bottom-right: Lit×Bio repeat, medium -->
+  <img style="position:absolute;bottom:5%;right:1%;width:20vw;max-width:240px;transform:rotate(-4deg);opacity:0.08;" src="https://lh3.googleusercontent.com/aida/ADBb0ugdNtinNRnPzmINSsajNP8_jROCRxELkzXsP4rXtTDcgK3J4lT9JDoEjZzvn1jLyyXwqB9LNKCtHO9j-Z69tGyxv6urG4JJGgANlf-ZvWfyB7sJ1BXbKzNNBoNOxKR49gl7eE96GcYyJk_hiin55URgkh1iTZvqAEKuHvBXG6XELW64L8RUeqK5LriwJsZ883ekhxUzqQ3_NIXwZCEnBF1Fup9seczdYk7fcWKKtHEQu5qwKpLhHz96Mg" alt="" />
 </div>
 
 <!-- ===== ONBOARDING ===== -->
