@@ -79,18 +79,46 @@ body::before {
 
 /* ===== SHARED LAYOUT ===== */
 .page-wrap {
-  max-width: 680px; margin: 0 auto; padding: 0 24px 80px;
+  max-width: 680px; margin: 0 auto; padding: 0 24px 100px; position: relative; z-index: 1;
 }
 @media (min-width: 768px) {
-  .page-wrap { max-width: 960px; }
+  .page-wrap { max-width: 780px; }
 }
-.app-columns { display: grid; grid-template-columns: 1fr; gap: 0; }
-@media (min-width: 768px) {
-  .app-columns { grid-template-columns: 58% 38%; gap: 0 48px; align-items: start; }
-  .app-col-side { position: sticky; top: 32px; }
-  .app-col-side .tomorrow-wrap { border-top: none; margin-top: 0; padding-top: 16px; }
-  .app-col-side .constellation-wrap { border-top: none; margin-top: 0; padding-top: 0; }
+/* ===== DAY BADGE ===== */
+.day-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--accent); border: 1px solid var(--accent);
+  padding: 3px 10px; display: inline-block;
 }
+
+/* ===== BOTTOM NAV ===== */
+.bottom-nav {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 200;
+  display: flex; background: var(--paper);
+  border-top: 1px solid var(--border);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.bottom-nav-btn {
+  flex: 1; padding: 14px 0 12px;
+  background: none; border: none; cursor: pointer;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--muted); transition: color 0.15s;
+}
+.bottom-nav-btn.active { color: var(--accent); border-top: 2px solid var(--accent); margin-top: -1px; }
+.bottom-nav-btn:hover { color: var(--ink); }
+
+/* ===== ARCHIVE SCREEN ===== */
+.archive-header { padding: 40px 0 32px; border-bottom: 1px solid var(--border); margin-bottom: 8px; }
+.archive-title { font-family: 'Playfair Display', Georgia, serif; font-size: 32px; font-weight: 700; color: var(--ink); margin-bottom: 6px; }
+.archive-sub { font-family: 'Source Serif 4', Georgia, serif; font-size: 15px; font-style: italic; color: var(--muted); }
+.archive-item { padding: 24px 0; border-bottom: 1px solid var(--border); animation: fadeIn 0.3s ease both; }
+.archive-item-meta { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
+.archive-discipline { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); }
+.archive-date { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--muted); letter-spacing: 0.08em; }
+.archive-hook { font-family: 'Source Serif 4', Georgia, serif; font-size: 16px; font-style: italic; color: var(--ink); line-height: 1.6; }
+.archive-empty { font-family: 'Source Serif 4', Georgia, serif; font-size: 15px; font-style: italic; color: var(--muted); padding: 48px 0; text-align: center; }
 
 /* ===== APP HEADER ===== */
 .app-header {
@@ -664,6 +692,39 @@ body::before {
 </head>
 <body>
 
+<!-- Constellation background — fixed, covers full viewport including side margins -->
+<svg id="constellation-bg" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:0.045;">
+  <line x1="8%" y1="12%" x2="23%" y2="31%" stroke="#8a6f52" stroke-width="0.5"/>
+  <line x1="23%" y1="31%" x2="41%" y2="18%" stroke="#8a6f52" stroke-width="0.5"/>
+  <line x1="78%" y1="8%" x2="91%" y2="27%" stroke="#8a6f52" stroke-width="0.5"/>
+  <line x1="91%" y1="27%" x2="84%" y2="51%" stroke="#8a6f52" stroke-width="0.5"/>
+  <line x1="6%" y1="58%" x2="18%" y2="74%" stroke="#8a6f52" stroke-width="0.5"/>
+  <line x1="18%" y1="74%" x2="9%" y2="89%" stroke="#8a6f52" stroke-width="0.5"/>
+  <line x1="82%" y1="63%" x2="94%" y2="78%" stroke="#8a6f52" stroke-width="0.5"/>
+  <line x1="94%" y1="78%" x2="88%" y2="92%" stroke="#8a6f52" stroke-width="0.5"/>
+  <line x1="15%" y1="42%" x2="8%" y2="58%" stroke="#8a6f52" stroke-width="0.5"/>
+  <line x1="87%" y1="38%" x2="82%" y2="63%" stroke="#8a6f52" stroke-width="0.5"/>
+  <line x1="41%" y1="18%" x2="52%" y2="5%" stroke="#8a6f52" stroke-width="0.5"/>
+  <line x1="52%" y1="95%" x2="63%" y2="82%" stroke="#8a6f52" stroke-width="0.5"/>
+  <circle cx="8%" cy="12%" r="2.5" fill="#c4460a"/>
+  <circle cx="23%" cy="31%" r="2" fill="#8a6f52"/>
+  <circle cx="41%" cy="18%" r="1.5" fill="#8a6f52"/>
+  <circle cx="78%" cy="8%" r="2" fill="#8a6f52"/>
+  <circle cx="91%" cy="27%" r="2.5" fill="#c4460a"/>
+  <circle cx="84%" cy="51%" r="1.5" fill="#8a6f52"/>
+  <circle cx="6%" cy="58%" r="2" fill="#8a6f52"/>
+  <circle cx="18%" cy="74%" r="1.5" fill="#8a6f52"/>
+  <circle cx="9%" cy="89%" r="2" fill="#8a6f52"/>
+  <circle cx="82%" cy="63%" r="2.5" fill="#c4460a"/>
+  <circle cx="94%" cy="78%" r="2" fill="#8a6f52"/>
+  <circle cx="88%" cy="92%" r="1.5" fill="#8a6f52"/>
+  <circle cx="15%" cy="42%" r="2" fill="#8a6f52"/>
+  <circle cx="87%" cy="38%" r="1.5" fill="#8a6f52"/>
+  <circle cx="52%" cy="95%" r="2" fill="#8a6f52"/>
+  <circle cx="48%" cy="5%" r="1.5" fill="#8a6f52"/>
+  <circle cx="63%" cy="82%" r="2" fill="#8a6f52"/>
+</svg>
+
 <!-- ===== ONBOARDING ===== -->
 <div id="screen-onboarding">
   <div class="ob-wordmark">
@@ -788,6 +849,7 @@ body::before {
         <div class="app-logo">✦ Confluence</div>
         <div class="ob-wordmark-tagline">see through every lens</div>
       </div>
+      <div id="day-badge" class="day-badge"></div>
     </div>
 
     <div class="weekday-strip" id="weekday-strip"></div>
@@ -799,19 +861,13 @@ body::before {
     </div>
 
     <div id="connection-animation" class="hidden"></div>
-    <div class="app-columns">
-      <div class="app-col-main">
-        <div id="generate-area"></div>
-        <div id="card-area"></div>
-        <div id="close-line-area"></div>
-      </div>
-      <div class="app-col-side">
-        <div id="lattice-area"></div>
-        <div id="tomorrow-area"></div>
-        <div class="app-footer">
-          <button class="footer-link" onclick="showScreen('screen-about')">About Confluence</button>
-        </div>
-      </div>
+    <div id="generate-area"></div>
+    <div id="card-area"></div>
+    <div id="close-line-area"></div>
+    <div id="tomorrow-area"></div>
+    <div id="lattice-area"></div>
+    <div class="app-footer">
+      <button class="footer-link" onclick="showScreen('screen-about')">About Confluence</button>
     </div>
 
   </div>
@@ -904,6 +960,23 @@ body::before {
   </div>
 </div>
 
+<!-- ===== ARCHIVE SCREEN ===== -->
+<div id="screen-archive" class="hidden">
+  <div class="page-wrap">
+    <div class="app-header">
+      <div>
+        <div class="app-logo">✦ Confluence</div>
+        <div class="ob-wordmark-tagline">see through every lens</div>
+      </div>
+    </div>
+    <div class="archive-header">
+      <div class="archive-title">Your Archive</div>
+      <div class="archive-sub">Every lens you've looked through.</div>
+    </div>
+    <div id="archive-list"></div>
+  </div>
+</div>
+
 <!-- Toast -->
 <div class="toast" id="toast"></div>
 
@@ -960,6 +1033,7 @@ let state = {
   clusterProgress: {},
   exploredDisciplines: [],
   exploredThinkingTypes: {},
+  cardHistory: [],
 };
 
 const THINKING_TYPES = ['polymathic', 'critical', 'systems', 'structured', 'creative', 'metacognitive', 'probabilistic'];
@@ -1611,6 +1685,19 @@ function renderCard(card, discipline) {
 
   document.getElementById('generate-area').innerHTML =
     '<p class="already-generated">✓ Today\'s lens is ready.</p>';
+
+  // Save to archive history
+  const todayStr = new Date().toISOString().slice(0,10);
+  state.cardHistory = state.cardHistory || [];
+  if (!state.cardHistory.find(h => h.date === todayStr)) {
+    state.cardHistory.push({ date: todayStr, discipline, hook: card.hook });
+    if (state.cardHistory.length > 121) state.cardHistory = state.cardHistory.slice(-121);
+    saveState();
+  }
+
+  // Day badge
+  const dayBadge = document.getElementById('day-badge');
+  if (dayBadge && state.cardCount) dayBadge.textContent = `Day ${state.cardCount}`;
 }
 
 // ============================================================
@@ -1847,7 +1934,7 @@ function renderWeekdayStrip() {
 // SCREEN MANAGEMENT
 // ============================================================
 function showScreen(id) {
-  ['screen-onboarding','screen-app','screen-weekend','screen-about'].forEach(s => {
+  ['screen-onboarding','screen-app','screen-weekend','screen-about','screen-archive'].forEach(s => {
     const el = document.getElementById(s);
     if (el) el.classList.add('hidden');
   });
@@ -1860,6 +1947,40 @@ function showScreen(id) {
       dearEl.textContent = name ? `Dear ${name},` : 'Dear curious person,';
     }
   }
+  // Bottom nav — show only on app + archive screens
+  const nav = document.getElementById('bottom-nav');
+  if (nav) {
+    const showNav = ['screen-app','screen-archive'].includes(id);
+    nav.classList.toggle('hidden', !showNav);
+    document.getElementById('nav-lens')?.classList.toggle('active', id === 'screen-app');
+    document.getElementById('nav-archive')?.classList.toggle('active', id === 'screen-archive');
+  }
+}
+
+function showArchive() {
+  showScreen('screen-archive');
+  renderArchive();
+}
+
+function renderArchive() {
+  const list = document.getElementById('archive-list');
+  if (!list) return;
+  const history = [...(state.cardHistory || [])].reverse();
+  if (!history.length) {
+    list.innerHTML = '<p class="archive-empty">Your archive is empty. Come back after your first lens.</p>';
+    return;
+  }
+  list.innerHTML = history.map(h => {
+    const d = new Date(h.date);
+    const dateStr = d.toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' });
+    return `<div class="archive-item">
+      <div class="archive-item-meta">
+        <span class="archive-discipline">${h.discipline}</span>
+        <span class="archive-date">${dateStr}</span>
+      </div>
+      <div class="archive-hook">${h.hook}</div>
+    </div>`;
+  }).join('');
 }
 
 function isWeekend() {
@@ -1879,6 +2000,14 @@ function initApp() {
   document.getElementById('today-cluster-line').textContent =
     `${CLUSTERS[cluster]?.emoji || ''} ${cluster}`;
   document.getElementById('today-discipline-name').textContent = discipline;
+
+  // Show bottom nav on app screen
+  const nav = document.getElementById('bottom-nav');
+  if (nav) {
+    nav.classList.remove('hidden');
+    document.getElementById('nav-lens')?.classList.add('active');
+    document.getElementById('nav-archive')?.classList.remove('active');
+  }
 
   const today = getTodayStr();
   if (state.todayDate === today && state.todayCard) {
@@ -1965,5 +2094,14 @@ function init() {
 
 init();
 </script>
+
+<nav class="bottom-nav hidden" id="bottom-nav">
+  <button class="bottom-nav-btn" id="nav-lens" onclick="showScreen('screen-app')">
+    <span class="bottom-nav-label">Lens</span>
+  </button>
+  <button class="bottom-nav-btn" id="nav-archive" onclick="showArchive()">
+    <span class="bottom-nav-label">Archive</span>
+  </button>
+</nav>
 </body>
 </html>
