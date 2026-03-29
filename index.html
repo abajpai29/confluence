@@ -21,6 +21,7 @@
   <meta property="og:url" content="https://abajpai29.github.io/confluence/" />
   <meta property="og:type" content="website" />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;1,8..60,300;1,8..60,400&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
   <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -120,8 +121,8 @@ body::before {
   .margin-deco-left { left: 0; }
   .margin-deco-right { right: 0; }
   .margin-deco-img {
-    position: absolute; width: 100%; height: auto;
-    opacity: 0.13;
+    position: absolute; height: auto;
+    opacity: 0.22;
     -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 12%, black 82%, transparent 100%);
     mask-image: linear-gradient(to bottom, transparent 0%, black 12%, black 82%, transparent 100%);
   }
@@ -186,13 +187,6 @@ body::before {
   max-width: 680px; margin: 0 auto; padding: 36px 24px 48px;
   border-bottom: 1px solid var(--border);
   position: relative; overflow: hidden; z-index: 1;
-}
-.ob-hero-illustration {
-  position: absolute; bottom: 0; left: 0; width: 100%;
-  opacity: 0.11;
-  -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 40%, transparent 100%);
-  mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 40%, transparent 100%);
-  pointer-events: none;
 }
 .ob-eyebrow {
   font-family: 'JetBrains Mono', monospace;
@@ -396,17 +390,18 @@ body::before {
   color: var(--muted); margin-top: 12px; line-height: 1.6;
 }
 .card-why-box {
-  background: var(--paper2); border-left: 2px solid var(--accent);
-  padding: 20px 24px; margin-bottom: 32px; border-radius: 0 1px 1px 0;
+  background: var(--paper2);
+  border-top: 0.5px solid var(--border);
+  padding: 28px; margin: 0 -28px -28px;
 }
 .card-why-label {
   font-family: 'JetBrains Mono', monospace; font-size: 9px;
   letter-spacing: 0.2em; text-transform: uppercase;
-  color: var(--accent); margin-bottom: 8px;
+  color: var(--muted); margin-bottom: 10px;
 }
 .card-why-text {
   font-family: 'Source Serif 4', Georgia, serif;
-  font-size: 15px; font-weight: 300; line-height: 1.75; color: var(--ink);
+  font-size: 15px; font-style: italic; font-weight: 300; line-height: 1.75; color: var(--ink);
 }
 .card-bottom-tag {
   font-family: 'JetBrains Mono', monospace; font-size: 11px;
@@ -414,16 +409,16 @@ body::before {
   margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid var(--border);
 }
 .card-actions { margin-bottom: 10px; }
-.share-row { display: flex; gap: 8px; margin-bottom: 8px; align-items: stretch; }
+.share-row { display: flex; gap: 32px; justify-content: center; margin-bottom: 24px; }
 .share-btn {
-  display: inline-block; padding: 0 16px;
-  height: 36px; border: 1px solid var(--border); border-radius: 2px;
-  font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: 400;
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: 'JetBrains Mono', monospace; font-size: 10px;
   letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer;
-  transition: all 0.15s; background: transparent; color: var(--muted);
-  margin-bottom: 0; width: auto;
+  transition: color 0.15s; background: none; border: none; color: var(--muted);
+  padding: 0;
 }
-.share-btn:hover { border-color: var(--accent); color: var(--accent); }
+.share-btn:hover { color: var(--ink); }
+.material-symbols-outlined { font-variation-settings: 'FILL' 0,'wght' 300,'GRAD' 0,'opsz' 24; vertical-align: middle; }
 .btn-action {
   flex: 1; height: 42px;
   font-family: 'JetBrains Mono', monospace; font-size: 10px;
@@ -680,12 +675,12 @@ body::before {
 }
 .card-feedback-btns { display: flex; gap: 8px; }
 .feedback-btn {
-  flex: 1; padding: 10px 12px; border: 1px solid var(--border);
-  background: transparent; border-radius: 1px; cursor: pointer;
-  font-family: 'JetBrains Mono', monospace; font-size: 10px;
-  letter-spacing: 0.06em; color: var(--muted); transition: all 0.15s; text-align: center;
+  flex: 1; padding: 16px 8px; border: 0.5px solid var(--border);
+  background: transparent; cursor: pointer;
+  font-family: 'JetBrains Mono', monospace; font-size: 11px;
+  letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink); transition: background 0.15s; text-align: center;
 }
-.feedback-btn:hover { border-color: var(--accent); color: var(--accent); }
+.feedback-btn:hover { background: var(--paper2); }
 .card-feedback-thanks {
   font-family: 'Source Serif 4', Georgia, serif;
   font-size: 14px; font-style: italic; font-weight: 300; color: var(--muted);
@@ -712,7 +707,7 @@ body::before {
 <body>
 
 <!-- Constellation background — fixed, covers full viewport including side margins -->
-<svg id="constellation-bg" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:0.07;">
+<svg id="constellation-bg" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:0.15;">
   <line x1="8%" y1="12%" x2="23%" y2="31%" stroke="#8a6f52" stroke-width="0.5"/>
   <line x1="23%" y1="31%" x2="41%" y2="18%" stroke="#8a6f52" stroke-width="0.5"/>
   <line x1="78%" y1="8%" x2="91%" y2="27%" stroke="#8a6f52" stroke-width="0.5"/>
@@ -746,16 +741,12 @@ body::before {
 
 <!-- Margin decorations — desktop only, fixed to viewport sides -->
 <div class="margin-deco margin-deco-left" aria-hidden="true">
-  <!-- Literature × Biology — top of left margin -->
-  <img class="margin-deco-img" style="top:8%;" src="https://lh3.googleusercontent.com/aida/ADBb0ugdNtinNRnPzmINSsajNP8_jROCRxELkzXsP4rXtTDcgK3J4lT9JDoEjZzvn1jLyyXwqB9LNKCtHO9j-Z69tGyxv6urG4JJGgANlf-ZvWfyB7sJ1BXbKzNNBoNOxKR49gl7eE96GcYyJk_hiin55URgkh1iTZvqAEKuHvBXG6XELW64L8RUeqK5LriwJsZ883ekhxUzqQ3_NIXwZCEnBF1Fup9seczdYk7fcWKKtHEQu5qwKpLhHz96Mg" alt="" />
-  <!-- Triptych left panel (music×math) — lower left margin -->
-  <img class="margin-deco-img" style="top:58%; opacity:0.09;" src="https://lh3.googleusercontent.com/aida/ADBb0uiVtk88afAxkmarCiWkBnYc7Kf6ez67Iws-yJuxmJPGFZfUeKshgiUlfZMP-DgsUOa0RNAvww4nMXaytmIYRuknS0yYAIwz87g34Fq-O9oHY_9ZvYNadToZ6lJfMvu0MTpyvvuSdzwJDWS2U9lnwI5QNy6MZf30aNSS9_JNrTNxp-Fj7awnu8LD_fz6tQAeXuzZ5qELwib50hmaVt3N5zaJdnGxJVrytN0a3eF4qEYRfR2CSqBNsm4OHaw" alt="" />
+  <img class="margin-deco-img" style="top:5%;width:115%;left:-8%;transform:rotate(2deg);" src="https://lh3.googleusercontent.com/aida/ADBb0ugdNtinNRnPzmINSsajNP8_jROCRxELkzXsP4rXtTDcgK3J4lT9JDoEjZzvn1jLyyXwqB9LNKCtHO9j-Z69tGyxv6urG4JJGgANlf-ZvWfyB7sJ1BXbKzNNBoNOxKR49gl7eE96GcYyJk_hiin55URgkh1iTZvqAEKuHvBXG6XELW64L8RUeqK5LriwJsZ883ekhxUzqQ3_NIXwZCEnBF1Fup9seczdYk7fcWKKtHEQu5qwKpLhHz96Mg" alt="" />
+  <img class="margin-deco-img" style="top:58%;width:90%;left:5%;transform:rotate(-1.5deg);opacity:0.18;" src="https://lh3.googleusercontent.com/aida/ADBb0uiVtk88afAxkmarCiWkBnYc7Kf6ez67Iws-yJuxmJPGFZfUeKshgiUlfZMP-DgsUOa0RNAvww4nMXaytmIYRuknS0yYAIwz87g34Fq-O9oHY_9ZvYNadToZ6lJfMvu0MTpyvvuSdzwJDWS2U9lnwI5QNy6MZf30aNSS9_JNrTNxp-Fj7awnu8LD_fz6tQAeXuzZ5qELwib50hmaVt3N5zaJdnGxJVrytN0a3eF4qEYRfR2CSqBNsm4OHaw" alt="" />
 </div>
 <div class="margin-deco margin-deco-right" aria-hidden="true">
-  <!-- Geography × Physics — top of right margin -->
-  <img class="margin-deco-img" style="top:18%;" src="https://lh3.googleusercontent.com/aida/ADBb0uhtg7zk84LSTf2sl8AMTwe-DRrNeBFrXDO1_88ZboFnLK3_eQ5OvCbtAp4Mcpt910H_vP3PoRlJdcnLVMV7g248jdLGicV4h0R2CIM10NVBVtJu2qM1Y7KBpCNtwbSrIsToiEg_5MqU7-HZfVeiVeKYoXyxT4wj2WWt_jKiywbTDMQWVq9u263SHHUmVGziZ57Ue19nTrgb1yJsj2--9a1CXqtNha3ZRJngQnJQO1aWUODRVsaMxolY9w" alt="" />
-  <!-- Chemistry × Political Science — lower right margin -->
-  <img class="margin-deco-img" style="top:62%;" src="https://lh3.googleusercontent.com/aida/ADBb0uiQS6rpWKwUI_-1WTppueHO7i3vUXanqMEgH9OsmQ_trkkQiP0HbPx_DOc6DuZtnurF-0clSG14jWtFEMLjmxJzxeAptvaAJeU3PEf_dniGpY7vW_DEAgXW91Bi-Bb766_4KhAFOEnfXksEWF5gT1om7zIMhmxxBNSYC7kpAxWglUxcVUzHCeqGJXsiFd4aU0c45ealvtBYvwKjY-jMMUQpj0SnuB8DVGocAQJUms4p-cCSMwQ8T0LwNRM" alt="" />
+  <img class="margin-deco-img" style="top:22%;width:110%;right:-6%;transform:rotate(-2deg);" src="https://lh3.googleusercontent.com/aida/ADBb0uhtg7zk84LSTf2sl8AMTwe-DRrNeBFrXDO1_88ZboFnLK3_eQ5OvCbtAp4Mcpt910H_vP3PoRlJdcnLVMV7g248jdLGicV4h0R2CIM10NVBVtJu2qM1Y7KBpCNtwbSrIsToiEg_5MqU7-HZfVeiVeKYoXyxT4wj2WWt_jKiywbTDMQWVq9u263SHHUmVGziZ57Ue19nTrgb1yJsj2--9a1CXqtNha3ZRJngQnJQO1aWUODRVsaMxolY9w" alt="" />
+  <img class="margin-deco-img" style="top:65%;width:88%;left:4%;transform:rotate(1.5deg);opacity:0.20;" src="https://lh3.googleusercontent.com/aida/ADBb0uiQS6rpWKwUI_-1WTppueHO7i3vUXanqMEgH9OsmQ_trkkQiP0HbPx_DOc6DuZtnurF-0clSG14jWtFEMLjmxJzxeAptvaAJeU3PEf_dniGpY7vW_DEAgXW91Bi-Bb766_4KhAFOEnfXksEWF5gT1om7zIMhmxxBNSYC7kpAxWglUxcVUzHCeqGJXsiFd4aU0c45ealvtBYvwKjY-jMMUQpj0SnuB8DVGocAQJUms4p-cCSMwQ8T0LwNRM" alt="" />
 </div>
 
 <!-- ===== ONBOARDING ===== -->
@@ -773,7 +764,6 @@ body::before {
       <p>Every weekday morning, Confluence brings you one unexpected connection, from across the full map of human knowledge.</p>
       <p>Read in five minutes. Something you can't unsee.</p>
     </div>
-    <img class="ob-hero-illustration" src="https://lh3.googleusercontent.com/aida/ADBb0uiVtk88afAxkmarCiWkBnYc7Kf6ez67Iws-yJuxmJPGFZfUeKshgiUlfZMP-DgsUOa0RNAvww4nMXaytmIYRuknS0yYAIwz87g34Fq-O9oHY_9ZvYNadToZ6lJfMvu0MTpyvvuSdzwJDWS2U9lnwI5QNy6MZf30aNSS9_JNrTNxp-Fj7awnu8LD_fz6tQAeXuzZ5qELwib50hmaVt3N5zaJdnGxJVrytN0a3eF4qEYRfR2CSqBNsm4OHaw" alt="" aria-hidden="true" />
   </div>
 
   <!-- SAMPLE LENS -->
@@ -1711,8 +1701,8 @@ function renderCard(card, discipline) {
       })()}
       <div class="card-actions">
         <div class="share-row">
-          <button class="share-btn" onclick="shareWhatsApp()">Share on WhatsApp</button>
-          <button class="share-btn" onclick="copyCard()">Copy text</button>
+          <button class="share-btn" onclick="shareWhatsApp()"><span class="material-symbols-outlined" style="font-size:16px;">share</span> Share on WhatsApp</button>
+          <button class="share-btn" onclick="copyCard()"><span class="material-symbols-outlined" style="font-size:16px;">content_copy</span> Copy text</button>
         </div>
       </div>
     </div>`;
