@@ -160,9 +160,8 @@ body::before {
 .ob-card {
   background: var(--card); border: 1px solid var(--border);
   border-radius: 2px; padding: 36px 32px 32px;
-  box-shadow: 0 2px 24px rgba(26,22,20,0.07);
 }
-.ob-section { margin-bottom: 28px; }
+.ob-section { margin-bottom: 40px; }
 .ob-label {
   font-family: 'JetBrains Mono', monospace;
   font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
@@ -189,15 +188,14 @@ body::before {
 .chip.selected { background: var(--accent); color: #fff; border-color: var(--accent); }
 .ob-divider { height: 1px; background: var(--border); margin: 4px 0 28px; }
 #ob-submit {
-  display: block; width: 100%; margin-top: 32px; padding: 16px 24px;
+  display: block; width: 100%; margin-top: 36px; padding: 18px 24px;
   font-family: 'Playfair Display', Georgia, serif;
-  font-size: 17px; font-style: italic; font-weight: 600;
+  font-size: 18px; font-style: italic; font-weight: 600;
   color: #fff; background: var(--accent); border: none; border-radius: 1px;
-  cursor: pointer; transition: background 0.2s, transform 0.1s;
+  cursor: pointer; transition: background 0.2s; letter-spacing: 0.01em;
 }
-#ob-submit:hover { background: #a33a08; transform: translateY(-1px); }
-#ob-submit:active { transform: translateY(0); }
-#ob-submit:disabled { opacity: 0.35; cursor: not-allowed; transform: none; }
+#ob-submit:hover { background: #a33a08; }
+#ob-submit:disabled { opacity: 0.35; cursor: not-allowed; }
 
 /* ===== WEEKDAY STRIP ===== */
 .weekday-strip { padding: 24px 0 4px; }
@@ -278,10 +276,9 @@ body::before {
 /* ===== INSIGHT CARD ===== */
 .card {
   background: var(--card); border: 1px solid var(--border);
-  border-left: 4px solid var(--accent); border-radius: 2px;
-  padding: 40px 36px 32px; box-shadow: 0 4px 40px rgba(26,22,20,0.09);
+  border-radius: 2px; padding: 52px 40px 44px;
   position: relative; overflow: hidden; margin-bottom: 0;
-  animation: fadeUp 0.5s ease both;
+  animation: fadeIn 0.3s ease both;
   overflow-wrap: break-word; word-break: break-word;
 }
 .card-watermark {
@@ -309,7 +306,7 @@ body::before {
   border-left: 3px solid var(--accent);
   letter-spacing: -0.01em;
 }
-.card-body { margin-bottom: 32px; }
+.card-body { margin-bottom: 40px; }
 .card-para {
   font-family: 'Source Serif 4', Georgia, serif;
   font-size: 16px; font-weight: 300; line-height: 1.9;
@@ -334,8 +331,8 @@ body::before {
   color: var(--muted); margin-top: 12px; line-height: 1.6;
 }
 .card-why-box {
-  background: var(--paper2); border-left: 3px solid var(--accent);
-  padding: 16px 20px; margin-bottom: 28px; border-radius: 0 1px 1px 0;
+  background: var(--paper2); border-left: 2px solid var(--accent);
+  padding: 20px 24px; margin-bottom: 32px; border-radius: 0 1px 1px 0;
 }
 .card-why-label {
   font-family: 'JetBrains Mono', monospace; font-size: 9px;
@@ -354,12 +351,12 @@ body::before {
 .card-actions { margin-bottom: 10px; }
 .share-row { display: flex; gap: 8px; margin-bottom: 8px; align-items: stretch; }
 .share-btn {
-  display: block; width: 100%; box-sizing: border-box;
-  height: 42px; border: 1px solid var(--border); border-radius: 2px;
-  font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 400;
+  display: inline-block; padding: 0 16px;
+  height: 36px; border: 1px solid var(--border); border-radius: 2px;
+  font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: 400;
   letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer;
   transition: all 0.15s; background: transparent; color: var(--muted);
-  margin-bottom: 8px;
+  margin-bottom: 0; width: auto;
 }
 .share-btn:hover { border-color: var(--accent); color: var(--accent); }
 .btn-action {
@@ -383,21 +380,19 @@ body::before {
 
 /* ===== TOMORROW ===== */
 .tomorrow-wrap {
-  padding: 44px 0 20px; border-top: 1px solid var(--border); margin-top: 32px;
-  text-align: center; animation: fadeUp 0.5s ease 0.3s both;
+  padding: 56px 0 32px; border-top: 1px solid var(--border);
+  margin-top: 40px; text-align: center;
+  animation: fadeIn 0.5s ease 0.2s both;
 }
-.tomorrow-sunrise { font-size: 28px; margin-bottom: 20px; display: block; animation: pulse 3s ease infinite; }
-.tomorrow-main {
+.tomorrow-label {
+  font-family: 'JetBrains Mono', monospace; font-size: 10px;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 16px;
+}
+.tomorrow-discipline {
   font-family: 'Playfair Display', Georgia, serif;
-  font-size: 18px; font-weight: 600; color: var(--ink); margin-bottom: 14px; line-height: 1.4;
-}
-.tomorrow-body {
-  font-family: 'Source Serif 4', Georgia, serif;
-  font-size: 15px; font-weight: 300; color: var(--muted); line-height: 1.8; margin-bottom: 14px;
-}
-.tomorrow-sub {
-  font-family: 'Playfair Display', Georgia, serif;
-  font-size: 15px; font-style: italic; color: var(--muted);
+  font-size: clamp(28px, 6vw, 42px); font-style: italic; font-weight: 400;
+  color: var(--ink); line-height: 1.2;
 }
 
 /* ===== LATTICE ===== */
@@ -526,7 +521,7 @@ body::before {
   .ob-hero { padding: 48px 20px 40px; }
   .ob-form-wrap { padding: 36px 20px 60px; }
   .ob-card { padding: 24px 18px; }
-  .card { padding: 28px 20px 24px; }
+  .card { padding: 36px 24px 32px; }
   .visual-wrap { margin: 0 -20px 24px; padding: 20px; }
   .about-wrap { padding: 32px 0 60px; }
   .page-wrap { padding: 0 20px 80px; }
@@ -670,7 +665,6 @@ body::before {
   <div class="sample-lens-wrap">
     <div class="sample-lens-label">Here's what a lens looks like</div>
     <div class="card" style="animation:none;">
-      <div class="card-watermark">Economics</div>
       <div class="card-hook">In September 1838, Charles Darwin picked up an economics essay for fun. It changed biology forever.</div>
       <div class="card-disc-tag">📊 Economics × Biology</div>
       <div class="card-body">
@@ -790,9 +784,6 @@ body::before {
     <div id="tomorrow-area"></div>
     <div id="lattice-area"></div>
 
-    <div class="app-footer">
-      <button class="footer-link" onclick="showScreen('screen-about')">About Confluence</button>
-    </div>
   </div>
 </div>
 
@@ -1551,16 +1542,11 @@ function renderCard(card, discipline) {
 
   document.getElementById('card-area').innerHTML = `
     <div class="card">
-      <div class="card-watermark">${discipline}</div>
       <div class="card-hook">${card.hook || ''}</div>
       <div class="card-disc-tag">${clusterEmoji} ${discipline} × Your World</div>
       <div class="card-body">
         ${card.para1 ? `<p class="card-para">${card.para1}</p>` : ''}
         ${card.para2 ? `<p class="card-para">${card.para2}</p>` : ''}
-      </div>
-      <div class="visual-wrap">
-        <div class="visual-svg-container">${renderBridge(bd)}</div>
-        ${caption ? `<div class="visual-caption">${caption}</div>` : ''}
       </div>
       ${card.whyItMatters ? `
       <div class="card-why-box">
@@ -1585,7 +1571,6 @@ function renderCard(card, discipline) {
         </div>`;
       })()}
       <div class="card-actions">
-        <button class="btn-calendar" onclick="addToCalendar()">Add to my morning routine</button>
         <div class="share-row">
           <button class="share-btn" onclick="shareWhatsApp()">Share on WhatsApp</button>
           <button class="share-btn" onclick="copyCard()">Copy text</button>
@@ -1680,13 +1665,11 @@ function getNextWeekdayDiscipline() {
 
 function renderTomorrow(todayDiscipline) {
   const nextDisc = getNextWeekdayDiscipline();
-  const name     = state.profile.name || 'Friend';
   const isFriday = new Date().getDay() === 5;
   document.getElementById('tomorrow-area').innerHTML = `
     <div class="tomorrow-wrap">
-      <span class="tomorrow-sunrise">🌅</span>
-      <div class="tomorrow-main">${name}, that's today's ${todayDiscipline} lens.</div>
-      <div class="tomorrow-sub">${isFriday ? 'Monday' : 'Tomorrow'}: <em>${nextDisc}</em>. See you then.</div>
+      <div class="tomorrow-label">${isFriday ? 'Monday' : 'Tomorrow'}</div>
+      <div class="tomorrow-discipline">${nextDisc}</div>
     </div>`;
 }
 
