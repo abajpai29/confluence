@@ -167,11 +167,10 @@ body::before {
 .ob-hero {
   max-width: 680px; margin: 0 auto; padding: 36px 24px 48px;
   border-bottom: 1px solid var(--border);
-  position: relative; overflow: hidden;
+  position: relative; overflow: hidden; z-index: 1;
 }
 .ob-hero-illustration {
-  width: 100%; display: block;
-  margin: 32px 0 0;
+  position: absolute; bottom: 0; left: 0; width: 100%;
   opacity: 0.11;
   -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 40%, transparent 100%);
   mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 40%, transparent 100%);
@@ -471,7 +470,7 @@ body::before {
 
 /* ===== WEEKEND ===== */
 #screen-weekend { animation: fadeUp 0.4s ease both; }
-.weekend-wrap { max-width: 480px; margin: 0 auto; padding: 80px 24px; text-align: center; }
+.weekend-wrap { max-width: 480px; margin: 0 auto; padding: 80px 24px; text-align: center; position: relative; z-index: 1; }
 .weekend-logo {
   font-family: 'Playfair Display', Georgia, serif;
   font-size: 18px; font-weight: 700; color: var(--ink); margin-bottom: 48px;
@@ -509,7 +508,7 @@ body::before {
   border: none; cursor: pointer; padding: 4px 0; transition: color 0.15s;
 }
 .back-btn:hover { color: var(--accent); }
-.about-wrap { max-width: 580px; margin: 0 auto; padding: 56px 0 80px; }
+.about-wrap { max-width: 580px; margin: 0 auto; padding: 56px 0 80px; position: relative; z-index: 1; }
 .about-eyebrow {
   font-family: 'JetBrains Mono', monospace; font-size: 11px;
   letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent); margin-bottom: 20px;
@@ -690,13 +689,6 @@ body::before {
   color: var(--ink); font-style: italic;
 }
 
-/* ===== STREAK ===== */
-.streak-badge {
-  margin-left: auto;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase;
-  color: var(--accent); opacity: 0.8;
-}
   </style>
 </head>
 <body>
@@ -1932,12 +1924,11 @@ function renderWeekdayStrip() {
   const todayIdx = (dow >= 1 && dow <= 5) ? dow - 1 : -1;
   const el = document.getElementById('weekday-strip');
   if (!el) return;
-  const streakHtml = state.streak > 0 ? `<div class="streak-badge">Day ${state.streak}</div>` : '';
   el.innerHTML = `<div class="weekday-strip-inner">${labels.map((d,i) => `
     <div class="weekday-dot ${i === todayIdx ? 'active' : i < todayIdx ? 'past' : ''}">
       <div class="weekday-circle"></div>
       <div class="weekday-day-label">${d}</div>
-    </div>`).join('')}${streakHtml}</div>`;
+    </div>`).join('')}</div>`;
 }
 
 // ============================================================
