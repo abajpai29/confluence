@@ -45,6 +45,7 @@ body {
   font-family: 'Source Serif 4', Georgia, serif;
   background: var(--paper);
   color: var(--ink);
+  position: relative;
   min-height: 100vh;
   line-height: 1.75;
   overflow-x: hidden;
@@ -114,17 +115,17 @@ body::before {
 .margin-deco { display: none; }
 @media (min-width: 900px) {
   .margin-deco {
-    display: block; position: fixed; top: 0; height: 100%;
+    display: block; position: absolute; top: 0; height: 100%;
     width: calc((100vw - 840px) / 2);
-    overflow: hidden; pointer-events: none; z-index: 0;
+    overflow: visible; pointer-events: none; z-index: 0;
   }
   .margin-deco-left { left: 0; }
   .margin-deco-right { right: 0; }
   .margin-deco-img {
     position: absolute; height: auto;
     opacity: 0.22;
-    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 12%, black 82%, transparent 100%);
-    mask-image: linear-gradient(to bottom, transparent 0%, black 12%, black 82%, transparent 100%);
+    -webkit-mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
+    mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
   }
 }
 
@@ -741,12 +742,16 @@ body::before {
 
 <!-- Margin decorations — desktop only, fixed to viewport sides -->
 <div class="margin-deco margin-deco-left" aria-hidden="true">
-  <img class="margin-deco-img" style="top:5%;width:115%;left:-8%;transform:rotate(2deg);" src="https://lh3.googleusercontent.com/aida/ADBb0ugdNtinNRnPzmINSsajNP8_jROCRxELkzXsP4rXtTDcgK3J4lT9JDoEjZzvn1jLyyXwqB9LNKCtHO9j-Z69tGyxv6urG4JJGgANlf-ZvWfyB7sJ1BXbKzNNBoNOxKR49gl7eE96GcYyJk_hiin55URgkh1iTZvqAEKuHvBXG6XELW64L8RUeqK5LriwJsZ883ekhxUzqQ3_NIXwZCEnBF1Fup9seczdYk7fcWKKtHEQu5qwKpLhHz96Mg" alt="" />
-  <img class="margin-deco-img" style="top:58%;width:90%;left:5%;transform:rotate(-1.5deg);opacity:0.18;" src="https://lh3.googleusercontent.com/aida/ADBb0uiVtk88afAxkmarCiWkBnYc7Kf6ez67Iws-yJuxmJPGFZfUeKshgiUlfZMP-DgsUOa0RNAvww4nMXaytmIYRuknS0yYAIwz87g34Fq-O9oHY_9ZvYNadToZ6lJfMvu0MTpyvvuSdzwJDWS2U9lnwI5QNy6MZf30aNSS9_JNrTNxp-Fj7awnu8LD_fz6tQAeXuzZ5qELwib50hmaVt3N5zaJdnGxJVrytN0a3eF4qEYRfR2CSqBNsm4OHaw" alt="" />
+  <!-- Large, prominent, top — Lit×Bio -->
+  <img class="margin-deco-img" style="top:8vh;width:75%;left:4%;transform:rotate(3deg);" src="https://lh3.googleusercontent.com/aida/ADBb0ugdNtinNRnPzmINSsajNP8_jROCRxELkzXsP4rXtTDcgK3J4lT9JDoEjZzvn1jLyyXwqB9LNKCtHO9j-Z69tGyxv6urG4JJGgANlf-ZvWfyB7sJ1BXbKzNNBoNOxKR49gl7eE96GcYyJk_hiin55URgkh1iTZvqAEKuHvBXG6XELW64L8RUeqK5LriwJsZ883ekhxUzqQ3_NIXwZCEnBF1Fup9seczdYk7fcWKKtHEQu5qwKpLhHz96Mg" alt="" />
+  <!-- Small, offset low — triptych crop -->
+  <img class="margin-deco-img" style="top:62vh;width:45%;left:18%;transform:rotate(-2.5deg);opacity:0.18;" src="https://lh3.googleusercontent.com/aida/ADBb0uiVtk88afAxkmarCiWkBnYc7Kf6ez67Iws-yJuxmJPGFZfUeKshgiUlfZMP-DgsUOa0RNAvww4nMXaytmIYRuknS0yYAIwz87g34Fq-O9oHY_9ZvYNadToZ6lJfMvu0MTpyvvuSdzwJDWS2U9lnwI5QNy6MZf30aNSS9_JNrTNxp-Fj7awnu8LD_fz6tQAeXuzZ5qELwib50hmaVt3N5zaJdnGxJVrytN0a3eF4qEYRfR2CSqBNsm4OHaw" alt="" />
 </div>
 <div class="margin-deco margin-deco-right" aria-hidden="true">
-  <img class="margin-deco-img" style="top:22%;width:110%;right:-6%;transform:rotate(-2deg);" src="https://lh3.googleusercontent.com/aida/ADBb0uhtg7zk84LSTf2sl8AMTwe-DRrNeBFrXDO1_88ZboFnLK3_eQ5OvCbtAp4Mcpt910H_vP3PoRlJdcnLVMV7g248jdLGicV4h0R2CIM10NVBVtJu2qM1Y7KBpCNtwbSrIsToiEg_5MqU7-HZfVeiVeKYoXyxT4wj2WWt_jKiywbTDMQWVq9u263SHHUmVGziZ57Ue19nTrgb1yJsj2--9a1CXqtNha3ZRJngQnJQO1aWUODRVsaMxolY9w" alt="" />
-  <img class="margin-deco-img" style="top:65%;width:88%;left:4%;transform:rotate(1.5deg);opacity:0.20;" src="https://lh3.googleusercontent.com/aida/ADBb0uiQS6rpWKwUI_-1WTppueHO7i3vUXanqMEgH9OsmQ_trkkQiP0HbPx_DOc6DuZtnurF-0clSG14jWtFEMLjmxJzxeAptvaAJeU3PEf_dniGpY7vW_DEAgXW91Bi-Bb766_4KhAFOEnfXksEWF5gT1om7zIMhmxxBNSYC7kpAxWglUxcVUzHCeqGJXsiFd4aU0c45ealvtBYvwKjY-jMMUQpj0SnuB8DVGocAQJUms4p-cCSMwQ8T0LwNRM" alt="" />
+  <!-- Small, upper-mid — Geo×Physics -->
+  <img class="margin-deco-img" style="top:18vh;width:48%;left:8%;transform:rotate(-3.5deg);" src="https://lh3.googleusercontent.com/aida/ADBb0uhtg7zk84LSTf2sl8AMTwe-DRrNeBFrXDO1_88ZboFnLK3_eQ5OvCbtAp4Mcpt910H_vP3PoRlJdcnLVMV7g248jdLGicV4h0R2CIM10NVBVtJu2qM1Y7KBpCNtwbSrIsToiEg_5MqU7-HZfVeiVeKYoXyxT4wj2WWt_jKiywbTDMQWVq9u263SHHUmVGziZ57Ue19nTrgb1yJsj2--9a1CXqtNha3ZRJngQnJQO1aWUODRVsaMxolY9w" alt="" />
+  <!-- Large, lower — Chem×PolSci -->
+  <img class="margin-deco-img" style="top:52vh;width:80%;left:-4%;transform:rotate(2deg);opacity:0.20;" src="https://lh3.googleusercontent.com/aida/ADBb0uiQS6rpWKwUI_-1WTppueHO7i3vUXanqMEgH9OsmQ_trkkQiP0HbPx_DOc6DuZtnurF-0clSG14jWtFEMLjmxJzxeAptvaAJeU3PEf_dniGpY7vW_DEAgXW91Bi-Bb766_4KhAFOEnfXksEWF5gT1om7zIMhmxxBNSYC7kpAxWglUxcVUzHCeqGJXsiFd4aU0c45ealvtBYvwKjY-jMMUQpj0SnuB8DVGocAQJUms4p-cCSMwQ8T0LwNRM" alt="" />
 </div>
 
 <!-- ===== ONBOARDING ===== -->
