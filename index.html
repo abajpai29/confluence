@@ -1567,7 +1567,7 @@ function renderCard(card, discipline) {
         <div class="card-why-label">Why this matters for you</div>
         <div class="card-why-text">${card.whyItMatters}</div>
       </div>` : ''}
-      ${card.thinkingPrompt ? `
+      ${(state.cardCount >= 15) && card.thinkingPrompt ? `
       <div class="card-thinking">
         <div class="card-thinking-label">${card.thinkingPrompt.label || 'Think further'}</div>
         <div class="card-thinking-prompt">${card.thinkingPrompt.prompt}</div>
