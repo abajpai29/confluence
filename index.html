@@ -31,7 +31,7 @@
   --paper2: #ede8dc;
   --card: #ffffff;
   --accent: #c4460a;
-  --muted: #8a7d6b;
+  --muted: #8a6f52;
   --warm: #8b6914;
   --border: #d4c9b0;
   --gold: #b8860b;
@@ -80,6 +80,16 @@ body::before {
 /* ===== SHARED LAYOUT ===== */
 .page-wrap {
   max-width: 680px; margin: 0 auto; padding: 0 24px 80px;
+}
+@media (min-width: 768px) {
+  .page-wrap { max-width: 960px; }
+}
+.app-columns { display: grid; grid-template-columns: 1fr; gap: 0; }
+@media (min-width: 768px) {
+  .app-columns { grid-template-columns: 58% 38%; gap: 0 48px; align-items: start; }
+  .app-col-side { position: sticky; top: 32px; }
+  .app-col-side .tomorrow-wrap { border-top: none; margin-top: 0; padding-top: 16px; }
+  .app-col-side .constellation-wrap { border-top: none; margin-top: 0; padding-top: 0; }
 }
 
 /* ===== APP HEADER ===== */
@@ -144,7 +154,7 @@ body::before {
 .ob-body {
   font-family: 'Source Serif 4', Georgia, serif;
   font-size: 17px; font-weight: 300; line-height: 1.9;
-  color: var(--ink); max-width: 540px;
+  color: #3d3020; max-width: 540px;
 }
 .ob-body p { margin-bottom: 14px; }
 .ob-body p:last-child { margin-bottom: 0; }
@@ -292,6 +302,7 @@ body::before {
   font-family: 'Playfair Display', Georgia, serif;
   font-size: clamp(20px, 4vw, 26px); font-style: italic; font-weight: 400;
   color: var(--ink); line-height: 1.45; margin-bottom: 12px; letter-spacing: -0.01em;
+  border-left: 2px solid var(--accent); padding-left: 16px;
 }
 .card-disc-tag {
   font-family: 'JetBrains Mono', monospace; font-size: 10px;
@@ -310,7 +321,7 @@ body::before {
 .card-para {
   font-family: 'Source Serif 4', Georgia, serif;
   font-size: 17px; font-weight: 300; line-height: 1.9;
-  color: var(--ink); margin-bottom: 18px;
+  color: #3d3020; margin-bottom: 18px;
 }
 .card-para:last-child { margin-bottom: 0; }
 .visual-wrap {
@@ -788,12 +799,19 @@ body::before {
     </div>
 
     <div id="connection-animation" class="hidden"></div>
-    <div id="generate-area"></div>
-    <div id="card-area"></div>
-    <div id="tomorrow-area"></div>
-    <div id="lattice-area"></div>
-    <div class="app-footer">
-      <button class="footer-link" onclick="showScreen('screen-about')">About Confluence</button>
+    <div class="app-columns">
+      <div class="app-col-main">
+        <div id="generate-area"></div>
+        <div id="card-area"></div>
+        <div id="close-line-area"></div>
+      </div>
+      <div class="app-col-side">
+        <div id="lattice-area"></div>
+        <div id="tomorrow-area"></div>
+        <div class="app-footer">
+          <button class="footer-link" onclick="showScreen('screen-about')">About Confluence</button>
+        </div>
+      </div>
     </div>
 
   </div>
@@ -1679,13 +1697,14 @@ function getNextWeekdayDiscipline() {
 function renderTomorrow(todayDiscipline) {
   const nextDisc = getNextWeekdayDiscipline();
   const isFriday = new Date().getDay() === 5;
-  const name = state.profile?.name || 'Friend';
   document.getElementById('tomorrow-area').innerHTML = `
-    <p class="card-close-line">${name}, that's today's ${todayDiscipline} lens.</p>
     <div class="tomorrow-wrap">
       <div class="tomorrow-label">${isFriday ? 'Monday' : 'Tomorrow'}</div>
       <div class="tomorrow-discipline">${nextDisc}</div>
     </div>`;
+  const name = state.profile?.name || 'Friend';
+  const cl = document.getElementById('close-line-area');
+  if (cl) cl.innerHTML = `<p class="card-close-line">${name}, that's today's ${todayDiscipline} lens.</p>`;
 }
 
 // ============================================================
@@ -1774,13 +1793,19 @@ function renderConstellation(newDiscipline) {
     <circle cx="${cx}" cy="${cy}" r="9" fill="#c4460a" opacity="0.95" stroke="#f5f0e8" stroke-width="2"/>
     <text x="${cx}" y="${cy + 4}" font-family="'JetBrains Mono',monospace" font-size="9" fill="#f5f0e8" text-anchor="middle" font-weight="bold">${initial}</text>`;
 
-  const progressCopy = n <= 3
-    ? `${n} of 121 disciplines explored. The lattice grows every day.`
-    : n <= 7
-      ? 'The shape is emerging. Keep exploring.'
-      : n <= 15
-        ? 'A rare lattice. Most people never get here.'
-        : `${name}, this is what a polymathic mind looks like.`;
+  const progressCopy = n === 1
+    ? ''
+    : n <= 3
+      ? 'Each lens adds a node.'
+      : n <= 7
+        ? 'The shape is emerging. Keep exploring.'
+        : n <= 29
+          ? 'A rare lattice. Most people never get here.'
+          : n <= 59
+            ? `${name}, this is what a polymathic mind looks like.`
+            : n <= 99
+              ? 'Two months. The connections are compounding.'
+              : `${name}, you think differently now. Most people never get this far.`;
 
   const notifyHtml = newDiscipline
     ? `<div class="constellation-notify">✦ ${newDiscipline} added to your lattice</div>`
