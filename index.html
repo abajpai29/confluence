@@ -115,17 +115,17 @@ body::before {
 .margin-deco { display: none; }
 @media (min-width: 900px) {
   .margin-deco {
-    display: block; position: absolute; top: 0; height: 100%;
+    display: block; position: fixed; top: 0; height: 100%;
     width: calc((100vw - 840px) / 2);
-    overflow: visible; pointer-events: none; z-index: 0;
+    overflow: hidden; pointer-events: none; z-index: 0;
   }
   .margin-deco-left { left: 0; }
   .margin-deco-right { right: 0; }
   .margin-deco-img {
     position: absolute; height: auto;
-    opacity: 0.22;
-    -webkit-mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
-    mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
+    opacity: 0.28;
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 10%, black 85%, transparent 100%);
+    mask-image: linear-gradient(to bottom, transparent 0%, black 10%, black 85%, transparent 100%);
   }
 }
 
@@ -707,51 +707,40 @@ body::before {
 </head>
 <body>
 
-<!-- Constellation background — fixed, covers full viewport including side margins -->
-<svg id="constellation-bg" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:0.15;">
-  <line x1="8%" y1="12%" x2="23%" y2="31%" stroke="#8a6f52" stroke-width="0.5"/>
-  <line x1="23%" y1="31%" x2="41%" y2="18%" stroke="#8a6f52" stroke-width="0.5"/>
-  <line x1="78%" y1="8%" x2="91%" y2="27%" stroke="#8a6f52" stroke-width="0.5"/>
-  <line x1="91%" y1="27%" x2="84%" y2="51%" stroke="#8a6f52" stroke-width="0.5"/>
-  <line x1="6%" y1="58%" x2="18%" y2="74%" stroke="#8a6f52" stroke-width="0.5"/>
-  <line x1="18%" y1="74%" x2="9%" y2="89%" stroke="#8a6f52" stroke-width="0.5"/>
-  <line x1="82%" y1="63%" x2="94%" y2="78%" stroke="#8a6f52" stroke-width="0.5"/>
-  <line x1="94%" y1="78%" x2="88%" y2="92%" stroke="#8a6f52" stroke-width="0.5"/>
-  <line x1="15%" y1="42%" x2="8%" y2="58%" stroke="#8a6f52" stroke-width="0.5"/>
-  <line x1="87%" y1="38%" x2="82%" y2="63%" stroke="#8a6f52" stroke-width="0.5"/>
-  <line x1="41%" y1="18%" x2="52%" y2="5%" stroke="#8a6f52" stroke-width="0.5"/>
-  <line x1="52%" y1="95%" x2="63%" y2="82%" stroke="#8a6f52" stroke-width="0.5"/>
+<!-- Constellation — margin edges only (x < 15% or x > 85%) -->
+<svg id="constellation-bg" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" style="position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:0.18;">
+  <line x1="8%" y1="12%" x2="13%" y2="31%" stroke="#8a6f52" stroke-width="0.5"/>
+  <line x1="6%" y1="58%" x2="11%" y2="74%" stroke="#8a6f52" stroke-width="0.5"/>
+  <line x1="11%" y1="74%" x2="7%" y2="89%" stroke="#8a6f52" stroke-width="0.5"/>
+  <line x1="9%" y1="42%" x2="6%" y2="58%" stroke="#8a6f52" stroke-width="0.5"/>
+  <line x1="87%" y1="8%" x2="93%" y2="27%" stroke="#8a6f52" stroke-width="0.5"/>
+  <line x1="93%" y1="27%" x2="88%" y2="51%" stroke="#8a6f52" stroke-width="0.5"/>
+  <line x1="86%" y1="63%" x2="94%" y2="78%" stroke="#8a6f52" stroke-width="0.5"/>
+  <line x1="94%" y1="78%" x2="89%" y2="92%" stroke="#8a6f52" stroke-width="0.5"/>
+  <line x1="91%" y1="38%" x2="86%" y2="63%" stroke="#8a6f52" stroke-width="0.5"/>
   <circle cx="8%" cy="12%" r="2.5" fill="#c4460a"/>
-  <circle cx="23%" cy="31%" r="2" fill="#8a6f52"/>
-  <circle cx="41%" cy="18%" r="1.5" fill="#8a6f52"/>
-  <circle cx="78%" cy="8%" r="2" fill="#8a6f52"/>
-  <circle cx="91%" cy="27%" r="2.5" fill="#c4460a"/>
-  <circle cx="84%" cy="51%" r="1.5" fill="#8a6f52"/>
+  <circle cx="13%" cy="31%" r="1.5" fill="#8a6f52"/>
   <circle cx="6%" cy="58%" r="2" fill="#8a6f52"/>
-  <circle cx="18%" cy="74%" r="1.5" fill="#8a6f52"/>
-  <circle cx="9%" cy="89%" r="2" fill="#8a6f52"/>
-  <circle cx="82%" cy="63%" r="2.5" fill="#c4460a"/>
+  <circle cx="11%" cy="74%" r="1.5" fill="#8a6f52"/>
+  <circle cx="7%" cy="89%" r="2" fill="#8a6f52"/>
+  <circle cx="9%" cy="42%" r="1.5" fill="#8a6f52"/>
+  <circle cx="87%" cy="8%" r="2" fill="#8a6f52"/>
+  <circle cx="93%" cy="27%" r="2.5" fill="#c4460a"/>
+  <circle cx="88%" cy="51%" r="1.5" fill="#8a6f52"/>
+  <circle cx="86%" cy="63%" r="2.5" fill="#c4460a"/>
   <circle cx="94%" cy="78%" r="2" fill="#8a6f52"/>
-  <circle cx="88%" cy="92%" r="1.5" fill="#8a6f52"/>
-  <circle cx="15%" cy="42%" r="2" fill="#8a6f52"/>
-  <circle cx="87%" cy="38%" r="1.5" fill="#8a6f52"/>
-  <circle cx="52%" cy="95%" r="2" fill="#8a6f52"/>
-  <circle cx="48%" cy="5%" r="1.5" fill="#8a6f52"/>
-  <circle cx="63%" cy="82%" r="2" fill="#8a6f52"/>
+  <circle cx="89%" cy="92%" r="1.5" fill="#8a6f52"/>
+  <circle cx="91%" cy="38%" r="1.5" fill="#8a6f52"/>
 </svg>
 
 <!-- Margin decorations — desktop only, fixed to viewport sides -->
 <div class="margin-deco margin-deco-left" aria-hidden="true">
-  <!-- Large, prominent, top — Lit×Bio -->
-  <img class="margin-deco-img" style="top:8vh;width:75%;left:4%;transform:rotate(3deg);" src="https://lh3.googleusercontent.com/aida/ADBb0ugdNtinNRnPzmINSsajNP8_jROCRxELkzXsP4rXtTDcgK3J4lT9JDoEjZzvn1jLyyXwqB9LNKCtHO9j-Z69tGyxv6urG4JJGgANlf-ZvWfyB7sJ1BXbKzNNBoNOxKR49gl7eE96GcYyJk_hiin55URgkh1iTZvqAEKuHvBXG6XELW64L8RUeqK5LriwJsZ883ekhxUzqQ3_NIXwZCEnBF1Fup9seczdYk7fcWKKtHEQu5qwKpLhHz96Mg" alt="" />
-  <!-- Small, offset low — triptych crop -->
-  <img class="margin-deco-img" style="top:62vh;width:45%;left:18%;transform:rotate(-2.5deg);opacity:0.18;" src="https://lh3.googleusercontent.com/aida/ADBb0uiVtk88afAxkmarCiWkBnYc7Kf6ez67Iws-yJuxmJPGFZfUeKshgiUlfZMP-DgsUOa0RNAvww4nMXaytmIYRuknS0yYAIwz87g34Fq-O9oHY_9ZvYNadToZ6lJfMvu0MTpyvvuSdzwJDWS2U9lnwI5QNy6MZf30aNSS9_JNrTNxp-Fj7awnu8LD_fz6tQAeXuzZ5qELwib50hmaVt3N5zaJdnGxJVrytN0a3eF4qEYRfR2CSqBNsm4OHaw" alt="" />
+  <img class="margin-deco-img" style="top:6%;width:95%;left:-2%;transform:rotate(3deg);" src="https://lh3.googleusercontent.com/aida/ADBb0ugdNtinNRnPzmINSsajNP8_jROCRxELkzXsP4rXtTDcgK3J4lT9JDoEjZzvn1jLyyXwqB9LNKCtHO9j-Z69tGyxv6urG4JJGgANlf-ZvWfyB7sJ1BXbKzNNBoNOxKR49gl7eE96GcYyJk_hiin55URgkh1iTZvqAEKuHvBXG6XELW64L8RUeqK5LriwJsZ883ekhxUzqQ3_NIXwZCEnBF1Fup9seczdYk7fcWKKtHEQu5qwKpLhHz96Mg" alt="" />
+  <img class="margin-deco-img" style="top:58%;width:60%;left:15%;transform:rotate(-2.5deg);opacity:0.22;" src="https://lh3.googleusercontent.com/aida/ADBb0uiVtk88afAxkmarCiWkBnYc7Kf6ez67Iws-yJuxmJPGFZfUeKshgiUlfZMP-DgsUOa0RNAvww4nMXaytmIYRuknS0yYAIwz87g34Fq-O9oHY_9ZvYNadToZ6lJfMvu0MTpyvvuSdzwJDWS2U9lnwI5QNy6MZf30aNSS9_JNrTNxp-Fj7awnu8LD_fz6tQAeXuzZ5qELwib50hmaVt3N5zaJdnGxJVrytN0a3eF4qEYRfR2CSqBNsm4OHaw" alt="" />
 </div>
 <div class="margin-deco margin-deco-right" aria-hidden="true">
-  <!-- Small, upper-mid — Geo×Physics -->
-  <img class="margin-deco-img" style="top:18vh;width:48%;left:8%;transform:rotate(-3.5deg);" src="https://lh3.googleusercontent.com/aida/ADBb0uhtg7zk84LSTf2sl8AMTwe-DRrNeBFrXDO1_88ZboFnLK3_eQ5OvCbtAp4Mcpt910H_vP3PoRlJdcnLVMV7g248jdLGicV4h0R2CIM10NVBVtJu2qM1Y7KBpCNtwbSrIsToiEg_5MqU7-HZfVeiVeKYoXyxT4wj2WWt_jKiywbTDMQWVq9u263SHHUmVGziZ57Ue19nTrgb1yJsj2--9a1CXqtNha3ZRJngQnJQO1aWUODRVsaMxolY9w" alt="" />
-  <!-- Large, lower — Chem×PolSci -->
-  <img class="margin-deco-img" style="top:52vh;width:80%;left:-4%;transform:rotate(2deg);opacity:0.20;" src="https://lh3.googleusercontent.com/aida/ADBb0uiQS6rpWKwUI_-1WTppueHO7i3vUXanqMEgH9OsmQ_trkkQiP0HbPx_DOc6DuZtnurF-0clSG14jWtFEMLjmxJzxeAptvaAJeU3PEf_dniGpY7vW_DEAgXW91Bi-Bb766_4KhAFOEnfXksEWF5gT1om7zIMhmxxBNSYC7kpAxWglUxcVUzHCeqGJXsiFd4aU0c45ealvtBYvwKjY-jMMUQpj0SnuB8DVGocAQJUms4p-cCSMwQ8T0LwNRM" alt="" />
+  <img class="margin-deco-img" style="top:15%;width:60%;left:6%;transform:rotate(-3.5deg);" src="https://lh3.googleusercontent.com/aida/ADBb0uhtg7zk84LSTf2sl8AMTwe-DRrNeBFrXDO1_88ZboFnLK3_eQ5OvCbtAp4Mcpt910H_vP3PoRlJdcnLVMV7g248jdLGicV4h0R2CIM10NVBVtJu2qM1Y7KBpCNtwbSrIsToiEg_5MqU7-HZfVeiVeKYoXyxT4wj2WWt_jKiywbTDMQWVq9u263SHHUmVGziZ57Ue19nTrgb1yJsj2--9a1CXqtNha3ZRJngQnJQO1aWUODRVsaMxolY9w" alt="" />
+  <img class="margin-deco-img" style="top:52%;width:92%;left:-4%;transform:rotate(2deg);opacity:0.25;" src="https://lh3.googleusercontent.com/aida/ADBb0uiQS6rpWKwUI_-1WTppueHO7i3vUXanqMEgH9OsmQ_trkkQiP0HbPx_DOc6DuZtnurF-0clSG14jWtFEMLjmxJzxeAptvaAJeU3PEf_dniGpY7vW_DEAgXW91Bi-Bb766_4KhAFOEnfXksEWF5gT1om7zIMhmxxBNSYC7kpAxWglUxcVUzHCeqGJXsiFd4aU0c45ealvtBYvwKjY-jMMUQpj0SnuB8DVGocAQJUms4p-cCSMwQ8T0LwNRM" alt="" />
 </div>
 
 <!-- ===== ONBOARDING ===== -->
