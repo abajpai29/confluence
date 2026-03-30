@@ -89,8 +89,7 @@ body::before {
 .day-badge {
   font-family: 'JetBrains Mono', monospace;
   font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
-  color: var(--accent); border: 1px solid var(--accent);
-  padding: 3px 10px; display: inline-block;
+  color: var(--accent); display: inline-block;
 }
 .day-badge:empty { display: none; }
 
@@ -162,7 +161,7 @@ body::before {
 }
 .ob-headline {
   font-family: 'Playfair Display', Georgia, serif;
-  font-size: clamp(32px, 6vw, 52px); font-weight: 700;
+  font-size: clamp(36px, 7vw, 48px); font-weight: 700;
   color: var(--ink); line-height: 1.15; margin-bottom: 20px;
   letter-spacing: -0.025em;
 }
@@ -175,7 +174,9 @@ body::before {
 .ob-body p:last-child { margin-bottom: 0; }
 
 .ob-form-wrap {
-  max-width: 680px; margin: 0 auto; padding: 48px 24px 80px;
+  background: var(--paper2);
+  border-top: 1px solid var(--border);
+  padding: 56px 24px 80px;
 }
 .ob-form-kicker {
   font-family: 'Source Serif 4', Georgia, serif;
@@ -185,11 +186,12 @@ body::before {
 .ob-card {
   background: var(--card); border: 1px solid var(--border);
   border-radius: 2px; padding: 36px 32px 32px;
+  max-width: 680px; margin: 0 auto;
 }
 .ob-section { margin-bottom: 48px; }
 .ob-label {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
+  font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase;
   color: var(--muted); margin-bottom: 12px; display: block;
 }
 .ob-label span { font-size: 10px; opacity: 0.85; }
@@ -204,10 +206,10 @@ body::before {
 .ob-input::placeholder { color: var(--muted); opacity: 0.6; }
 .chips { display: flex; flex-wrap: wrap; gap: 8px; }
 .chip {
-  font-family: 'JetBrains Mono', monospace; font-size: 11px;
+  font-family: 'Source Serif 4', Georgia, serif; font-size: 14px; font-weight: 300;
   padding: 10px 18px; border: 1px solid var(--border); border-radius: 1px;
   cursor: pointer; color: var(--muted); background: var(--paper);
-  transition: all 0.15s; letter-spacing: 0.03em; user-select: none;
+  transition: all 0.15s; user-select: none;
 }
 .chip:hover { border-color: var(--accent); color: var(--accent); background: var(--paper2); }
 .chip.selected { background: var(--accent); color: #fff; border-color: var(--accent); }
@@ -219,8 +221,8 @@ body::before {
   color: #fff; background: var(--accent); border: none; border-radius: 1px;
   cursor: pointer; transition: background 0.2s; letter-spacing: 0.02em;
 }
-#ob-submit:hover { background: #a33a08; }
-#ob-submit:disabled { opacity: 0.4; cursor: not-allowed; }
+#ob-submit:hover:not(:disabled) { background: #a33a08; }
+#ob-submit:disabled { opacity: 0.55; cursor: not-allowed; }
 
 /* ===== WEEKDAY STRIP ===== */
 .weekday-strip { padding: 24px 0 4px; }
@@ -322,7 +324,7 @@ body::before {
 }
 .card-hook {
   font-family: 'Playfair Display', Georgia, serif;
-  font-size: clamp(20px, 4vw, 26px); font-style: italic; font-weight: 400;
+  font-size: clamp(18px, 3.5vw, 22px); font-style: italic; font-weight: 400;
   color: var(--ink); line-height: 1.45; margin-bottom: 12px; letter-spacing: -0.01em;
   border-left: 2px solid var(--accent); padding-left: 16px;
 }
@@ -339,7 +341,7 @@ body::before {
   border-left: 3px solid var(--accent);
   letter-spacing: -0.01em;
 }
-.card-body { margin-bottom: 40px; }
+.card-body { margin-bottom: 0; }
 .card-para {
   font-family: 'Source Serif 4', Georgia, serif;
   font-size: 17px; font-weight: 300; line-height: 1.9;
@@ -364,12 +366,12 @@ body::before {
   color: var(--muted); margin-top: 12px; line-height: 1.6;
 }
 .card-why-box {
-  background: var(--paper2);
+  background: #e5dfce;
   border-top: 0.5px solid var(--border);
-  padding: 28px; margin: 0 -28px -28px;
+  padding: 24px 40px 28px; margin: 40px -40px 0;
 }
 .card-why-label {
-  font-family: 'JetBrains Mono', monospace; font-size: 9px;
+  font-family: 'JetBrains Mono', monospace; font-size: 11px;
   letter-spacing: 0.2em; text-transform: uppercase;
   color: var(--muted); margin-bottom: 10px;
 }
@@ -384,13 +386,13 @@ body::before {
 }
 .share-row {
   display: flex; gap: 32px; justify-content: center;
-  padding: 20px 0 24px; border-top: 1px solid var(--border);
+  padding: 28px 0 28px; border-top: 1px solid var(--border);
   margin-top: 4px;
 }
 .share-btn {
   font-family: 'JetBrains Mono', monospace; font-size: 10px;
   letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer;
-  transition: color 0.15s; background: none; border: none; color: var(--muted); padding: 0;
+  transition: color 0.15s; background: none; border: none; color: var(--muted); padding: 8px 0;
 }
 .share-btn:hover { color: var(--ink); }
 .btn-action {
@@ -564,6 +566,7 @@ body::before {
   .ob-form-wrap { padding: 36px 20px 60px; }
   .ob-card { padding: 24px 18px; }
   .card { padding: 36px 24px 32px; }
+  .card-why-box { padding: 20px 24px 24px; margin: 32px -24px 0; }
   .visual-wrap { margin: 0 -20px 24px; padding: 20px; }
   .about-wrap { padding: 32px 0 60px; }
   .page-wrap { padding: 0 20px 80px; }
@@ -622,8 +625,8 @@ body::before {
 }
 .sample-lens-label {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase;
-  color: var(--accent); margin-bottom: 20px; opacity: 0.7;
+  font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 20px;
 }
 .sample-lens-cta {
   display: block; width: 100%; margin-top: 32px; padding: 16px 24px;
@@ -652,15 +655,45 @@ body::before {
 }
 .card-feedback-btns { display: flex; gap: 8px; }
 .feedback-btn {
-  flex: 1; padding: 16px 8px; border: 0.5px solid var(--border);
+  flex: 1; padding: 16px 12px; border: 0.5px solid var(--border);
   background: transparent; cursor: pointer;
-  font-family: 'JetBrains Mono', monospace; font-size: 11px;
-  letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink); transition: background 0.15s; text-align: center;
+  font-family: 'Source Serif 4', Georgia, serif;
+  font-size: 15px; font-weight: 300; font-style: italic;
+  color: var(--ink); transition: background 0.15s; text-align: center;
 }
 .feedback-btn:hover { background: var(--paper2); }
 .card-feedback-thanks {
   font-family: 'Source Serif 4', Georgia, serif;
   font-size: 14px; font-style: italic; font-weight: 300; color: var(--muted);
+}
+
+/* ===== EMAIL CAPTURE ===== */
+.email-capture {
+  padding: 24px 0 8px;
+  border-top: 0.5px solid var(--border);
+  margin-top: 8px;
+}
+.email-capture-label {
+  font-family: 'Source Serif 4', Georgia, serif;
+  font-size: 15px; font-style: italic; font-weight: 300;
+  color: var(--muted); margin-bottom: 12px;
+}
+.email-capture-row { display: flex; gap: 8px; }
+.email-input {
+  flex: 1; padding: 12px 14px;
+  border: 0.5px solid var(--border); background: var(--paper2);
+  font-family: 'Source Serif 4', Georgia, serif; font-size: 15px;
+  color: var(--ink); outline: none;
+}
+.email-input:focus { border-color: var(--accent); }
+.email-submit-btn {
+  padding: 12px 18px; background: var(--accent); color: #fff;
+  border: none; cursor: pointer; font-size: 16px; transition: background 0.15s;
+}
+.email-submit-btn:hover { background: #a33a08; }
+.email-capture-thanks {
+  font-family: 'Source Serif 4', Georgia, serif;
+  font-size: 15px; font-style: italic; font-weight: 300; color: var(--muted);
 }
 
 /* ===== THINKING PROMPT ===== */
@@ -735,19 +768,15 @@ body::before {
         <div class="card-why-text">Your next breakthrough is probably not in your field. It is sitting in a book you would never normally pick up.</div>
       </div>
     </div>
-    <button class="sample-lens-cta" onclick="document.getElementById('ob-form-wrap').scrollIntoView({behavior:'smooth'})">Get yours personalized. Takes 30 seconds.</button>
+    <button class="sample-lens-cta" onclick="document.getElementById('ob-form-wrap').scrollIntoView({behavior:'smooth'})">Get yours personalized.</button>
     <div class="sample-lens-note">Yours is connected to your specific world.</div>
-  </div>
-
-  <div style="text-align:center;padding:48px 24px 40px;">
-    <button onclick="showScreen('screen-about')" style="background:none;border:none;cursor:pointer;font-family:'Source Serif 4',Georgia,serif;font-size:15px;font-style:italic;font-weight:300;color:var(--accent);letter-spacing:0.01em;">Read why we built this →</button>
   </div>
 
   <div class="ob-form-wrap" id="ob-form-wrap">
     <div class="ob-card">
       <div class="ob-section">
         <label class="ob-label">What should we call you?</label>
-        <input type="text" class="ob-input" id="ob-name" placeholder="Your name" maxlength="40" />
+        <input type="text" class="ob-input" id="ob-name" maxlength="40" />
       </div>
       <div class="ob-section">
         <label class="ob-label">What describes you best right now?</label>
@@ -819,6 +848,13 @@ body::before {
         </div>
       </div>
       <button id="ob-submit" disabled>Enter the Confluence</button>
+      <div class="ob-section" style="margin-top: 32px; margin-bottom: 0;">
+        <label class="ob-label">Get your daily lens in your inbox <span>(optional)</span></label>
+        <input type="email" class="ob-input" id="ob-email" />
+      </div>
+      <div style="text-align:center;padding:32px 0 4px;">
+        <button onclick="showScreen('screen-about')" style="background:none;border:none;cursor:pointer;font-family:'Source Serif 4',Georgia,serif;font-size:14px;font-style:italic;font-weight:300;color:var(--muted);letter-spacing:0.01em;">Read why we built this →</button>
+      </div>
     </div>
   </div>
 </div>
@@ -832,6 +868,7 @@ body::before {
         <div class="ob-wordmark-tagline">see through every lens</div>
       </div>
       <div style="display:flex;align-items:center;gap:16px;">
+        <button class="nav-link" onclick="showSaved()">Saved</button>
         <button class="nav-link" onclick="showArchive()">Archive</button>
         <div id="day-badge" class="day-badge"></div>
       </div>
@@ -953,12 +990,31 @@ body::before {
         <div class="app-logo">✦ Confluence</div>
         <div class="ob-wordmark-tagline">see through every lens</div>
       </div>
+      <button class="nav-link" onclick="showScreen('screen-app')">← Back</button>
     </div>
     <div class="archive-header">
       <div class="archive-title">Your Archive</div>
       <div class="archive-sub">Every lens you've looked through.</div>
     </div>
     <div id="archive-list"></div>
+  </div>
+</div>
+
+<!-- ===== SAVED SCREEN ===== -->
+<div id="screen-saved" class="hidden">
+  <div class="page-wrap">
+    <div class="app-header">
+      <div>
+        <div class="app-logo">✦ Confluence</div>
+        <div class="ob-wordmark-tagline">see through every lens</div>
+      </div>
+      <button class="nav-link" onclick="showScreen('screen-app')">← Back</button>
+    </div>
+    <div class="archive-header">
+      <div class="archive-title">Saved Lenses</div>
+      <div class="archive-sub">The ones that changed something.</div>
+    </div>
+    <div id="saved-list"></div>
   </div>
 </div>
 
@@ -1663,6 +1719,14 @@ function renderCard(card, discipline) {
              </div>`;
       })()}
     </div>
+    ${!state.profile?.email ? `
+    <div class="email-capture" id="email-capture-inline">
+      <div class="email-capture-label">Get tomorrow's lens in your inbox.</div>
+      <div class="email-capture-row">
+        <input type="email" class="email-input" id="inline-email" placeholder="your@email.com" />
+        <button class="email-submit-btn" onclick="saveInlineEmail()">→</button>
+      </div>
+    </div>` : ''}
     <div class="share-row">
       <button class="share-btn" onclick="shareWhatsApp()">↗ Share on WhatsApp</button>
       <button class="share-btn" onclick="copyCard()">⎘ Copy text</button>
@@ -1732,6 +1796,17 @@ function toggleBookmark(discipline) {
     showToast('Saved');
   }
   saveState();
+}
+
+function saveInlineEmail() {
+  const val = (document.getElementById('inline-email')?.value || '').trim();
+  if (val && val.includes('@')) {
+    state.profile = state.profile || {};
+    state.profile.email = val;
+    saveState();
+    const el = document.getElementById('email-capture-inline');
+    if (el) el.innerHTML = '<p class="email-capture-thanks">You\'re in.</p>';
+  }
 }
 
 function submitFeedback(response, discipline) {
@@ -1935,7 +2010,7 @@ function renderWeekdayStrip() {
 // SCREEN MANAGEMENT
 // ============================================================
 function showScreen(id) {
-  ['screen-onboarding','screen-app','screen-weekend','screen-about','screen-archive'].forEach(s => {
+  ['screen-onboarding','screen-app','screen-weekend','screen-about','screen-archive','screen-saved'].forEach(s => {
     const el = document.getElementById(s);
     if (el) el.classList.add('hidden');
   });
@@ -1953,6 +2028,32 @@ function showScreen(id) {
 function showArchive() {
   showScreen('screen-archive');
   renderArchive();
+}
+
+function showSaved() {
+  showScreen('screen-saved');
+  renderSaved();
+}
+
+function renderSaved() {
+  const list = document.getElementById('saved-list');
+  if (!list) return;
+  const saved = [...(state.savedCards || [])].reverse();
+  if (!saved.length) {
+    list.innerHTML = '<p class="archive-empty">Nothing saved yet. Tap ☆ on any lens.</p>';
+    return;
+  }
+  list.innerHTML = saved.map(h => {
+    const d = new Date(h.date);
+    const dateStr = d.toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' });
+    return `<div class="archive-item">
+      <div class="archive-item-meta">
+        <span class="archive-discipline">${h.discipline}</span>
+        <span class="archive-date">${dateStr}</span>
+      </div>
+      <div class="archive-hook">${h.hook || ''}</div>
+    </div>`;
+  }).join('');
 }
 
 function renderArchive() {
@@ -2008,12 +2109,14 @@ function initApp() {
 // ONBOARDING SUBMIT
 // ============================================================
 function submitOb() {
+  const emailVal = (document.getElementById('ob-email')?.value || '').trim();
   state.profile = {
     name:      document.getElementById('ob-name').value.trim(),
     lifeStage: getChips('chips-stage')[0] || '',
     domains:   getChips('chips-domain'),
     education: getChips('chips-edu'),
     hobbies:   getChips('chips-hobby'),
+    email:     emailVal,
   };
   state.onboarded = true;
   saveState();
