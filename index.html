@@ -1608,7 +1608,7 @@ The thinking prompt must be specific to THIS insight. A generic prompt that coul
 Respond ONLY with valid JSON — no markdown, no code fences, no extra text:
 {
   "title": "Punchy headline, max 8 words, impossible to ignore, NOT the discipline name",
-  "hook": "One provocative statement that stops the reader. NEVER a question. NEVER 'Did you know'. Specific — a real person, year, number, or event. Creates an information gap. Can include ${p.name} woven naturally, not as a greeting. Ends with a period, never a question mark.",
+  "hook": "One provocative statement that stops the reader. NEVER a question. NEVER 'Did you know'. Must contain BOTH worlds in one sentence — the source discipline and the user's world. The bridge must be visible from line 1, not revealed later. Authoritative on the mechanism, never on the user's specific situation. Bad: 'In 1996, a cryptographer broke a system without cracking its code.' (only one world). Good: 'In 1996, a cryptographer broke a perfect system by watching it work. Every strategic move leaks the same way.' (both worlds, authoritative on mechanism). Specific — a real person, year, number, or event. Ends with a period, never a question mark.",
   "para1": "2-3 short sentences. Open with a concrete story, fact, or moment. Walk into the discipline through narrative. Story first, concept second.",
   "para2": "2-3 short sentences. Deepen or surprise. End with the insight, not with the reader.",
   "bridgeData": {
@@ -1772,8 +1772,7 @@ function renderCard(card, discipline) {
       <button class="share-btn" onclick="copyCard()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:6px;"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>Copy text</button>
     </div>`;
 
-  document.getElementById('generate-area').innerHTML =
-    '<p class="already-generated">✓ Today\'s lens is ready.</p>';
+  document.getElementById('generate-area').innerHTML = '';
 
   // Save to archive history
   const todayStr = new Date().toISOString().slice(0,10);
