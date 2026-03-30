@@ -435,13 +435,13 @@ body::before {
 }
 .tomorrow-discipline {
   font-family: 'Playfair Display', Georgia, serif;
-  font-size: clamp(28px, 6vw, 42px); font-style: italic; font-weight: 400;
+  font-size: clamp(22px, 4vw, 32px); font-style: italic; font-weight: 400;
   color: var(--ink); line-height: 1.2;
 }
 
 /* ===== LATTICE ===== */
 .lattice-wrap {
-  padding: 36px 0 8px; border-top: 1px solid var(--border); margin-top: 32px;
+  padding: 56px 0 8px; border-top: 1px solid var(--border); margin-top: 56px;
   animation: fadeUp 0.4s ease 0.2s both;
 }
 .lattice-title {
@@ -850,10 +850,10 @@ body::before {
       <button id="ob-submit" disabled>Enter the Confluence</button>
       <div class="ob-section" style="margin-top: 32px; margin-bottom: 0;">
         <label class="ob-label">Get your daily lens in your inbox <span>(optional)</span></label>
-        <input type="email" class="ob-input" id="ob-email" />
+        <input type="email" class="ob-input" id="ob-email" placeholder="your@email.com" />
       </div>
       <div style="text-align:center;padding:32px 0 4px;">
-        <button onclick="showScreen('screen-about')" style="background:none;border:none;cursor:pointer;font-family:'Source Serif 4',Georgia,serif;font-size:14px;font-style:italic;font-weight:300;color:var(--muted);letter-spacing:0.01em;">Read why we built this →</button>
+        <button onclick="showScreen('screen-about')" style="background:none;border:none;cursor:pointer;font-family:'Source Serif 4',Georgia,serif;font-size:14px;font-style:italic;font-weight:300;color:var(--muted);letter-spacing:0.01em;">A personal note →</button>
       </div>
     </div>
   </div>
@@ -888,9 +888,6 @@ body::before {
     <div id="close-line-area"></div>
     <div id="tomorrow-area"></div>
     <div id="lattice-area"></div>
-    <div class="app-footer">
-      <button class="footer-link" onclick="showScreen('screen-about')">About Confluence</button>
-    </div>
 
   </div>
 </div>
@@ -1721,15 +1718,15 @@ function renderCard(card, discipline) {
     </div>
     ${!state.profile?.email ? `
     <div class="email-capture" id="email-capture-inline">
-      <div class="email-capture-label">Get tomorrow's lens in your inbox.</div>
+      <div class="email-capture-label">Get your daily lens in your inbox</div>
       <div class="email-capture-row">
         <input type="email" class="email-input" id="inline-email" placeholder="your@email.com" />
         <button class="email-submit-btn" onclick="saveInlineEmail()">→</button>
       </div>
     </div>` : ''}
     <div class="share-row">
-      <button class="share-btn" onclick="shareWhatsApp()">↗ Share on WhatsApp</button>
-      <button class="share-btn" onclick="copyCard()">⎘ Copy text</button>
+      <button class="share-btn" onclick="shareWhatsApp()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:6px;"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>Share on WhatsApp</button>
+      <button class="share-btn" onclick="copyCard()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:6px;"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>Copy text</button>
     </div>`;
 
   document.getElementById('generate-area').innerHTML =
