@@ -174,9 +174,13 @@ body::before {
 .ob-body p:last-child { margin-bottom: 0; }
 
 .ob-form-wrap {
-  background: var(--paper2);
-  border-top: 1px solid var(--border);
+  background: linear-gradient(to bottom, var(--paper) 0%, var(--paper2) 80px);
   padding: 56px 24px 80px;
+}
+.ob-form-heading {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 22px; font-weight: 700; color: var(--ink);
+  text-align: center; margin-bottom: 32px;
 }
 .ob-form-kicker {
   font-family: 'Source Serif 4', Georgia, serif;
@@ -310,7 +314,8 @@ body::before {
 }
 .card-bookmark {
   position: absolute; top: 18px; right: 20px;
-  font-size: 20px; color: var(--border); background: none; border: none;
+  font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: 0.08em;
+  color: var(--border); background: none; border: none;
   cursor: pointer; transition: color 0.15s; line-height: 1; padding: 0;
 }
 .card-bookmark:hover { color: var(--accent); }
@@ -773,6 +778,7 @@ body::before {
   </div>
 
   <div class="ob-form-wrap" id="ob-form-wrap">
+    <div class="ob-form-heading">Tell us about your world.</div>
     <div class="ob-card">
       <div class="ob-section">
         <label class="ob-label">What should we call you?</label>
@@ -849,12 +855,12 @@ body::before {
       </div>
       <button id="ob-submit" disabled>Enter the Confluence</button>
       <div class="ob-section" style="margin-top: 32px; margin-bottom: 0;">
-        <label class="ob-label">Get your daily lens in your inbox <span>(optional)</span></label>
+        <label class="ob-label">Get your daily lens in your inbox</label>
         <input type="email" class="ob-input" id="ob-email" placeholder="your@email.com" />
       </div>
-      <div style="text-align:center;padding:32px 0 4px;">
-        <button onclick="showScreen('screen-about')" style="background:none;border:none;cursor:pointer;font-family:'Source Serif 4',Georgia,serif;font-size:14px;font-style:italic;font-weight:300;color:var(--muted);letter-spacing:0.01em;">A personal note →</button>
-      </div>
+    </div>
+    <div style="text-align:center;padding-top:28px;">
+      <button onclick="showScreen('screen-about')" style="background:none;border:none;cursor:pointer;font-family:'Source Serif 4',Georgia,serif;font-size:14px;font-style:italic;font-weight:300;color:var(--muted);letter-spacing:0.01em;text-decoration:underline;">A personal note →</button>
     </div>
   </div>
 </div>
@@ -1723,7 +1729,7 @@ function renderCard(card, discipline) {
   const isSaved = (state.savedCards || []).some(s => s.date === getTodayStr());
   document.getElementById('card-area').innerHTML = `
     <div class="card">
-      <button class="card-bookmark${isSaved ? ' saved' : ''}" id="card-bookmark-btn" onclick="toggleBookmark('${discipline}')" title="${isSaved ? 'Saved' : 'Save lens'}">${isSaved ? '★' : '☆'}</button>
+      <button class="card-bookmark${isSaved ? ' saved' : ''}" id="card-bookmark-btn" onclick="toggleBookmark('${discipline}')">${isSaved ? '★ Saved' : '☆ Save'}</button>
       <div class="card-hook">${card.hook || ''}</div>
       <div class="card-disc-tag">${clusterEmoji} ${discipline} × Your World</div>
       <div class="card-body">
@@ -1822,11 +1828,11 @@ function toggleBookmark(discipline) {
   const btn = document.getElementById('card-bookmark-btn');
   if (idx >= 0) {
     state.savedCards.splice(idx, 1);
-    if (btn) { btn.textContent = '☆'; btn.classList.remove('saved'); btn.title = 'Save lens'; }
+    if (btn) { btn.textContent = '☆ Save'; btn.classList.remove('saved'); }
     showToast('Removed from saved');
   } else {
     state.savedCards.push({ date: today, discipline, hook: state.todayCard?.hook });
-    if (btn) { btn.textContent = '★'; btn.classList.add('saved'); btn.title = 'Saved'; }
+    if (btn) { btn.textContent = '★ Saved'; btn.classList.add('saved'); }
     showToast('Saved');
   }
   saveState();
