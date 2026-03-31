@@ -748,18 +748,18 @@ body::before {
     <div class="ob-wordmark-tagline">see through every lens</div>
   </div>
   <div class="ob-hero">
-    <h1 class="ob-headline">The world is one thing.<br>You were taught to see it in pieces.</h1>
+    <h1 class="ob-headline">The world is one thing.<br><span style="white-space:nowrap;">You were taught to see it in pieces.</span></h1>
     <div class="ob-body">
       <p>Physics, Chemistry, History, Mathematics, Biology, Economics, Geography, English Literature, Political Science. Studied separately, each in its own world. The conversation happening between them? Nobody showed us that.</p>
       <p>That conversation is where the best thinking lives.</p>
-      <p>Every weekday morning, Confluence brings you one unexpected connection, from across the full map of human knowledge.</p>
+      <p>Every weekday, Confluence brings you one unexpected connection, from across the full map of human knowledge.</p>
       <p>Read in five minutes. Something you can't unsee.</p>
     </div>
   </div>
 
   <!-- SAMPLE LENS -->
   <div class="sample-lens-wrap">
-    <div class="sample-lens-label">This is how thinking changes.</div>
+    <div class="sample-lens-label">This is what seeing differently looks like</div>
     <div class="card" style="animation:none; border-left: 3px solid var(--accent);">
       <div class="card-hook">In September 1838, Charles Darwin picked up an economics essay for fun. It changed biology forever.</div>
       <div class="card-disc-tag">📊 Economics × Biology</div>
@@ -782,8 +782,8 @@ body::before {
   </div>
 
   <div class="ob-form-wrap" id="ob-form-wrap">
-    <div class="ob-form-heading">Let's make this yours.</div>
-    <div style="font-family:'Source Serif 4',Georgia,serif; font-size:15px; font-style:italic; font-weight:300; color:var(--muted); text-align:center; margin-top:-16px; margin-bottom:32px;">We'll shape your lenses around the world you live in.</div>
+    <div class="ob-form-heading">Let's make this yours</div>
+    <div style="font-family:'Source Serif 4',Georgia,serif; font-size:15px; font-style:italic; font-weight:300; color:var(--muted); text-align:center; margin-top:-16px; margin-bottom:32px;">We'll shape your lenses around the world you live in</div>
     <div class="ob-card" id="ob-card">
       <div class="ob-section">
         <label class="ob-label">What should we call you?</label>
@@ -861,7 +861,10 @@ body::before {
       <button id="ob-submit" disabled>See your first lens</button>
       <div class="ob-section" style="margin-top: 32px; margin-bottom: 0;">
         <label class="ob-label">Get your daily lens in your inbox</label>
-        <input type="email" class="ob-input" id="ob-email" placeholder="your@email.com" />
+        <div style="display:flex;gap:8px;">
+          <input type="email" class="ob-input" id="ob-email" placeholder="your@email.com" style="flex:1;margin-bottom:0;" />
+          <button class="email-submit-btn" onclick="saveObEmail()" type="button">→</button>
+        </div>
       </div>
     </div>
     <div style="text-align:center;padding-top:28px;">
@@ -925,7 +928,7 @@ body::before {
         <div class="app-logo">✦ Confluence</div>
         <div class="ob-wordmark-tagline">see through every lens</div>
       </div>
-      <button class="nav-link" onclick="showScreen('screen-app')">← Back</button>
+      <button class="nav-link" onclick="showScreen(state.todayCard ? 'screen-app' : 'screen-onboarding')">← Back</button>
     </div>
     <div class="about-wrap">
       <div class="about-eyebrow">Why Confluence exists</div>
@@ -1841,6 +1844,17 @@ function toggleBookmark(discipline) {
     showToast('Saved');
   }
   saveState();
+}
+
+function saveObEmail() {
+  const val = (document.getElementById('ob-email')?.value || '').trim();
+  if (val && val.includes('@')) {
+    state.profile = state.profile || {};
+    state.profile.email = val;
+    saveState();
+    const btn = document.querySelector('#ob-email + button, #ob-email ~ button');
+    if (btn) btn.textContent = '✓';
+  }
 }
 
 function saveInlineEmail() {
