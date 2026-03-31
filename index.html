@@ -865,7 +865,7 @@ body::before {
       </div>
     </div>
     <div style="text-align:center;padding-top:28px;">
-      <button onclick="showScreen('screen-about')" style="background:none;border:none;cursor:pointer;font-family:'Source Serif 4',Georgia,serif;font-size:14px;font-style:italic;font-weight:300;color:var(--ink);letter-spacing:0.01em;">The thinking behind this →</button>
+      <button onclick="showScreen('screen-about')" style="background:none;border:none;cursor:pointer;font-family:'Source Serif 4',Georgia,serif;font-size:14px;font-style:italic;font-weight:300;color:var(--muted);letter-spacing:0.01em;text-decoration:none;">The thinking behind this →</button>
     </div>
   </div>
 </div>
@@ -1765,10 +1765,6 @@ function renderCard(card, discipline) {
              </div>`;
       })()}
     </div>
-    <div class="share-row">
-      <button class="share-btn" onclick="shareWhatsApp()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:6px;"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>Share on WhatsApp</button>
-      <button class="share-btn" onclick="copyCard()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:6px;"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>Copy text</button>
-    </div>
     ${!state.profile?.email ? `
     <div class="email-capture" id="email-capture-inline">
       <div class="email-capture-label">Get your daily lens in your inbox</div>
@@ -1776,7 +1772,11 @@ function renderCard(card, discipline) {
         <input type="email" class="email-input" id="inline-email" placeholder="your@email.com" />
         <button class="email-submit-btn" onclick="saveInlineEmail()">→</button>
       </div>
-    </div>` : ''}`;
+    </div>` : ''}
+    <div class="share-row">
+      <button class="share-btn" onclick="shareWhatsApp()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:6px;"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>Share on WhatsApp</button>
+      <button class="share-btn" onclick="copyCard()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:6px;"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>Copy text</button>
+    </div>`;
 
   document.getElementById('generate-area').innerHTML = '';
 
