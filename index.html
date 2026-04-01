@@ -1801,7 +1801,6 @@ Respond ONLY with valid JSON — no markdown, no code fences, no extra text:
   "sourceWorld": "2-4 short sentences. The discipline's story — what happened, what was discovered, why it mattered there. Open with something concrete: a person, a moment, a number. Introduce any jargon naturally and ground it immediately in plain language. One idea at a time. A 15-year-old should be able to follow without slowing down.",
   "pivotLine": "One sentence only. This is the moment the two worlds collide. It must feel inevitable — not clever, not forced. The reader should feel it land before they understand why. No jargon. No abstract nouns. Write it last, after you know exactly what the card is saying.",
   "yourWorld": "2-4 short sentences. The application to the user's world — specific, grounded, no hand-waving. Follow the same rhythm as sourceWorld: short sentences, one idea each. The user should recognise their own world immediately.",
-  "compression": "One sentence. The distilled principle that survives if you strip away everything else. Plain language. Should work as a standalone thought someone could carry with them all day.",
   "whyItMatters": "One sentence. Plain language only — no jargon, no abstract nouns. Direct and personal. If you removed the writing style, the idea must still land. Bad: 'The strongest argument is never as loud as the operational residue that precedes it.' Good: 'Your next breakthrough is probably not in your field.'",
   "bridgeData": {
     "leftLabel": "${discipline}",
@@ -1928,7 +1927,6 @@ function renderCard(card, discipline) {
         ${card.sourceWorld ? `<p class="card-para">${card.sourceWorld}</p>` : (card.para1 ? `<p class="card-para">${card.para1}</p>` : '')}
         ${card.pivotLine ? `<p class="card-pivot">${card.pivotLine}</p>` : ''}
         ${card.yourWorld ? `<p class="card-para">${card.yourWorld}</p>` : (card.para2 ? `<p class="card-para">${card.para2}</p>` : '')}
-        ${card.compression ? `<p class="card-compression">${card.compression}</p>` : ''}
       </div>
       ${card.whyItMatters ? `
       <div class="card-why-box">
