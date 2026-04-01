@@ -849,7 +849,7 @@ body::before {
 
   <div class="ob-form-wrap" id="ob-form-wrap">
     <div class="ob-form-heading">Let's make this yours</div>
-    <div style="font-family:'Source Serif 4',Georgia,serif; font-size:15px; font-style:italic; font-weight:300; color:var(--muted); text-align:center; margin-top:-16px; margin-bottom:32px;">We'll shape your lenses around the world you live in</div>
+    <div style="font-family:'Source Serif 4',Georgia,serif; font-size:15px; font-style:italic; font-weight:300; color:var(--muted); text-align:center; margin-top:-16px; margin-bottom:32px;">We'll shape this around the world you live in.</div>
 
     <!-- Progress bar -->
     <div class="ob-progress-wrap">
@@ -2116,7 +2116,7 @@ function renderTomorrow(todayDiscipline) {
     </div>`;
   const name = state.profile?.name || 'Friend';
   const cl = document.getElementById('close-line-area');
-  if (cl) cl.innerHTML = `<p class="card-close-line">That was your lens for today.</p>`;
+  if (cl) cl.innerHTML = `<p class="card-close-line">That was today's way to see.</p>`;
 }
 
 // ============================================================
@@ -2226,7 +2226,7 @@ function renderConstellation(newDiscipline) {
   el.innerHTML = `
     <div class="constellation-wrap">
       <div class="constellation-title">Your Knowledge Lattice</div>
-      <div class="constellation-pre-text">Every lens you explore adds a node. Watch your map of thinking grow.</div>
+      <div class="constellation-pre-text">Every discipline you explore adds a node. Watch your map of thinking grow.</div>
       <svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:520px;height:auto;display:block;margin:0 auto;">
         ${centerLinesSvg}
         ${edgeSvg}
