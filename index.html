@@ -393,6 +393,19 @@ body::before {
   color: #3d3020; margin-bottom: 18px;
 }
 .card-para:last-child { margin-bottom: 0; }
+.card-pivot {
+  font-family: 'Source Serif 4', Georgia, serif;
+  font-size: 16px; font-weight: 400; font-style: italic;
+  color: var(--accent); line-height: 1.7;
+  margin: 4px 0 20px; display: block;
+}
+.card-compression {
+  font-family: 'Source Serif 4', Georgia, serif;
+  font-size: 16px; font-weight: 300; font-style: italic;
+  color: var(--muted); line-height: 1.8;
+  margin-top: 4px; margin-bottom: 0;
+  border-left: 2px solid var(--border); padding-left: 14px;
+}
 .visual-wrap {
   margin: 0 -36px 28px; padding: 24px 36px;
   background: var(--paper2);
@@ -430,9 +443,17 @@ body::before {
   margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid var(--border);
 }
 .share-row {
-  display: flex; gap: 32px; justify-content: center;
+  display: flex; flex-direction: column; align-items: center; gap: 16px;
   padding: 28px 0 28px; border-top: 1px solid var(--border);
   margin-top: 4px;
+}
+.share-row-label {
+  font-family: 'Source Serif 4', Georgia, serif;
+  font-size: 13px; font-style: italic; font-weight: 300;
+  color: var(--muted); text-align: center;
+}
+.share-row-btns {
+  display: flex; gap: 32px; justify-content: center;
 }
 .share-btn {
   font-family: 'JetBrains Mono', monospace; font-size: 10px;
@@ -482,6 +503,11 @@ body::before {
   font-family: 'Playfair Display', Georgia, serif;
   font-size: clamp(22px, 4vw, 32px); font-style: italic; font-weight: 400;
   color: var(--ink); line-height: 1.2;
+}
+.tomorrow-sub {
+  font-family: 'Source Serif 4', Georgia, serif;
+  font-size: 13px; font-style: italic; font-weight: 300;
+  color: var(--muted); margin-top: 12px;
 }
 
 /* ===== LATTICE ===== */
@@ -1772,8 +1798,10 @@ Respond ONLY with valid JSON — no markdown, no code fences, no extra text:
 {
   "title": "Punchy headline, max 8 words, impossible to ignore, NOT the discipline name",
   "hook": "1-3 sentences maximum. NON-NEGOTIABLE RULE: every discipline and every world mentioned anywhere in the card must appear in the hook. If the card bridges cryptography and business strategy, both must be in the hook. The bridge must be visible from line 1, not revealed in para2. Authoritative on the mechanism, never on the user's specific situation. Specific — a real person, year, number, or event where certain. No em dashes. No questions. No 'Did you know'. Ends with a period. These examples show the quality and the pattern — they are not templates, find your own version that fits this specific card: (A) 'In 1996, Paul Kocher broke a perfect encryption system without touching the code. Every strategic move you make leaks the same way.' (B) 'During World War II, Allied codebreakers did not crack Enigma by guessing German words. Corporate strategy leaks the same way. Not through the decision. Through the habits around it.' (C) 'In 1956, George Miller proved the human mind can hold exactly seven things at once. Your onboarding flow is asking it to hold fourteen.' (D) 'The British army lost the American Revolution not on the battlefield. They kept fighting the wrong kind of war. Most reorganisations fail for exactly the same reason.'",
-  "para1": "3-4 short sentences maximum. One idea per sentence. Open with a concrete story, fact, or moment — something the reader already knows or can picture. Walk into the discipline through narrative. No dense blocks. Imagine this is being read on a phone screen while scrolling — every sentence must earn the next scroll.",
-  "para2": "Must contain a pivot line — one short standalone sentence that marks the exact moment the two worlds collide. This is the sentence the reader screenshots. Before it: the discipline. After it: the user's world. Keep it short, sharp, inevitable. No jargon. No abstract nouns. A 22-year-old must understand every word without slowing down.",
+  "sourceWorld": "2-4 short sentences. The discipline's story — what happened, what was discovered, why it mattered there. Open with something concrete: a person, a moment, a number. Introduce any jargon naturally and ground it immediately in plain language. One idea at a time. A 15-year-old should be able to follow without slowing down.",
+  "pivotLine": "One sentence only. This is the moment the two worlds collide. It must feel inevitable — not clever, not forced. The reader should feel it land before they understand why. No jargon. No abstract nouns. Write it last, after you know exactly what the card is saying.",
+  "yourWorld": "2-4 short sentences. The application to the user's world — specific, grounded, no hand-waving. Follow the same rhythm as sourceWorld: short sentences, one idea each. The user should recognise their own world immediately.",
+  "compression": "One sentence. The distilled principle that survives if you strip away everything else. Plain language. Should work as a standalone thought someone could carry with them all day.",
   "whyItMatters": "One sentence. Plain language only — no jargon, no abstract nouns. Direct and personal. If you removed the writing style, the idea must still land. Bad: 'The strongest argument is never as loud as the operational residue that precedes it.' Good: 'Your next breakthrough is probably not in your field.'",
   "bridgeData": {
     "leftLabel": "${discipline}",
@@ -1897,8 +1925,10 @@ function renderCard(card, discipline) {
       <div class="card-hook">${card.hook || ''}</div>
       <div class="card-disc-tag">${clusterEmoji} ${discipline} × Your World</div>
       <div class="card-body">
-        ${card.para1 ? `<p class="card-para">${card.para1}</p>` : ''}
-        ${card.para2 ? `<p class="card-para">${card.para2}</p>` : ''}
+        ${card.sourceWorld ? `<p class="card-para">${card.sourceWorld}</p>` : (card.para1 ? `<p class="card-para">${card.para1}</p>` : '')}
+        ${card.pivotLine ? `<p class="card-pivot">${card.pivotLine}</p>` : ''}
+        ${card.yourWorld ? `<p class="card-para">${card.yourWorld}</p>` : (card.para2 ? `<p class="card-para">${card.para2}</p>` : '')}
+        ${card.compression ? `<p class="card-compression">${card.compression}</p>` : ''}
       </div>
       ${card.whyItMatters ? `
       <div class="card-why-box">
@@ -1915,11 +1945,11 @@ function renderCard(card, discipline) {
       ${(() => {
         const hasFeedback = (state.feedback || []).some(f => f.date === getTodayStr());
         return hasFeedback
-          ? `<div class="card-feedback-thanks">Thanks for the signal.</div>`
-          : `<div class="card-feedback-label">Did this change how you see something?</div>
+          ? `<div class="card-feedback-thanks">Got it. That helps shape future lenses.</div>`
+          : `<div class="card-feedback-label">Did this shift how you see something?</div>
              <div class="card-feedback-btns">
-               <button class="feedback-btn" onclick="submitFeedback('yes','${discipline}')">Made me think differently</button>
-               <button class="feedback-btn" onclick="submitFeedback('no','${discipline}')">Not for me</button>
+               <button class="feedback-btn" onclick="submitFeedback('yes','${discipline}')">This changed something</button>
+               <button class="feedback-btn" onclick="submitFeedback('no','${discipline}')">Did not land</button>
              </div>`;
       })()}
     </div>
@@ -1934,8 +1964,11 @@ function renderCard(card, discipline) {
       </div>
     </div>` : ''}
     <div class="share-row">
-      <button class="share-btn" onclick="shareWhatsApp()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:6px;"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>Share on WhatsApp</button>
-      <button class="share-btn" onclick="copyCard()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:6px;"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>Copy text</button>
+      <div class="share-row-label">Know someone who would appreciate this lens?</div>
+      <div class="share-row-btns">
+        <button class="share-btn" onclick="shareWhatsApp()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:6px;"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>Share on WhatsApp</button>
+        <button class="share-btn" onclick="copyCard()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:6px;"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>Copy text</button>
+      </div>
     </div>`;
 
   document.getElementById('generate-area').innerHTML = '';
@@ -2031,7 +2064,7 @@ function submitFeedback(response, discipline) {
   state.feedback.push({ discipline, response, date: getTodayStr() });
   saveState();
   const el = document.getElementById('card-feedback');
-  if (el) el.innerHTML = '<div class="card-feedback-thanks">Thanks for the signal.</div>';
+  if (el) el.innerHTML = '<div class="card-feedback-thanks">Got it. That helps shape future lenses.</div>';
 }
 
 // ============================================================
@@ -2081,10 +2114,11 @@ function renderTomorrow(todayDiscipline) {
     <div class="tomorrow-wrap">
       <div class="tomorrow-label">${isFriday ? 'Monday' : 'Tomorrow'}</div>
       <div class="tomorrow-discipline">${nextDisc}</div>
+      <div class="tomorrow-sub">A different lens. A different way to see.</div>
     </div>`;
   const name = state.profile?.name || 'Friend';
   const cl = document.getElementById('close-line-area');
-  if (cl) cl.innerHTML = `<p class="card-close-line">${name}, that's today's ${todayDiscipline} lens.</p>`;
+  if (cl) cl.innerHTML = `<p class="card-close-line">That was your lens for today.</p>`;
 }
 
 // ============================================================
@@ -2194,7 +2228,7 @@ function renderConstellation(newDiscipline) {
   el.innerHTML = `
     <div class="constellation-wrap">
       <div class="constellation-title">Your Knowledge Lattice</div>
-      <div class="constellation-pre-text">Every discipline you explore adds a node. Watch it grow.</div>
+      <div class="constellation-pre-text">Every lens you explore adds a node. Watch your map of thinking grow.</div>
       <svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:520px;height:auto;display:block;margin:0 auto;">
         ${centerLinesSvg}
         ${edgeSvg}
