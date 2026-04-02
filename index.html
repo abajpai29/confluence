@@ -108,21 +108,27 @@ body::before {
 /* ===== APP HEADER ===== */
 .app-header {
   display: flex; align-items: center; justify-content: space-between;
-  padding: 28px 0 24px; border-bottom: 1px solid var(--border);
+  padding: 32px 0 28px; border-bottom: 1px solid var(--border);
 }
 .app-logo {
   font-family: 'Playfair Display', Georgia, serif;
-  font-size: 22px; font-weight: 700; color: var(--ink); letter-spacing: 0.02em;
+  font-size: 24px; font-weight: 700; color: var(--ink); letter-spacing: 0.01em;
 }
 .app-logo span { color: var(--accent); }
-.header-nav { display: flex; gap: 20px; align-items: center; }
+.header-nav { display: flex; gap: 28px; align-items: center; }
 .nav-link {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+  font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
   color: var(--muted); background: none; border: none; cursor: pointer;
-  padding: 4px 0; transition: color 0.15s;
+  padding: 4px 0; transition: color 0.2s;
+  position: relative;
+}
+.nav-link::after {
+  content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 1px;
+  background: var(--accent); transition: width 0.2s ease;
 }
 .nav-link:hover { color: var(--accent); }
+.nav-link:hover::after { width: 100%; }
 
 /* ===== ONBOARDING ===== */
 #screen-onboarding {
@@ -130,57 +136,60 @@ body::before {
   position: relative; z-index: 1;
 }
 
-.ob-wordmark { padding: 32px 0 0 32px; }
+.ob-wordmark {
+  max-width: 680px; margin: 0 auto; padding: 36px 24px 0;
+}
 .ob-wordmark-name {
   font-family: 'Playfair Display', Georgia, serif;
-  font-size: 20px; font-weight: 700; color: var(--ink);
+  font-size: 24px; font-weight: 700; color: var(--ink); letter-spacing: 0.01em;
 }
 .ob-wordmark-tagline {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 10px; color: var(--muted); margin-top: 4px;
+  font-size: 10px; letter-spacing: 0.1em; color: var(--muted); margin-top: 5px;
 }
 .ob-cta {
-  margin-top: 28px;
+  margin-top: 36px;
   font-family: 'Playfair Display', Georgia, serif;
-  font-style: italic; font-size: 16px;
+  font-style: italic; font-size: 17px;
   background: var(--ink); color: var(--paper);
   border: none; border-radius: 0;
-  padding: 14px 28px; cursor: pointer;
-  display: inline-block; transition: opacity 0.15s;
+  padding: 16px 36px; cursor: pointer;
+  display: inline-block; transition: background 0.2s, transform 0.15s;
+  letter-spacing: 0.01em;
 }
-.ob-cta:hover { opacity: 0.85; }
+.ob-cta:hover { background: #2d2520; transform: translateY(-1px); }
 .ob-hero {
-  max-width: 680px; margin: 0 auto; padding: 36px 24px 48px;
+  max-width: 680px; margin: 0 auto; padding: 80px 24px 72px;
   border-bottom: 1px solid var(--border);
   position: relative; overflow: hidden; z-index: 1;
 }
 .ob-eyebrow {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
-  color: var(--accent); margin-bottom: 16px;
+  font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: 20px;
 }
 .ob-headline {
   font-family: 'Playfair Display', Georgia, serif;
-  font-size: clamp(28px, 5.5vw, 44px); font-weight: 700;
-  color: var(--ink); line-height: 1.15; margin-bottom: 20px;
-  letter-spacing: -0.025em;
+  font-size: clamp(32px, 6vw, 52px); font-weight: 700;
+  color: var(--ink); line-height: 1.1; margin-bottom: 28px;
+  letter-spacing: -0.03em;
 }
 .ob-body {
   font-family: 'Source Serif 4', Georgia, serif;
-  font-size: 17px; font-weight: 300; line-height: 1.9;
-  color: #3d3020; max-width: 540px;
+  font-size: 18px; font-weight: 300; line-height: 1.9;
+  color: #3d3020; max-width: 520px;
 }
-.ob-body p { margin-bottom: 14px; }
+.ob-body p { margin-bottom: 16px; }
 .ob-body p:last-child { margin-bottom: 0; }
 
 .ob-form-wrap {
   background: linear-gradient(to bottom, var(--paper) 0%, var(--paper2) 80px);
-  padding: 56px 24px 80px;
+  padding: 72px 24px 96px;
 }
 .ob-form-heading {
   font-family: 'Playfair Display', Georgia, serif;
-  font-size: 22px; font-weight: 700; color: var(--ink);
-  text-align: center; margin-bottom: 32px;
+  font-size: 26px; font-weight: 700; color: var(--ink);
+  text-align: center; margin-bottom: 40px;
 }
 .ob-form-kicker {
   font-family: 'Source Serif 4', Georgia, serif;
@@ -189,7 +198,7 @@ body::before {
 }
 .ob-card {
   background: var(--card); border: 1px solid var(--border);
-  border-radius: 2px; padding: 36px 32px 32px;
+  border-radius: 2px; padding: 48px 40px 40px;
   max-width: 680px; margin: 0 auto;
 }
 .ob-section { margin-bottom: 48px; }
@@ -285,7 +294,7 @@ body::before {
 
 /* ===== TODAY BANNER ===== */
 .today-banner {
-  padding: 36px 0 28px; border-bottom: 1px solid var(--border); margin-bottom: 36px;
+  padding: 48px 0 36px; border-bottom: 1px solid var(--border); margin-bottom: 48px;
 }
 .today-meta {
   font-family: 'JetBrains Mono', monospace; font-size: 10px;
@@ -351,6 +360,10 @@ body::before {
   position: relative; overflow: hidden; margin-bottom: 0;
   animation: fadeIn 0.3s ease both;
   overflow-wrap: break-word; word-break: break-word;
+}
+@media (max-width: 480px) {
+  .card { padding: 40px 24px 0; }
+  .card-why-box { padding: 24px 24px 28px; margin: 40px -24px 0; }
 }
 .card-bookmark {
   position: absolute; top: 18px; right: 20px;
@@ -485,19 +498,19 @@ body::before {
   font-family: 'Source Serif 4', Georgia, serif;
   font-size: 15px; font-weight: 300; font-style: italic;
   color: var(--muted); text-align: center;
-  margin: 40px 0 0; animation: fadeIn 0.4s ease both;
+  margin: 56px 0 0; animation: fadeIn 0.4s ease both;
 }
 
 /* ===== TOMORROW ===== */
 .tomorrow-wrap {
-  padding: 56px 0 32px; border-top: 1px solid var(--border);
-  margin-top: 40px; text-align: center;
+  padding: 64px 0 40px; border-top: 1px solid var(--border);
+  margin-top: 56px; text-align: center;
   animation: fadeIn 0.5s ease 0.2s both;
 }
 .tomorrow-label {
   font-family: 'JetBrains Mono', monospace; font-size: 10px;
-  letter-spacing: 0.22em; text-transform: uppercase;
-  color: var(--muted); margin-bottom: 16px;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 20px;
 }
 .tomorrow-discipline {
   font-family: 'Playfair Display', Georgia, serif;
@@ -512,7 +525,7 @@ body::before {
 
 /* ===== LATTICE ===== */
 .lattice-wrap {
-  padding: 56px 0 8px; border-top: 1px solid var(--border); margin-top: 56px;
+  padding: 64px 0 8px; border-top: 1px solid var(--border); margin-top: 64px;
   animation: fadeUp 0.4s ease 0.2s both;
 }
 .lattice-title {
@@ -691,13 +704,14 @@ body::before {
 
 /* ===== SAMPLE LENS ===== */
 .sample-lens-wrap {
-  max-width: 680px; margin: 0 auto; padding: 80px 24px 0;
+  max-width: 680px; margin: 0 auto; padding: 96px 24px 0;
   border-bottom: 1px solid var(--border);
 }
 .sample-lens-label {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
-  color: var(--accent); margin-bottom: 20px;
+  font-family: 'Source Serif 4', Georgia, serif;
+  font-size: 13px; font-style: italic; font-weight: 300;
+  letter-spacing: 0.01em;
+  color: var(--muted); margin-bottom: 28px;
 }
 .sample-lens-cta {
   display: block; width: 100%; margin-top: 32px; padding: 16px 24px;
@@ -716,7 +730,7 @@ body::before {
 
 /* ===== FEEDBACK ===== */
 .card-feedback-section {
-  padding: 28px 0 24px;
+  padding: 36px 0 28px;
   border-top: 1px solid var(--border);
 }
 .card-feedback-label {
@@ -816,11 +830,9 @@ body::before {
   <div class="ob-hero">
     <h1 class="ob-headline">The world is one thing.<br>You were taught to see it in pieces.</h1>
     <div class="ob-body">
-      <p>Physics, Chemistry, History, Mathematics, Biology, Economics, Geography, English Literature, Political Science. Studied separately, each in its own world. The conversation happening between them? Nobody showed us that.</p>
-      <p>That conversation is where the best thinking lives.</p>
-      <p>Every weekday, Confluence brings you one unexpected connection, from across the full map of human knowledge.</p>
-      <p>Read in five minutes. Something you can't unsee.</p>
+      <p>Every weekday, one unexpected connection from across the full map of human knowledge. Read in five minutes. Something you can't unsee.</p>
     </div>
+    <button class="ob-cta" onclick="document.getElementById('ob-form-wrap').scrollIntoView({behavior:'smooth'})">Start here →</button>
   </div>
 
   <!-- SAMPLE LENS -->
