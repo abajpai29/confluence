@@ -247,8 +247,17 @@ body::before {
 }
 
 /* Progressive steps */
-.ob-step { animation: fadeUp 0.25s ease both; }
+.ob-step { animation: fadeUp 0.28s ease both; }
 .ob-step.hidden { display: none; }
+.ob-step.leaving {
+  animation: fadeSlideOut 0.18s ease forwards;
+  pointer-events: none;
+}
+@keyframes fadeSlideOut {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(-10px); }
+}
+.card-feedback-thanks { animation: fadeIn 0.35s ease both; }
 .ob-ack {
   font-family: 'Source Serif 4', Georgia, serif;
   font-size: 15px; font-style: italic; font-weight: 300;
@@ -1345,12 +1354,26 @@ function obUpdateProgress(step) {
 }
 
 function obShowStep(step) {
-  for (let i = 1; i <= OB_TOTAL; i++) {
-    const el = document.getElementById('ob-step-' + i);
-    if (el) el.classList.toggle('hidden', i !== step);
+  const current = document.querySelector('.ob-step:not(.hidden)');
+  const next = document.getElementById('ob-step-' + step);
+  if (!next) return;
+  if (current && current !== next) {
+    current.classList.add('leaving');
+    setTimeout(() => {
+      current.classList.add('hidden');
+      current.classList.remove('leaving');
+      next.classList.remove('hidden');
+      obUpdateProgress(step);
+      document.getElementById('ob-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 180);
+  } else {
+    for (let i = 1; i <= OB_TOTAL; i++) {
+      const el = document.getElementById('ob-step-' + i);
+      if (el) el.classList.toggle('hidden', i !== step);
+    }
+    obUpdateProgress(step);
+    document.getElementById('ob-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
-  obUpdateProgress(step);
-  document.getElementById('ob-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 function obNext(step) {
