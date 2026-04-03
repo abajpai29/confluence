@@ -2081,12 +2081,25 @@ function toggleBookmark(discipline) {
   saveState();
 }
 
+const FORMSPREE_URL = 'https://formspree.io/f/xbdpzyad';
+
+async function submitEmailToFormspree(email, source) {
+  try {
+    await fetch(FORMSPREE_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({ email, source }),
+    });
+  } catch(e) {}
+}
+
 function saveObEmail() {
   const val = (document.getElementById('ob-email')?.value || '').trim();
   if (val && val.includes('@')) {
     state.profile = state.profile || {};
     state.profile.email = val;
     saveState();
+    submitEmailToFormspree(val, 'onboarding');
     const btn = document.querySelector('#ob-email + button, #ob-email ~ button');
     if (btn) btn.textContent = '✓';
   }
@@ -2098,6 +2111,7 @@ function saveInlineEmail() {
     state.profile = state.profile || {};
     state.profile.email = val;
     saveState();
+    submitEmailToFormspree(val, 'inline');
     const el = document.getElementById('email-capture-inline');
     if (el) el.innerHTML = '<p class="email-capture-thanks">You\'re part of Confluence now. The dots are about to start connecting.</p>';
   }
