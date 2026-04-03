@@ -2091,6 +2091,13 @@ async function submitEmailToFormspree(email, source) {
       body: JSON.stringify({ email, source }),
     });
   } catch(e) {}
+  try {
+    await fetch(WORKER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'subscribe', email, source }),
+    });
+  } catch(e) {}
 }
 
 function saveObEmail() {

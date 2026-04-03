@@ -2,10 +2,14 @@ name = "confluence-proxy"
 main = "worker.js"
 compatibility_date = "2024-09-01"
 
-# ALLOWED_ORIGIN and ANTHROPIC_API_KEY are set by setup.ps1 — do not edit manually.
-
 [vars]
-ALLOWED_ORIGIN = "https://abajpai29-hash.github.io"
+ALLOWED_ORIGIN = "https://abajpai29.github.io"
+SITE_URL = "https://abajpai29.github.io/confluence/"
+# FROM_EMAIL — set this in Cloudflare dashboard as a plain variable once you have a verified domain in Resend
+# e.g. "Confluence <lens@yourdomain.com>"
+
+[triggers]
+crons = ["30 1 * * 1-5"]
 
 [[kv_namespaces]]
 binding = "RATE_LIMIT"
