@@ -137,7 +137,7 @@ body::before {
 }
 
 .ob-wordmark {
-  max-width: 680px; margin: 0 auto; padding: 28px 24px 0;
+  max-width: 720px; margin: 0 auto; padding: 28px 24px 0;
 }
 .ob-wordmark-name {
   font-family: 'Playfair Display', Georgia, serif;
@@ -159,8 +159,7 @@ body::before {
 }
 .ob-cta:hover { background: #2d2520; transform: translateY(-1px); }
 .ob-hero {
-  max-width: 680px; margin: 0 auto; padding: 48px 24px 36px;
-  border-bottom: 1px solid var(--border);
+  max-width: 720px; margin: 0 auto; padding: 48px 24px 44px;
   position: relative; overflow: hidden; z-index: 1;
 }
 .ob-eyebrow {
@@ -182,14 +181,79 @@ body::before {
 .ob-body p { margin-bottom: 12px; }
 .ob-body p:last-child { margin-bottom: 0; }
 
+.ob-headline em { font-style: italic; color: var(--accent); }
+
+.ob-hero-ornament {
+  display: flex; align-items: center; gap: 12px; margin-bottom: 28px;
+}
+.ob-hero-ornament-line {
+  height: 0.5px; width: 36px; background: var(--accent);
+}
+.ob-hero-ornament-text {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--accent);
+}
+
+.ob-section-rule {
+  max-width: 720px; margin: 0 auto; padding: 0 24px;
+}
+.ob-section-rule hr {
+  border: none; border-top: 0.5px solid var(--border); margin: 0;
+}
+
+.ob-value-section {
+  max-width: 720px; margin: 0 auto; padding: 44px 24px 40px;
+}
+.ob-value-eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 28px;
+}
+.ob-value-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 0; margin-bottom: 28px;
+}
+.ob-value-item {
+  padding: 12px 0; border-bottom: 0.5px solid var(--border);
+  display: flex; align-items: flex-start; gap: 10px;
+}
+.ob-value-item:nth-child(odd) { padding-right: 28px; border-right: 0.5px solid var(--border); }
+.ob-value-item:nth-child(even) { padding-left: 28px; }
+.ob-value-item.full-width { grid-column: 1 / -1; border-right: none; padding-right: 0; padding-left: 0; }
+.ob-value-dot {
+  width: 4px; height: 4px; border-radius: 50%;
+  background: var(--accent); flex-shrink: 0; margin-top: 9px;
+}
+.ob-value-text {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 15px; font-weight: 400; color: var(--ink); line-height: 1.5;
+}
+.ob-value-for {
+  font-family: 'Source Serif 4', Georgia, serif;
+  font-size: 14px; font-weight: 300; font-style: italic;
+  color: var(--muted); line-height: 1.8;
+}
+@media (max-width: 480px) {
+  .ob-value-grid { grid-template-columns: 1fr; }
+  .ob-value-item:nth-child(odd) { border-right: none; padding-right: 0; }
+  .ob-value-item:nth-child(even) { padding-left: 0; }
+  .ob-value-item.full-width { grid-column: 1; }
+}
+
+.ob-form-eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 16px;
+}
+
 .ob-form-wrap {
   background: linear-gradient(to bottom, var(--paper) 0%, var(--paper2) 80px);
   padding: 72px 24px 96px;
 }
 .ob-form-heading {
   font-family: 'Playfair Display', Georgia, serif;
-  font-size: 26px; font-weight: 700; color: var(--ink);
-  text-align: center; margin-bottom: 40px;
+  font-size: clamp(22px, 3.5vw, 28px); font-weight: 400; color: var(--ink);
+  text-align: left; margin-bottom: 8px; line-height: 1.35; letter-spacing: -0.01em;
 }
 .ob-form-kicker {
   font-family: 'Source Serif 4', Georgia, serif;
@@ -199,7 +263,7 @@ body::before {
 .ob-card {
   background: var(--card); border: 1px solid var(--border);
   border-radius: 2px; padding: 48px 40px 40px;
-  max-width: 680px; margin: 0 auto;
+  max-width: 720px; margin: 0 auto;
 }
 .ob-section { margin-bottom: 48px; }
 .ob-label {
@@ -209,14 +273,14 @@ body::before {
 }
 .ob-label span { font-size: 10px; opacity: 0.85; }
 .ob-input {
-  width: 100%; padding: 12px 14px;
+  width: 100%; padding: 10px 0;
   font-family: 'Source Serif 4', Georgia, serif;
-  font-size: 16px; color: var(--ink); background: var(--paper);
-  border: 1px solid var(--border); border-radius: 1px; outline: none;
+  font-size: 16px; color: var(--ink); background: transparent;
+  border: none; border-bottom: 1px solid var(--border); outline: none;
   transition: border-color 0.2s;
 }
-.ob-input:focus { border-color: var(--accent); }
-.ob-input::placeholder { color: var(--muted); opacity: 0.6; }
+.ob-input:focus { border-bottom-color: var(--accent); }
+.ob-input::placeholder { color: var(--muted); opacity: 0.5; }
 .chips { display: flex; flex-wrap: wrap; gap: 8px; }
 .chip {
   font-family: 'Source Serif 4', Georgia, serif; font-size: 14px; font-weight: 300;
@@ -716,7 +780,7 @@ body::before {
 
 /* ===== SAMPLE LENS ===== */
 .sample-lens-wrap {
-  max-width: 680px; margin: 0 auto; padding: 40px 24px 0;
+  max-width: 720px; margin: 0 auto; padding: 40px 24px 0;
   border-bottom: 1px solid var(--border);
 }
 .sample-lens-label {
@@ -840,7 +904,11 @@ body::before {
     <div class="ob-wordmark-tagline">see through every lens</div>
   </div>
   <div class="ob-hero">
-    <h1 class="ob-headline">The world is one thing.<br>You were taught to see it in pieces.</h1>
+    <div class="ob-hero-ornament">
+      <div class="ob-hero-ornament-line"></div>
+      <span class="ob-hero-ornament-text">Daily insight</span>
+    </div>
+    <h1 class="ob-headline">The world is one thing.<br>You were taught to see it <em>in pieces.</em></h1>
     <div class="ob-body">
       <p>Physics, Chemistry, History, Mathematics, Biology, Economics, Geography, English Literature, Political Science. Studied separately, each in its own world. The conversation happening between them? Nobody showed us that.</p>
       <p>That conversation is where the best thinking lives.</p>
@@ -849,12 +917,37 @@ body::before {
     </div>
   </div>
 
+  <div class="ob-section-rule"><hr></div>
+
   <!-- VALUE BLOCK -->
-  <div style="max-width:520px; margin:0 auto; padding:48px 24px 40px; text-align:center;">
-    <p style="font-family:'Source Serif 4',Georgia,serif; font-size:17px; font-weight:400; color:var(--ink); line-height:1.75; margin-bottom:20px;">The knowledge nobody taught you. The thinking nobody showed you.<br>Hidden patterns. Better ideas. Sharper decisions. Fresh frameworks.</p>
-    <p style="font-family:'Playfair Display',Georgia,serif; font-size:20px; font-weight:700; font-style:italic; color:var(--ink); line-height:1.5; margin-bottom:24px;">A mind that holds its own in a world full of AI.</p>
-    <p style="font-family:'Source Serif 4',Georgia,serif; font-size:14px; font-weight:300; color:var(--muted); line-height:1.8;">For professionals, entrepreneurs, consultants, students, teachers.<br>And anyone who wants to think better. In work and in life.</p>
-  </div>
+  <section class="ob-value-section">
+    <p class="ob-value-eyebrow">What you get</p>
+    <div class="ob-value-grid">
+      <div class="ob-value-item">
+        <div class="ob-value-dot"></div>
+        <span class="ob-value-text">The knowledge nobody taught you</span>
+      </div>
+      <div class="ob-value-item">
+        <div class="ob-value-dot"></div>
+        <span class="ob-value-text">The thinking nobody showed you</span>
+      </div>
+      <div class="ob-value-item">
+        <div class="ob-value-dot"></div>
+        <span class="ob-value-text">Better ideas. Sharper decisions.</span>
+      </div>
+      <div class="ob-value-item">
+        <div class="ob-value-dot"></div>
+        <span class="ob-value-text">Fresh frameworks. Hidden patterns.</span>
+      </div>
+      <div class="ob-value-item full-width">
+        <div class="ob-value-dot"></div>
+        <span class="ob-value-text">A mind that holds its own in a world full of AI.</span>
+      </div>
+    </div>
+    <p class="ob-value-for">For professionals, entrepreneurs, consultants, students, teachers.<br>And anyone who wants to think better. In work and in life.</p>
+  </section>
+
+  <div class="ob-section-rule"><hr></div>
 
   <!-- SAMPLE LENS -->
   <div class="sample-lens-wrap">
@@ -881,8 +974,11 @@ body::before {
   </div>
 
   <div class="ob-form-wrap" id="ob-form-wrap">
-    <div class="ob-form-heading">Let's make this yours</div>
-    <div style="font-family:'Source Serif 4',Georgia,serif; font-size:15px; font-style:italic; font-weight:300; color:var(--muted); text-align:center; margin-top:-16px; margin-bottom:32px;">We'll shape this around the world you live in.</div>
+    <div style="max-width:720px; margin:0 auto;">
+      <p class="ob-form-eyebrow">Begin here</p>
+      <div class="ob-form-heading">Let's make this yours.</div>
+      <div style="font-family:'Source Serif 4',Georgia,serif; font-size:15px; font-style:italic; font-weight:300; color:var(--muted); text-align:left; margin-bottom:36px;">We'll shape it around the world you live in.</div>
+    </div>
 
     <!-- Progress bar -->
     <div class="ob-progress-wrap">
