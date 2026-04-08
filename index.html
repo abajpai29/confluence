@@ -137,24 +137,28 @@ body::before {
 }
 
 .ob-wordmark {
-  max-width: 920px; margin: 0 auto; padding: 28px 24px 0;
+  max-width: 920px; margin: 0 auto; padding: 28px 24px 24px;
+  border-bottom: 0.5px solid var(--border);
 }
 .ob-wordmark-name {
   font-family: 'Playfair Display', Georgia, serif;
-  font-size: 1.2rem; font-weight: 400; color: #1A1612; letter-spacing: 0.06em;
-}
-.ob-wordmark-rule {
-  height: 0.5px; background: rgba(26,22,18,0.15);
-  border: none; margin: 3px 0; width: 100%;
+  font-size: 1.8rem; font-weight: 400; color: #1A1612; letter-spacing: 0.06em;
+  display: inline-block;
+  border-bottom: 0.5px solid rgba(26,22,18,0.15);
+  padding-bottom: 3px; margin-bottom: 4px;
 }
 .ob-wordmark-tagline {
   font-family: 'Cormorant Garamond', Georgia, serif;
   font-style: italic; font-weight: 300;
-  font-size: 0.65rem; letter-spacing: 0.04em; color: #6B6358;
+  font-size: 0.72rem; letter-spacing: 0.04em; color: #6B6358;
+  display: block;
 }
 .app-logo {
   font-family: 'Playfair Display', Georgia, serif;
-  font-size: 1.2rem; font-weight: 400; color: #1A1612; letter-spacing: 0.06em;
+  font-size: 1.8rem; font-weight: 400; color: #1A1612; letter-spacing: 0.06em;
+  display: inline-block;
+  border-bottom: 0.5px solid rgba(26,22,18,0.15);
+  padding-bottom: 3px; margin-bottom: 4px;
 }
 .ob-cta {
   margin-top: 36px;
@@ -733,11 +737,11 @@ body::before {
 
 /* ===== OB ABOUT LINK ===== */
 .ob-footer {
-  max-width: 920px; margin: 32px auto 0; padding: 20px 24px 32px;
+  max-width: 920px; margin: 32px auto 0; padding: 24px 24px 40px;
   border-top: 0.5px solid var(--border);
   display: flex; align-items: center; gap: 0;
   font-family: 'Source Serif 4', Georgia, serif;
-  font-size: 13px; font-style: italic; font-weight: 300;
+  font-size: 15px; font-style: italic; font-weight: 300;
   color: var(--muted); flex-wrap: wrap;
 }
 .ob-footer-sep {
@@ -922,7 +926,6 @@ body::before {
 <div id="screen-onboarding">
   <div class="ob-wordmark">
     <div class="ob-wordmark-name">Eneth</div>
-    <hr class="ob-wordmark-rule">
     <div class="ob-wordmark-tagline">Think to the nth degree</div>
   </div>
   <div class="ob-hero">
@@ -1122,7 +1125,6 @@ body::before {
     <div class="app-header">
       <div>
         <div class="app-logo">Eneth</div>
-        <hr class="ob-wordmark-rule">
         <div class="ob-wordmark-tagline">Think to the nth degree</div>
       </div>
       <div style="display:flex;align-items:center;gap:16px;">
@@ -1154,7 +1156,6 @@ body::before {
 <div id="screen-weekend" class="hidden">
   <div class="weekend-wrap">
     <div class="app-logo">Eneth</div>
-    <hr class="ob-wordmark-rule" style="max-width:60px;">
     <div class="ob-wordmark-tagline">Think to the nth degree</div>
     <div class="weekend-main" id="weekend-greeting"></div>
     <div class="weekend-main">Rest on weekends.</div>
@@ -1171,7 +1172,6 @@ body::before {
     <div class="app-header">
       <div>
         <div class="app-logo">Eneth</div>
-        <hr class="ob-wordmark-rule">
         <div class="ob-wordmark-tagline">Think to the nth degree</div>
       </div>
       <button class="nav-link" onclick="showScreen(state.todayCard ? 'screen-app' : 'screen-onboarding')">← Back</button>
@@ -1237,7 +1237,6 @@ body::before {
     <div class="app-header">
       <div>
         <div class="app-logo">Eneth</div>
-        <hr class="ob-wordmark-rule">
         <div class="ob-wordmark-tagline">Think to the nth degree</div>
       </div>
       <button class="nav-link" onclick="showScreen('screen-app')">← Back</button>
@@ -1256,7 +1255,6 @@ body::before {
     <div class="app-header">
       <div>
         <div class="app-logo">Eneth</div>
-        <hr class="ob-wordmark-rule">
         <div class="ob-wordmark-tagline">Think to the nth degree</div>
       </div>
       <button class="nav-link" onclick="showScreen('screen-app')">← Back</button>
