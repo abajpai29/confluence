@@ -110,10 +110,6 @@ body::before {
   display: flex; align-items: center; justify-content: space-between;
   padding: 32px 0 28px; border-bottom: 1px solid var(--border);
 }
-.app-logo {
-  font-family: 'Playfair Display', Georgia, serif;
-  font-size: 24px; font-weight: 700; color: var(--ink); letter-spacing: 0.01em;
-}
 .app-logo span { color: var(--accent); }
 .header-nav { display: flex; gap: 28px; align-items: center; }
 .nav-link {
@@ -140,12 +136,16 @@ body::before {
   max-width: 920px; margin: 0 auto; padding: 28px 24px 24px;
   border-bottom: 0.5px solid var(--border);
 }
+.ob-logo-lockup {
+  display: inline-block;
+}
 .ob-wordmark-name {
   font-family: 'Playfair Display', Georgia, serif;
   font-size: 1.5rem; font-weight: 400; color: #1A1612; letter-spacing: 0.06em;
-  display: block; width: fit-content;
-  border-bottom: 0.5px solid rgba(26,22,18,0.15);
-  padding-bottom: 3px; margin-bottom: 4px;
+}
+.ob-wordmark-rule {
+  display: block; width: 100%; height: 0.5px;
+  background: rgba(26,22,18,0.15); border: none; margin: 3px 0;
 }
 .ob-wordmark-tagline {
   font-family: 'Cormorant Garamond', Georgia, serif;
@@ -156,9 +156,6 @@ body::before {
 .app-logo {
   font-family: 'Playfair Display', Georgia, serif;
   font-size: 1.5rem; font-weight: 400; color: #1A1612; letter-spacing: 0.06em;
-  display: block; width: fit-content;
-  border-bottom: 0.5px solid rgba(26,22,18,0.15);
-  padding-bottom: 3px; margin-bottom: 4px;
 }
 .ob-cta {
   margin-top: 36px;
@@ -925,8 +922,11 @@ body::before {
 <!-- ===== ONBOARDING ===== -->
 <div id="screen-onboarding">
   <div class="ob-wordmark">
-    <div class="ob-wordmark-name">Eneth</div>
-    <div class="ob-wordmark-tagline">Think to the nth degree</div>
+    <div class="ob-logo-lockup">
+      <div class="ob-wordmark-name">Eneth</div>
+      <div class="ob-wordmark-rule"></div>
+      <div class="ob-wordmark-tagline">Think to the nth degree</div>
+    </div>
   </div>
   <div class="ob-hero">
     <h1 class="ob-headline">The world is one thing.<br>You were taught to see it <em>in pieces.</em></h1>
@@ -1124,8 +1124,11 @@ body::before {
   <div class="page-wrap">
     <div class="app-header">
       <div>
-        <div class="app-logo">Eneth</div>
-        <div class="ob-wordmark-tagline">Think to the nth degree</div>
+        <div class="ob-logo-lockup">
+          <div class="app-logo">Eneth</div>
+          <div class="ob-wordmark-rule"></div>
+          <div class="ob-wordmark-tagline">Think to the nth degree</div>
+        </div>
       </div>
       <div style="display:flex;align-items:center;gap:16px;">
         <button class="nav-link" onclick="showSaved()">Saved</button>
@@ -1155,8 +1158,11 @@ body::before {
 <!-- ===== WEEKEND SCREEN ===== -->
 <div id="screen-weekend" class="hidden">
   <div class="weekend-wrap">
-    <div class="app-logo">Eneth</div>
-    <div class="ob-wordmark-tagline">Think to the nth degree</div>
+    <div class="ob-logo-lockup">
+      <div class="app-logo">Eneth</div>
+      <div class="ob-wordmark-rule"></div>
+      <div class="ob-wordmark-tagline">Think to the nth degree</div>
+    </div>
     <div class="weekend-main" id="weekend-greeting"></div>
     <div class="weekend-main">Rest on weekends.</div>
     <div class="weekend-body">See you Monday with a fresh lens.</div>
@@ -1171,8 +1177,11 @@ body::before {
   <div class="page-wrap">
     <div class="app-header">
       <div>
-        <div class="app-logo">Eneth</div>
-        <div class="ob-wordmark-tagline">Think to the nth degree</div>
+        <div class="ob-logo-lockup">
+          <div class="app-logo">Eneth</div>
+          <div class="ob-wordmark-rule"></div>
+          <div class="ob-wordmark-tagline">Think to the nth degree</div>
+        </div>
       </div>
       <button class="nav-link" onclick="showScreen(state.todayCard ? 'screen-app' : 'screen-onboarding')">← Back</button>
     </div>
@@ -1236,8 +1245,11 @@ body::before {
   <div class="page-wrap">
     <div class="app-header">
       <div>
-        <div class="app-logo">Eneth</div>
-        <div class="ob-wordmark-tagline">Think to the nth degree</div>
+        <div class="ob-logo-lockup">
+          <div class="app-logo">Eneth</div>
+          <div class="ob-wordmark-rule"></div>
+          <div class="ob-wordmark-tagline">Think to the nth degree</div>
+        </div>
       </div>
       <button class="nav-link" onclick="showScreen('screen-app')">← Back</button>
     </div>
@@ -1254,8 +1266,11 @@ body::before {
   <div class="page-wrap">
     <div class="app-header">
       <div>
-        <div class="app-logo">Eneth</div>
-        <div class="ob-wordmark-tagline">Think to the nth degree</div>
+        <div class="ob-logo-lockup">
+          <div class="app-logo">Eneth</div>
+          <div class="ob-wordmark-rule"></div>
+          <div class="ob-wordmark-tagline">Think to the nth degree</div>
+        </div>
       </div>
       <button class="nav-link" onclick="showScreen('screen-app')">← Back</button>
     </div>
