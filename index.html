@@ -61,6 +61,27 @@ body::before {
 .hidden { display: none !important; }
 
 @keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+@keyframes fadeUpLanding { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+
+/* Landing page load animations */
+.ob-hero { animation: fadeUpLanding 0.6s ease both; }
+.sample-lens-wrap { animation: fadeUpLanding 0.6s ease 0.15s both; }
+.ob-form-wrap { animation: fadeUpLanding 0.6s ease 0.25s both; }
+
+/* Scroll reveal */
+.scroll-reveal {
+  opacity: 0; transform: translateY(16px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.scroll-reveal.visible {
+  opacity: 1; transform: translateY(0);
+}
+
+/* Nav on scroll */
+.ob-wordmark.scrolled {
+  border-bottom-color: rgba(26,22,18,0.18);
+  transition: border-bottom-color 0.3s ease;
+}
 @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
 @keyframes spin { to { transform:rotate(360deg); } }
 @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.4; } }
@@ -339,9 +360,9 @@ body::before {
   font-family: 'JetBrains Mono', monospace; font-size: 11px;
   letter-spacing: 0.1em; color: #fff; background: var(--accent);
   border: none; border-radius: 1px; padding: 10px 20px;
-  cursor: pointer; transition: background 0.15s;
+  cursor: pointer; transition: background-color 0.2s ease;
 }
-.ob-next-btn:hover:not(:disabled) { background: #a33a08; }
+.ob-next-btn:hover:not(:disabled) { background-color: var(--ink); }
 .ob-next-btn:disabled { opacity: 0.45; cursor: not-allowed; }
 .ob-back-btn {
   font-family: 'JetBrains Mono', monospace; font-size: 11px;
@@ -946,18 +967,8 @@ body::before {
 
   <div class="ob-section-rule"><hr></div>
 
-  <!-- VALUE BLOCK -->
-  <section class="ob-value-section">
-    <p class="ob-value-line1">The knowledge nobody taught you &nbsp;·&nbsp; The thinking nobody showed you</p>
-    <p class="ob-value-line2">Better ideas &nbsp;·&nbsp; Sharper decisions &nbsp;·&nbsp; Fresh frameworks &nbsp;·&nbsp; Hidden patterns</p>
-    <p class="ob-value-line3">A mind that holds its own in a world full of AI</p>
-    <p class="ob-value-for">For professionals, entrepreneurs, consultants, students, teachers.<br>And anyone who wants to think better. In work and in life.</p>
-  </section>
-
-  <div class="ob-section-rule"><hr></div>
-
   <!-- SAMPLE LENS -->
-  <div class="sample-lens-wrap">
+  <div class="sample-lens-wrap scroll-reveal">
     <div class="sample-lens-label">This is what seeing differently looks like</div>
     <div class="card" style="animation:none; border-left: 3px solid var(--accent);">
       <div class="card-hook">In September 1838, Charles Darwin picked up an economics essay for fun. It changed biology forever.</div>
@@ -980,7 +991,7 @@ body::before {
     </div>
   </div>
 
-  <div class="ob-form-wrap" id="ob-form-wrap">
+  <div class="ob-form-wrap scroll-reveal" id="ob-form-wrap">
     <div style="max-width:920px; margin:0 auto;">
       <div class="ob-form-heading">Let's make this <em>yours.</em></div>
       <div style="font-family:'Source Serif 4',Georgia,serif; font-size:15px; font-style:italic; font-weight:300; color:var(--muted); text-align:left; margin-bottom:36px;">We'll shape it around the world you live in.</div>
@@ -1115,14 +1126,27 @@ body::before {
       </div>
     </div>
 
-    <footer class="ob-footer">
-      <span>© 2026 Eneth</span>
-      <span class="ob-footer-sep">·</span>
-      <a href="mailto:hello@eneth.co">hello@eneth.co</a>
-      <span class="ob-footer-sep">·</span>
-      <button onclick="showScreen('screen-about')">The thinking behind Eneth →</button>
-    </footer>
   </div>
+
+  <div class="ob-section-rule"><hr></div>
+
+  <!-- VALUE BLOCK -->
+  <section class="ob-value-section scroll-reveal">
+    <p class="ob-value-line1">The knowledge nobody taught you &nbsp;·&nbsp; The thinking nobody showed you</p>
+    <p class="ob-value-line2">Better ideas &nbsp;·&nbsp; Sharper decisions &nbsp;·&nbsp; Fresh frameworks &nbsp;·&nbsp; Hidden patterns</p>
+    <p class="ob-value-line3">A mind that holds its own in a world full of AI</p>
+    <p class="ob-value-for">For professionals, entrepreneurs, consultants, students, teachers.<br>And anyone who wants to think better. In work and in life.</p>
+  </section>
+
+  <div class="ob-section-rule"><hr></div>
+
+  <footer class="ob-footer">
+    <span>© 2026 Eneth</span>
+    <span class="ob-footer-sep">·</span>
+    <a href="mailto:hello@eneth.co">hello@eneth.co</a>
+    <span class="ob-footer-sep">·</span>
+    <button onclick="showScreen('screen-about')">The thinking behind Eneth →</button>
+  </footer>
 </div>
 
 <!-- ===== APP SCREEN ===== -->
@@ -2614,6 +2638,38 @@ function init() {
 }
 
 init();
+
+// ============================================================
+// LANDING PAGE ANIMATIONS
+// ============================================================
+
+// Scroll reveal — IntersectionObserver
+(function() {
+  const els = document.querySelectorAll('.scroll-reveal');
+  if (!els.length) return;
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  els.forEach(el => observer.observe(el));
+})();
+
+// Nav border on scroll
+(function() {
+  const wordmark = document.querySelector('.ob-wordmark');
+  if (!wordmark) return;
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 60) {
+      wordmark.classList.add('scrolled');
+    } else {
+      wordmark.classList.remove('scrolled');
+    }
+  }, { passive: true });
+})();
 </script>
 
 </body>
