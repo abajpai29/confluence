@@ -101,10 +101,7 @@ body::before {
 
 /* ===== SHARED LAYOUT ===== */
 .page-wrap {
-  max-width: 680px; margin: 0 auto; padding: 0 24px 64px; position: relative; z-index: 1;
-}
-@media (min-width: 768px) {
-  .page-wrap { max-width: 780px; }
+  max-width: 920px; margin: 0 auto; padding: 0 24px 64px; position: relative; z-index: 1;
 }
 /* ===== DAY BADGE ===== */
 .day-badge {
@@ -678,7 +675,7 @@ body::before {
   border: none; cursor: pointer; padding: 4px 0; transition: color 0.15s;
 }
 .back-btn:hover { color: var(--accent); }
-.about-wrap { max-width: 580px; margin: 0 auto; padding: 56px 0 80px; position: relative; z-index: 1; }
+.about-wrap { max-width: 920px; margin: 0 auto; padding: 56px 0 80px; position: relative; z-index: 1; }
 .about-eyebrow {
   font-family: 'JetBrains Mono', monospace; font-size: 11px;
   letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent); margin-bottom: 20px;
@@ -1215,7 +1212,6 @@ body::before {
       <button class="nav-link" onclick="showScreen(state.todayCard ? 'screen-app' : 'screen-onboarding')">← Back</button>
     </div>
     <div class="about-wrap">
-      <div class="about-eyebrow">The thinking behind Eneth</div>
       <div class="about-divider">✦</div>
       <div class="about-body">
         <p>Everything you've ever studied is connected. Every subject you thought was useless has a direct line to something that matters in your world right now.</p>
