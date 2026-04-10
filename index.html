@@ -1448,7 +1448,7 @@ function stopLoadingFragments() {
 function getShareText() {
   const c = state.todayCard;
   if (!c) return '';
-  return `I just saw my world through the lens of ${state.todayDiscipline} and I can't unsee it.\n\n"${c.hook}"\n\nConfluence does this every weekday morning. One unexpected discipline connected directly to your world.\n\nWorth 5 minutes.\n\nhttps://abajpai29.github.io/confluence/`;
+  return `I just saw my world through the lens of ${state.todayDiscipline} and I can't unsee it.\n\n"${c.hook}"\n\nEneth does this every weekday. One unexpected discipline connected directly to your world.\n\nWorth 5 minutes.\n\nhttps://abajpai29.github.io/confluence/`;
 }
 
 function shareWhatsApp() {
@@ -2259,7 +2259,7 @@ function saveInlineEmail() {
     saveState();
     submitEmailToFormspree(val, 'inline');
     const el = document.getElementById('email-capture-inline');
-    if (el) el.innerHTML = '<p class="email-capture-thanks">You\'re part of Confluence now. The dots are about to start connecting.</p>';
+    if (el) el.innerHTML = '<p class="email-capture-thanks">You\'re part of Eneth now. The dots are about to start connecting.</p>';
   }
 }
 
