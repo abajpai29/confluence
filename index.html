@@ -2161,7 +2161,7 @@ function renderCard(card, discipline) {
   const todayStr = new Date().toISOString().slice(0,10);
   state.cardHistory = state.cardHistory || [];
   if (!state.cardHistory.find(h => h.date === todayStr)) {
-    state.cardHistory.push({ date: todayStr, discipline, hook: card.hook });
+    state.cardHistory.push({ date: todayStr, discipline, hook: card.hook, card: card });
     if (state.cardHistory.length > 121) state.cardHistory = state.cardHistory.slice(-121);
     saveState();
   }
@@ -2213,7 +2213,7 @@ function toggleBookmark(discipline) {
     if (btn) { btn.textContent = '☆ Save'; btn.classList.remove('saved'); }
     showToast('Removed from saved');
   } else {
-    state.savedCards.push({ date: today, discipline, hook: state.todayCard?.hook });
+    state.savedCards.push({ date: today, discipline, hook: state.todayCard?.hook, card: state.todayCard });
     if (btn) { btn.textContent = '★ Saved'; btn.classList.add('saved'); }
     showToast('Saved');
   }
@@ -2498,10 +2498,12 @@ function renderSaved() {
     list.innerHTML = '<p class="archive-empty">Nothing saved yet. Tap ☆ on any lens.</p>';
     return;
   }
+  window._archiveLookup = window._archiveLookup || {};
+  saved.forEach(h => { window._archiveLookup[h.date] = h; });
   list.innerHTML = saved.map(h => {
     const d = new Date(h.date);
     const dateStr = d.toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' });
-    return `<div class="archive-item">
+    return `<div class="archive-item" style="cursor:pointer;" onclick="openLensModal('${h.date}')">
       <div class="archive-item-meta">
         <span class="archive-discipline">${h.discipline}</span>
         <span class="archive-date">${dateStr}</span>
@@ -2519,10 +2521,12 @@ function renderArchive() {
     list.innerHTML = '<p class="archive-empty">Your archive is empty. Come back after your first lens.</p>';
     return;
   }
+  window._archiveLookup = window._archiveLookup || {};
+  history.forEach(h => { window._archiveLookup[h.date] = h; });
   list.innerHTML = history.map(h => {
     const d = new Date(h.date);
     const dateStr = d.toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' });
-    return `<div class="archive-item">
+    return `<div class="archive-item" style="cursor:pointer;" onclick="openLensModal('${h.date}')">
       <div class="archive-item-meta">
         <span class="archive-discipline">${h.discipline}</span>
         <span class="archive-date">${dateStr}</span>
@@ -2665,6 +2669,55 @@ init();
     }
   }, { passive: true });
 })();
+</script>
+
+<!-- LENS MODAL -->
+<div id="lens-modal-overlay" onclick="closeLensModal()" style="display:none;position:fixed;inset:0;background:rgba(26,22,18,0.45);z-index:1000;backdrop-filter:blur(2px);"></div>
+<div id="lens-modal" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:min(620px,92vw);max-height:82vh;overflow-y:auto;background:var(--paper);z-index:1001;padding:36px 32px 32px;box-shadow:0 12px 48px rgba(0,0,0,0.2);">
+  <button onclick="closeLensModal()" style="position:absolute;top:14px;right:18px;background:none;border:none;font-family:'JetBrains Mono',monospace;font-size:18px;cursor:pointer;color:var(--muted);line-height:1;padding:4px;">×</button>
+  <div id="lens-modal-content"></div>
+</div>
+
+<script>
+function openLensModal(date) {
+  const h = window._archiveLookup && window._archiveLookup[date];
+  if (!h) return;
+  const card = h.card;
+  const clusterEmoji = CLUSTERS[DISC_TO_CLUSTER[h.discipline]]?.emoji || '✦';
+  const d = new Date(h.date);
+  const dateStr = d.toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' });
+
+  let html = `
+    <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent);margin-bottom:4px;">${clusterEmoji} ${h.discipline}</div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:0.08em;margin-bottom:18px;">${dateStr}</div>
+    <div style="font-family:'Source Serif 4',Georgia,serif;font-size:18px;font-style:italic;color:var(--ink);line-height:1.6;margin-bottom:20px;">${h.hook || ''}</div>
+  `;
+
+  if (card) {
+    const p1 = card.sourceWorld || card.para1 || '';
+    const pivot = card.pivotLine || '';
+    const p2 = card.yourWorld || card.para2 || '';
+    if (p1) html += `<p style="font-family:'Source Serif 4',Georgia,serif;font-size:15px;color:var(--ink);line-height:1.8;margin-bottom:12px;">${p1}</p>`;
+    if (pivot) html += `<p style="font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.04em;color:var(--accent);line-height:1.7;margin-bottom:12px;">${pivot}</p>`;
+    if (p2) html += `<p style="font-family:'Source Serif 4',Georgia,serif;font-size:15px;color:var(--ink);line-height:1.8;margin-bottom:12px;">${p2}</p>`;
+    if (card.whyItMatters) html += `
+      <div style="border-top:0.5px solid var(--border);padding-top:16px;margin-top:16px;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">Why this matters for you</div>
+        <div style="font-family:'Source Serif 4',Georgia,serif;font-size:14px;color:var(--ink);line-height:1.8;">${card.whyItMatters}</div>
+      </div>`;
+  }
+
+  document.getElementById('lens-modal-content').innerHTML = html;
+  document.getElementById('lens-modal-overlay').style.display = 'block';
+  document.getElementById('lens-modal').style.display = 'block';
+  document.body.style.overflow = 'hidden';
+}
+
+function closeLensModal() {
+  document.getElementById('lens-modal-overlay').style.display = 'none';
+  document.getElementById('lens-modal').style.display = 'none';
+  document.body.style.overflow = '';
+}
 </script>
 
 </body>
