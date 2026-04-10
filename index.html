@@ -1049,7 +1049,7 @@ body::before {
         </div>
         <div class="ob-step-nav">
           <button class="ob-back-btn" onclick="obBack(3)">← Back</button>
-          <button class="ob-next-btn" id="ob-next-3" onclick="obNext(3)" disabled>Continue →</button>
+          <button class="ob-next-btn" id="ob-next-3" onclick="obNext(3)">Continue →</button>
         </div>
       </div>
 
@@ -1071,7 +1071,6 @@ body::before {
           <div class="chip" data-val="Social Sciences">Social Sciences</div>
           <div class="chip" data-val="Architecture & Design">Architecture</div>
           <div class="chip" data-val="Agriculture">Agriculture</div>
-          <div class="chip" data-val="Education">Education</div>
           <div class="chip" data-val="Public Policy & Governance">Public Policy</div>
         </div>
         <div class="ob-step-nav">
@@ -1525,9 +1524,7 @@ function obInitStep2() {
 }
 
 function obInitStep3() {
-  initChips('chips-domain', true, () => {
-    document.getElementById('ob-next-3').disabled = !getChips('chips-domain').length;
-  });
+  initChips('chips-domain', true);
 }
 
 function obInitStep4() {
