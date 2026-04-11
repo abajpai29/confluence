@@ -128,6 +128,7 @@ body::before {
   display: flex; align-items: center; justify-content: space-between;
   padding: 32px 0 28px; border-bottom: 1px solid var(--border);
 }
+#screen-about .app-header { border-bottom: none; }
 .app-logo span { color: var(--accent); }
 .header-nav { display: flex; gap: 28px; align-items: center; }
 .nav-link {
@@ -161,10 +162,10 @@ body::before {
   font-size: 1.5rem; font-weight: 400; color: #1A1612; letter-spacing: 0.06em;
 }
 .ob-wordmark .ob-wordmark-name {
-  font-size: 3.5rem;
+  font-size: 2.2rem;
 }
 .ob-wordmark .ob-wordmark-tagline {
-  font-size: 1.05rem;
+  font-size: 0.8rem;
 }
 .ob-wordmark-rule {
   display: block; width: 100%; height: 0.5px;
@@ -1199,7 +1200,6 @@ body::before {
       <button class="nav-link" onclick="showScreen(state.todayCard ? 'screen-app' : 'screen-onboarding')">← Back</button>
     </div>
     <div class="about-wrap">
-      <div class="about-divider">✦</div>
       <div class="about-body">
         <p>Everything you've ever studied is connected. Every subject you thought was useless has a direct line to something that matters in your world right now.</p>
         <p>You just weren't shown the connections.</p>
@@ -1226,6 +1226,9 @@ body::before {
         <p>The people who develop these ways of thinking do so accidentally. Through unusual careers. Through environments that force them to think across everything at once. Through the right education at the right moment.</p>
         <p>Most people never get that forcing function.</p>
         <p>This starts long before the workplace. In school we memorise and reproduce. By the time we enter the more practical and professional world, we have years of knowledge but almost no practice in using it well. Nobody ever showed us the conversation happening between the things we already know.</p>
+      </div>
+      <div class="about-divider">✦</div>
+      <div class="about-body">
         <p>The cost of that is real.</p>
         <p>You make decisions with one lens when three would serve you better.</p>
         <p>You solve problems inside one discipline when the answer was sitting in another.</p>
@@ -1238,13 +1241,13 @@ body::before {
         <p>AI is an extraordinary answer machine. It knows more facts than any human ever will.</p>
         <p>But asking the question nobody thought to ask. Finding the connection that lives in the unmapped space between disciplines. Questioning the assumption everyone in the room has accepted. Thinking clearly when the answer isn't certain.</p>
         <p>That still requires a human mind.</p>
-        <p>In a world where AI can answer almost anything — the ability to ask the right question, see the right connection, think clearly under uncertainty — that becomes more valuable. Not less.</p>
+        <p>In a world where AI can answer almost anything, the ability to ask the right question, see the right connection, think clearly under uncertainty, becomes more valuable. Not less.</p>
       </div>
       <div class="about-divider">✦</div>
       <div class="about-body">
         <p>What you find here today is the beginning.</p>
         <p>One unexpected connection from across human knowledge, every weekday. That is where we start. There is much more we want to build.</p>
-        <p>Our hope is simple. That every day after you read, it shifts something. That over time the shifts compound into something larger — a mind that works differently from the one you had before.</p>
+        <p>Our hope is simple. That every day after you read, it shifts something. That over time the shifts compound into something larger. A mind that works differently from the one you had before.</p>
         <p>Think to the nth degree.</p>
         <p>Welcome to Eneth.</p>
       </div>
@@ -1495,10 +1498,10 @@ function obShowStep(step) {
 
 function obNext(step) {
   const acks = {
-    1: () => { const n = document.getElementById('ob-name').value.trim(); return n ? `Good to meet you, ${n}.` : ''; },
-    2: () => 'Got it.',
-    3: () => 'Interesting mix.',
-    4: () => 'That helps.',
+    1: () => '',
+    2: () => '',
+    3: () => '',
+    4: () => '',
     5: () => '',
   };
   const next = step + 1;
