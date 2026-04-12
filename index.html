@@ -126,7 +126,7 @@ body::before {
 /* ===== APP HEADER ===== */
 .app-header {
   display: flex; align-items: center; justify-content: space-between;
-  padding: 32px 0 28px; border-bottom: 1px solid var(--border);
+  padding: 20px 0 16px; border-bottom: 1px solid var(--border);
 }
 #screen-about .app-header { border-bottom: none; }
 .app-logo span { color: var(--accent); }
@@ -967,6 +967,7 @@ body::before {
       <p>That conversation is where the best thinking lives.</p>
       <p>Every weekday, Eneth brings you one unexpected connection, from across the full map of human knowledge.</p>
       <p>Something you can't unsee.</p>
+      <p>Better thinking starts here.</p>
     </div>
   </div>
 
@@ -981,10 +982,10 @@ body::before {
       <div class="card-body">
         <p class="card-para">Darwin was stuck.</p>
         <p class="card-para">He had years of observations from the Beagle voyage. Species changed over time. He could see it. But he could not explain the mechanism.</p>
-        <p class="card-para">Then he read Thomas Malthus. A clergyman writing about poverty and grain prices. Malthus argued that human populations grow faster than food supply, creating relentless competition for survival.</p>
+        <p class="card-para">Then he read Thomas Malthus, a political economist writing about population, scarcity, and the pressures that follow when resources are limited. Malthus argued that human populations grow faster than food supply, creating relentless competition for survival.</p>
         <p class="card-para" style="font-style:italic; color:var(--accent); font-size:15px;">Darwin saw it instantly.</p>
         <p class="card-para">That same pressure applied to every living species. Organisms multiply faster than resources allow. The ones with favourable variations survive. The rest don't.</p>
-        <p class="card-para">He wrote in his notebook that he had "at last got a theory by which to work." Natural selection. The most transformative idea in biology. It did not come from biology. It came from a book about economics that he picked up for amusement.</p>
+        <p class="card-para">He wrote in his notebook that he had "at last got a theory by which to work." Natural selection. One of the most transformative ideas in biology. It did not come from biology. It came from a book about economics that he picked up for amusement.</p>
       </div>
       <div class="card-why-box">
         <div class="card-why-label">Why this matters</div>
@@ -1847,9 +1848,9 @@ Every card must meet this standard. Study it.
 
 Hook: "In September 1838, Charles Darwin picked up an economics essay for fun. It changed biology forever."
 
-Para1: Darwin was stuck. He had years of observations from the Beagle voyage. Species changed over time. He could see it. But he could not explain the mechanism. Then he read Thomas Malthus, a clergyman writing about poverty and grain prices. Malthus argued that human populations grow faster than food supply, creating relentless competition for survival.
+Para1: Darwin was stuck. He had years of observations from the Beagle voyage. Species changed over time. He could see it. But he could not explain the mechanism. Then he read Thomas Malthus, a political economist writing about population, scarcity, and the pressures that follow when resources are limited. Malthus argued that human populations grow faster than food supply, creating relentless competition for survival.
 
-Para2: Darwin saw it instantly. That same pressure applied to every living species. Organisms multiply faster than resources allow. The ones with favourable variations survive. The rest do not. He wrote in his notebook that he had "at last got a theory by which to work." Natural selection. The most transformative idea in biology. It did not come from biology. It came from a book about economics that he picked up for amusement.
+Para2: Darwin saw it instantly. That same pressure applied to every living species. Organisms multiply faster than resources allow. The ones with favourable variations survive. The rest do not. He wrote in his notebook that he had "at last got a theory by which to work." Natural selection. One of the most transformative ideas in biology. It did not come from biology. It came from a book about economics that he picked up for amusement.
 
 Why it matters: Your next breakthrough is probably not in your field. It is sitting in a book you would never normally pick up.
 
@@ -2106,7 +2107,7 @@ function renderCard(card, discipline) {
     </div>
     ${!state.profile?.email ? `
     <div class="email-capture" id="email-capture-inline">
-      <div class="email-capture-label">Get your daily lens
+      <div class="email-capture-label">Get your daily insight.
         <div style="font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.06em;color:var(--muted);margin-top:3px;font-weight:400;">Every weekday.</div>
       </div>
       <div class="email-capture-row">
@@ -2291,7 +2292,7 @@ function renderTomorrow(todayDiscipline) {
     </div>`;
   const name = state.profile?.name || 'Friend';
   const cl = document.getElementById('close-line-area');
-  if (cl) cl.innerHTML = `<p class="card-close-line">That was today's way to see.</p>`;
+  if (cl) cl.innerHTML = '';
 }
 
 // ============================================================
@@ -2400,6 +2401,7 @@ function renderConstellation(newDiscipline) {
 
   el.innerHTML = `
     <div class="constellation-wrap">
+      <div style="border-top:1px solid var(--rule); margin: 32px 0 24px;"></div>
       <div class="constellation-title">Your Knowledge Lattice</div>
       <div class="constellation-pre-text">Every discipline you explore adds a node. Watch your map of thinking grow.</div>
       <svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:520px;height:auto;display:block;margin:0 auto;">
