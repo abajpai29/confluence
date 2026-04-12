@@ -639,6 +639,14 @@ body::before {
 /* ===== WEEKEND ===== */
 #screen-weekend { animation: fadeUp 0.4s ease both; }
 .weekend-wrap { max-width: 480px; margin: 0 auto; padding: 80px 24px; text-align: center; position: relative; z-index: 1; }
+.weekend-wordmark { display: block; margin: 0 auto 48px; text-align: center; }
+.weekend-wordmark-name {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.8rem; font-weight: 400; color: #1A1612; letter-spacing: 0.06em;
+  margin-bottom: 0;
+}
+.weekend-wordmark .ob-wordmark-rule { margin: 2px auto; }
+.weekend-wordmark .ob-wordmark-tagline { text-align: center; }
 .weekend-logo {
   font-family: 'Playfair Display', Georgia, serif;
   font-size: 18px; font-weight: 700; color: var(--ink); margin-bottom: 48px;
@@ -1163,8 +1171,8 @@ body::before {
 <!-- ===== WEEKEND SCREEN ===== -->
 <div id="screen-weekend" class="hidden">
   <div class="weekend-wrap">
-    <div class="ob-logo-lockup">
-      <div class="app-logo">Eneth</div>
+    <div class="weekend-wordmark">
+      <div class="weekend-wordmark-name">Eneth</div>
       <div class="ob-wordmark-rule"></div>
       <div class="ob-wordmark-tagline">Think to the nth degree</div>
     </div>
@@ -1173,7 +1181,6 @@ body::before {
     <div class="weekend-body">See you Monday with a fresh lens.</div>
     <div class="weekend-teaser" id="weekend-teaser"></div>
     <div class="weekend-next" id="weekend-next"></div>
-    <button class="btn-calendar" style="max-width:320px; margin:0 auto;" onclick="addToCalendar()">Add to my morning routine</button>
   </div>
 </div>
 
@@ -2556,8 +2563,9 @@ function showWeekendScreen() {
   const count = state.cardCount || 0;
 
   document.getElementById('weekend-greeting').textContent = `${name}.`;
-  document.getElementById('weekend-teaser').textContent =
-    `You've seen ${count} connection${count !== 1 ? 's' : ''} so far. The lattice grows again on Monday.`;
+  document.getElementById('weekend-teaser').textContent = count > 0
+    ? `You've seen ${count} connection${count !== 1 ? 's' : ''} so far. The lattice grows again on Monday.`
+    : 'Your first lens arrives Monday.';
   document.getElementById('weekend-next').innerHTML = '';
 
   showScreen('screen-weekend');
