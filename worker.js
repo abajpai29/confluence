@@ -88,7 +88,7 @@ export default {
     }
 
     const safePayload = {
-      model: 'claude-opus-4-6',
+      model: 'claude-sonnet-4-6',
       max_tokens: MAX_TOKENS_CAP,
       messages: [{
         role: 'user',
@@ -142,7 +142,7 @@ async function sendDailyReminders(env) {
   const list = await env.RATE_LIMIT.list({ prefix: 'sub:' });
   if (!list.keys.length) return;
 
-  const siteUrl = (env.SITE_URL || 'https://abajpai29.github.io/confluence/').trim();
+  const siteUrl = (env.SITE_URL || 'https://eneth.co').trim();
   const fromEmail = (env.FROM_EMAIL || 'Confluence <onboarding@resend.dev>').trim();
   const subject = 'Your lens for today is ready.';
   const html = emailTemplate(siteUrl);
@@ -180,7 +180,7 @@ function emailTemplate(siteUrl) {
 </head>
 <body style="margin:0;padding:0;background:#f5f0e8;">
   <div style="max-width:480px;margin:0 auto;padding:48px 32px 56px;font-family:Georgia,'Times New Roman',serif;">
-    <div style="font-size:18px;font-weight:700;color:#1a1614;margin-bottom:56px;letter-spacing:0.01em;">✦ Confluence</div>
+    <div style="font-size:18px;font-weight:700;color:#1a1614;margin-bottom:56px;letter-spacing:0.01em;">Eneth</div>
     <div style="font-size:22px;font-weight:400;color:#1a1614;line-height:1.5;margin-bottom:10px;">Your lens for today is waiting.</div>
     <div style="font-size:16px;font-weight:300;font-style:italic;color:#8a6f52;line-height:1.7;margin-bottom:44px;">Something you can't unsee.</div>
     <a href="${siteUrl}" style="display:inline-block;background:#1a1614;color:#f5f0e8;font-family:Georgia,serif;font-size:15px;font-style:italic;padding:14px 32px;text-decoration:none;letter-spacing:0.01em;">See today's lens →</a>

@@ -3,8 +3,8 @@ main = "worker.js"
 compatibility_date = "2024-09-01"
 
 [vars]
-ALLOWED_ORIGIN = "https://abajpai29.github.io"
-SITE_URL = "https://abajpai29.github.io/confluence/"
+ALLOWED_ORIGIN = "https://eneth.co"
+SITE_URL = "https://eneth.co"
 # FROM_EMAIL — set this in Cloudflare dashboard as a plain variable once you have a verified domain in Resend
 # e.g. "Confluence <lens@yourdomain.com>"
 
