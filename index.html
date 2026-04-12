@@ -1102,24 +1102,10 @@ body::before {
         </div>
         <div class="ob-step-nav">
           <button class="ob-back-btn" onclick="obBack(5)">← Back</button>
-          <button class="ob-next-btn" id="ob-next-5" onclick="obNext(5)">Continue →</button>
+          <button class="ob-next-btn" id="ob-next-5" onclick="submitOb()">See your first lens</button>
         </div>
       </div>
 
-      <!-- Step 6: Email + Submit -->
-      <div class="ob-step hidden" id="ob-step-6">
-        <div class="ob-ack" id="ob-ack-6"></div>
-        <label class="ob-label">Get future lenses by email <span>(optional)</span></label>
-        <div class="ob-label-subtext">One new lens. Every weekday.</div>
-        <div style="display:flex;gap:8px;margin-top:12px;">
-          <input type="email" class="ob-input" id="ob-email" placeholder="your@email.com" style="flex:1;margin-bottom:0;" />
-          <button class="email-submit-btn" onclick="saveObEmail()" type="button">→</button>
-        </div>
-        <div class="ob-step-nav" style="margin-top:32px;">
-          <button class="ob-back-btn" onclick="obBack(6)">← Back</button>
-          <button class="ob-next-btn" id="ob-submit" onclick="submitOb()">See your first lens</button>
-        </div>
-      </div>
     </div>
 
   </div>
@@ -1465,7 +1451,7 @@ function getChips(id) {
 // ============================================================
 // PROGRESSIVE ONBOARDING
 // ============================================================
-const OB_TOTAL = 6;
+const OB_TOTAL = 5;
 
 function obUpdateProgress(step) {
   const pct = ((step - 1) / OB_TOTAL) * 100;
@@ -2543,14 +2529,13 @@ function initApp() {
 // ONBOARDING SUBMIT
 // ============================================================
 function submitOb() {
-  const emailVal = (document.getElementById('ob-email')?.value || '').trim();
   state.profile = {
     name:      document.getElementById('ob-name').value.trim(),
     lifeStage: getChips('chips-stage')[0] || '',
     domains:   getChips('chips-domain'),
     education: getChips('chips-edu'),
     hobbies:   getChips('chips-hobby'),
-    email:     emailVal,
+    email:     '',
   };
   state.onboarded = true;
   saveState();
