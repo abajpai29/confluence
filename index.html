@@ -747,7 +747,7 @@ body::before {
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 480px) {
-  .ob-hero { padding: 36px 20px 32px; }
+  .ob-hero { padding: 36px 20px 8px; }
   .ob-body { font-size: 16px; }
   .ob-body p { margin-bottom: 12px; }
   .sample-lens-wrap { padding-top: 36px; }
@@ -760,6 +760,14 @@ body::before {
   .page-wrap { padding: 0 20px 80px; }
   .app-header { padding: 20px 0 18px; }
   .today-banner { padding: 28px 0 20px; margin-bottom: 28px; }
+  /* Watermark illustrations — readable on mobile */
+  #watermark-bg img { opacity: 0.08 !important; }
+  /* Value prop lines — prevent wrapping */
+  .ob-value-line1 { font-size: 13px; }
+  .ob-value-line2 { font-size: 10px; letter-spacing: 0.03em; }
+  /* Footer — stack vertically */
+  .ob-footer { flex-direction: column; gap: 8px; align-items: flex-start; }
+  .ob-footer-sep { display: none; }
 }
 
 /* ===== OB ABOUT LINK ===== */
