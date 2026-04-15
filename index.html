@@ -612,11 +612,6 @@ body::before {
   color: var(--muted); margin-top: 12px;
 }
 
-/* ===== LATTICE ===== */
-.lattice-wrap {
-  padding: 48px 0 8px; border-top: 1px solid var(--border); margin-top: 48px;
-  animation: fadeUp 0.4s ease 0.2s both;
-}
 .lattice-title {
   font-family: 'Playfair Display', Georgia, serif;
   font-size: 22px; font-weight: 600; color: var(--ink); margin-bottom: 8px;
@@ -2539,7 +2534,7 @@ function renderConstellation(newDiscipline) {
 
   el.innerHTML = `
     <div class="constellation-wrap">
-      <div style="border-top:1px solid var(--rule); margin: 32px 0 24px;"></div>
+      <div style="border-top:1px solid var(--border); margin: 32px 0 24px;"></div>
       <div class="constellation-title">Your Knowledge Lattice</div>
       <div class="constellation-pre-text">Every discipline you explore adds a node. Watch your map of thinking grow.</div>
       <svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:520px;height:auto;display:block;margin:0 auto;">
