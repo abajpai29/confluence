@@ -747,6 +747,7 @@ body::before {
   .ob-form-wrap { padding: 36px 20px 60px; }
   .ob-card { padding: 24px 18px; }
   .card { padding: 18px 24px 32px; }
+  .card-hook { padding-right: 56px; }
   .card-why-box { padding: 20px 24px 24px; margin: 32px -24px 0; }
   .visual-wrap { margin: 0 -20px 24px; padding: 20px; }
   .about-wrap { padding: 32px 0 60px; }
@@ -2725,6 +2726,7 @@ function init() {
         const s = JSON.parse(raw);
         s.todayCard = null;
         s.todayDate = null;
+        s.feedback = (s.feedback || []).filter(f => f.date !== new Date().toISOString().split('T')[0]);
         localStorage.setItem(STORAGE_KEY, JSON.stringify(s));
       }
     } catch(e) {}
