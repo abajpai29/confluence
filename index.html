@@ -1050,9 +1050,30 @@ body::before {
         </div>
       </div>
 
-      <!-- Step 3: Domains -->
+      <!-- Step 3: Location -->
       <div class="ob-step hidden" id="ob-step-3">
         <div class="ob-ack" id="ob-ack-3"></div>
+        <label class="ob-label">Where are you based</label>
+        <div class="chips" id="chips-location">
+          <div class="chip" data-val="India">India</div>
+          <div class="chip" data-val="North America">North America</div>
+          <div class="chip" data-val="Europe">Europe</div>
+          <div class="chip" data-val="Middle East">Middle East</div>
+          <div class="chip" data-val="Africa">Africa</div>
+          <div class="chip" data-val="Southeast Asia">Southeast Asia</div>
+          <div class="chip" data-val="South America">South America</div>
+          <div class="chip" data-val="Australia & NZ">Australia & NZ</div>
+          <div class="chip" data-val="Other">Other</div>
+        </div>
+        <div class="ob-step-nav">
+          <button class="ob-back-btn" onclick="obBack(3)">← Back</button>
+          <button class="ob-next-btn" id="ob-next-3" onclick="obNext(3)" disabled>Continue →</button>
+        </div>
+      </div>
+
+      <!-- Step 4: Domains -->
+      <div class="ob-step hidden" id="ob-step-4">
+        <div class="ob-ack" id="ob-ack-4"></div>
         <label class="ob-label">Which domains have you worked in <span>(pick all that apply)</span></label>
         <div class="chips" id="chips-domain">
           <div class="chip" data-val="Technology & Software">Technology & Software</div>
@@ -1076,14 +1097,14 @@ body::before {
           <div class="chip" data-val="Other">Other</div>
         </div>
         <div class="ob-step-nav">
-          <button class="ob-back-btn" onclick="obBack(3)">← Back</button>
-          <button class="ob-next-btn" id="ob-next-3" onclick="obNext(3)">Continue →</button>
+          <button class="ob-back-btn" onclick="obBack(4)">← Back</button>
+          <button class="ob-next-btn" id="ob-next-4" onclick="obNext(4)">Continue →</button>
         </div>
       </div>
 
-      <!-- Step 4: Education -->
-      <div class="ob-step hidden" id="ob-step-4">
-        <div class="ob-ack" id="ob-ack-4"></div>
+      <!-- Step 5: Education -->
+      <div class="ob-step hidden" id="ob-step-5">
+        <div class="ob-ack" id="ob-ack-5"></div>
         <label class="ob-label">What have you studied <span>(pick all that apply)</span></label>
         <div class="chips" id="chips-edu">
           <div class="chip" data-val="Engineering & Technology">Engineering</div>
@@ -1105,14 +1126,14 @@ body::before {
           <div class="chip" data-val="Other">Other</div>
         </div>
         <div class="ob-step-nav">
-          <button class="ob-back-btn" onclick="obBack(4)">← Back</button>
-          <button class="ob-next-btn" id="ob-next-4" onclick="obNext(4)" disabled>Continue →</button>
+          <button class="ob-back-btn" onclick="obBack(5)">← Back</button>
+          <button class="ob-next-btn" id="ob-next-5" onclick="obNext(5)" disabled>Continue →</button>
         </div>
       </div>
 
-      <!-- Step 5: Hobbies -->
-      <div class="ob-step hidden" id="ob-step-5">
-        <div class="ob-ack" id="ob-ack-5"></div>
+      <!-- Step 6: Hobbies -->
+      <div class="ob-step hidden" id="ob-step-6">
+        <div class="ob-ack" id="ob-ack-6"></div>
         <label class="ob-label">What lights you up outside work <span>(optional)</span></label>
         <div class="chips" id="chips-hobby">
           <div class="chip" data-val="Music">Music</div>
@@ -1133,8 +1154,8 @@ body::before {
           <div class="chip" data-val="Investing">Investing</div>
         </div>
         <div class="ob-step-nav">
-          <button class="ob-back-btn" onclick="obBack(5)">← Back</button>
-          <button class="ob-next-btn" id="ob-next-5" onclick="submitOb()">Begin →</button>
+          <button class="ob-back-btn" onclick="obBack(6)">← Back</button>
+          <button class="ob-next-btn" id="ob-next-6" onclick="submitOb()">Begin →</button>
         </div>
       </div>
 
@@ -1340,7 +1361,7 @@ Object.entries(CLUSTERS).forEach(([cluster, data]) => {
 // STATE
 // ============================================================
 let state = {
-  profile: { name:'', lifeStage:'', domains:[], education:[], hobbies:[] },
+  profile: { name:'', lifeStage:'', location:'', domains:[], education:[], hobbies:[] },
   onboarded: false,
   todayDate: null,
   todayCard: null,
@@ -1553,7 +1574,7 @@ function getChips(id) {
 // ============================================================
 // PROGRESSIVE ONBOARDING
 // ============================================================
-const OB_TOTAL = 5;
+const OB_TOTAL = 6;
 
 function obUpdateProgress(step) {
   const pct = ((step - 1) / OB_TOTAL) * 100;
@@ -1590,6 +1611,7 @@ function obNext(step) {
     3: () => '',
     4: () => '',
     5: () => '',
+    6: () => '',
   };
   const next = step + 1;
   const ackEl = document.getElementById('ob-ack-' + next);
@@ -1614,16 +1636,22 @@ function obInitStep2() {
 }
 
 function obInitStep3() {
-  initChips('chips-domain', true);
-}
-
-function obInitStep4() {
-  initChips('chips-edu', true, () => {
-    document.getElementById('ob-next-4').disabled = !getChips('chips-edu').length;
+  initChips('chips-location', false, () => {
+    document.getElementById('ob-next-3').disabled = !getChips('chips-location').length;
   });
 }
 
+function obInitStep4() {
+  initChips('chips-domain', true);
+}
+
 function obInitStep5() {
+  initChips('chips-edu', true, () => {
+    document.getElementById('ob-next-5').disabled = !getChips('chips-edu').length;
+  });
+}
+
+function obInitStep6() {
   initChips('chips-hobby', true, null);
 }
 
@@ -1633,6 +1661,7 @@ function initOnboarding() {
   obInitStep3();
   obInitStep4();
   obInitStep5();
+  obInitStep6();
   obShowStep(1);
 }
 
@@ -1750,6 +1779,17 @@ Adapt based on life stage:
 - Student: anchor to their studies and emerging interests
 - Researcher: anchor to their research domain and intellectual questions
 
+Adapt based on location — anchor examples, institutions, and professional references to where the user lives:
+- India: IITs, IIMs, UPSC, PSUs, Indian startups, Indian regulatory and healthcare context, jugaad, family business
+- North America: Silicon Valley, Wall Street, US/Canada institutions, FDA, Ivy League
+- Europe: EU regulatory context, European companies, NHS (UK), continental professional norms
+- Middle East: Gulf business context, Vision 2030, regional institutions, family conglomerates
+- Africa: regional business and development context, mobile-first economy, regional institutions
+- Southeast Asia: regional tech and business context, ASEAN, family conglomerates, fintech
+- South America: regional professional context, Latin American institutions, commodity economies
+- Australia & NZ: ANZ professional context, similar to UK in many ways
+- Other or not specified: use universally relatable examples that require no local knowledge
+
 ---
 
 RULE 4: NAME THE MECHANISM — IN ONE SENTENCE
@@ -1822,11 +1862,13 @@ Para1:
 - Open with a concrete story or fact
 - Walk into the discipline through narrative
 - The user's world must appear by the end
+- Maximum 3 sentences. Every sentence must earn its place. Cut ruthlessly.
 
 Para2:
 - Deepen or surprise
 - Name the mechanism explicitly
 - Land the insight — end with the idea, not with the reader
+- Maximum 3 sentences. If it runs longer, identify the weakest sentence and remove it.
 
 ---
 
@@ -1956,6 +1998,8 @@ Why this card works:
 - No em dashes. No banned phrases. No fluent emptiness.
 - A 22-year-old and a 45-year-old both find it rewarding
 
+Notice the length. Para1 is 4 sentences. Para2 is 5 sentences. That is the ceiling, not the target. Shorter is better if the idea lands cleanly.
+
 ---
 
 HARD STOP CONDITIONS
@@ -2027,6 +2071,7 @@ function buildPrompt(discipline, cluster, todayType) {
 
 NAME: ${p.name}
 LIFE STAGE: ${p.lifeStage}
+LOCATION: ${p.location || 'not specified'}
 DOMAINS (current & past): ${doms}
 EDUCATION: ${edu}
 INTERESTS: ${hob}
@@ -2633,6 +2678,7 @@ function submitOb() {
   state.profile = {
     name:      document.getElementById('ob-name').value.trim(),
     lifeStage: getChips('chips-stage')[0] || '',
+    location:  getChips('chips-location')[0] || '',
     domains:   getChips('chips-domain'),
     education: getChips('chips-edu'),
     hobbies:   getChips('chips-hobby'),
