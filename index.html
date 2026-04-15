@@ -1353,6 +1353,8 @@ let state = {
   exploredDisciplines: [],
   exploredThinkingTypes: {},
   cardHistory: [],
+  disciplineSequence: [],
+  disciplineIndex: 0,
 };
 
 const THINKING_TYPES = ['polymathic', 'critical', 'systems', 'structured', 'creative', 'metacognitive', 'probabilistic'];
@@ -1371,12 +1373,86 @@ function loadState() {
 // ============================================================
 function getTodayStr() { return new Date().toISOString().split('T')[0]; }
 
+// ============================================================
+// PROFILE → CLUSTER MAPPING
+// ============================================================
+const DOMAIN_TO_CLUSTER = {
+  'Technology & Software':      ['Technology & Computing'],
+  'Engineering':                ['Engineering'],
+  'Business & Strategy':        ['Business & Strategy'],
+  'Finance & Banking':          ['Economics'],
+  'Medicine & Healthcare':      ['Health & Medicine'],
+  'Law':                        ['Governance & Law'],
+  'Policy & Government':        ['Governance & Law'],
+  'Science & Research':         ['Biology', 'Physics', 'Chemistry'],
+  'Creative & Design':          ['Arts & Design'],
+  'Education & Teaching':       ['Social Sciences'],
+  'Social Impact':              ['Social Sciences'],
+  'Agriculture':                ['Environment', 'Earth & Space'],
+  'Media & Communication':      ['Arts & Design'],
+  'Consulting & Advisory':      ['Business & Strategy'],
+  'Entrepreneurship & Startups':['Business & Strategy'],
+  'Sports & Athletics':         ['Sports & Performance'],
+  'Real Estate':                ['Economics'],
+  'Hospitality & Tourism':      ['Social Sciences'],
+};
+
+const EDUCATION_TO_CLUSTER = {
+  'Engineering & Technology':   ['Engineering', 'Technology & Computing'],
+  'Physics':                    ['Physics'],
+  'Chemistry':                  ['Chemistry'],
+  'Biology':                    ['Biology'],
+  'Mathematics & Statistics':   ['Mathematics'],
+  'Medicine & Health':          ['Health & Medicine'],
+  'Economics & Commerce':       ['Economics'],
+  'Business & Management':      ['Business & Strategy'],
+  'Law & Governance':           ['Governance & Law'],
+  'Arts & Humanities':          ['Arts & Design', 'History & Philosophy'],
+  'Social Sciences':            ['Social Sciences'],
+  'Architecture & Design':      ['Arts & Design'],
+  'Agriculture':                ['Environment'],
+  'Public Policy & Governance': ['Governance & Law'],
+  'Commerce':                   ['Economics'],
+  'Environment & Sustainability':['Environment', 'Earth & Space'],
+};
+
+function buildUserSequence(profile) {
+  // 1. Identify home clusters from profile
+  const homeClusters = new Set();
+  (profile.domains || []).forEach(d => (DOMAIN_TO_CLUSTER[d] || []).forEach(c => homeClusters.add(c)));
+  (profile.education || []).forEach(e => (EDUCATION_TO_CLUSTER[e] || []).forEach(c => homeClusters.add(c)));
+
+  // 2. Sort clusters — far first, home last
+  const allClusters = Object.keys(CLUSTERS);
+  const farClusters = allClusters.filter(c => !homeClusters.has(c));
+  const sortedClusters = [...farClusters, ...Array.from(homeClusters)];
+
+  // 3. Build interleaved sequence — one discipline per cluster per pass
+  const clusterQueues = {};
+  sortedClusters.forEach(c => { clusterQueues[c] = [...CLUSTERS[c].disciplines]; });
+
+  const sequence = [];
+  let remaining = true;
+  while (remaining) {
+    remaining = false;
+    for (const cluster of sortedClusters) {
+      if (clusterQueues[cluster].length > 0) {
+        sequence.push(clusterQueues[cluster].shift());
+        remaining = true;
+      }
+    }
+  }
+  return sequence;
+}
+
 function getTodaysDiscipline() {
-  const now = new Date();
-  const todayUTC = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
-  const epochUTC = Date.UTC(2024, 0, 1);
-  const dayIndex = Math.floor((todayUTC - epochUTC) / 86400000);
-  return ALL_DISCIPLINES[((dayIndex % ALL_DISCIPLINES.length) + ALL_DISCIPLINES.length) % ALL_DISCIPLINES.length];
+  if (!state.disciplineSequence || state.disciplineSequence.length === 0) {
+    state.disciplineSequence = buildUserSequence(state.profile);
+    state.disciplineIndex = 0;
+    saveState();
+  }
+  const idx = ((state.disciplineIndex || 0) % state.disciplineSequence.length + state.disciplineSequence.length) % state.disciplineSequence.length;
+  return state.disciplineSequence[idx];
 }
 
 function showToast(msg) {
@@ -1764,7 +1840,7 @@ Short sentences. Vary the rhythm. One idea per sentence. Fragments are fine.
 
 Read each sentence aloud before outputting. If it sounds generated — rewrite it.
 
-Never use em dashes. Replace every em dash with a period and a new sentence.
+ZERO TOLERANCE: Em dashes (—) are completely banned. Every em dash must be replaced with a period and a new sentence. This is a hard stop, not a style preference. Scan your output before returning it. If a single em dash remains, rewrite.
 
 BANNED PHRASES — never use any of these:
 "In today's fast-paced world" / "Let's dive in" / "Here's the thing" / "It turns out" / "Interestingly" / "In fact" / "It's worth noting" / "At its core" / "The reality is" / "What's fascinating is" / "reveals" / "illuminates" / "underscores" / "highlights" / "showcases" / "In essence" / "Fundamentally" / "What this shows us"
@@ -1893,6 +1969,7 @@ If any of the following are true — do not output. Regenerate with a different 
 5. The connection feels forced, generic, or shallow
 6. You are uncertain about any named fact, date, or attribution and have not removed it
 7. The insight depends on writing style rather than underlying idea strength
+8. The output contains an em dash (—). Em dashes are completely banned. Rewrite every instance as a period and a new sentence. Do not output until zero em dashes remain.
 
 A mediocre card is worse than no card. The worst card a user receives is the one they remember.
 
@@ -1908,6 +1985,7 @@ Answer these questions internally before generating the final JSON:
 4. Is there one sentence the reader will remember an hour from now?
 5. Have I removed or generalised every uncertain attribution?
 6. Does the underlying idea remain strong if the writing style is stripped away?
+7. Read the whyItMatters aloud. 1-2 sentences maximum. Would a 16-year-old understand it immediately? Would they feel it? No jargon. No abstract nouns. If not — rewrite. Bad: 'Systems that optimise locally often fail globally.' Good: 'The thing you are optimising for might be destroying something more important. Check what you are not measuring.'
 
 If any answer is no — regenerate. Do not output a card that fails any of these tests.
 
@@ -1973,7 +2051,7 @@ Respond ONLY with valid JSON — no markdown, no code fences, no extra text:
   "sourceWorld": "2-4 short sentences. The discipline's story — what happened, what was discovered, why it mattered there. Open with something concrete: a person, a moment, a number. Introduce any jargon naturally and ground it immediately in plain language. One idea at a time. A 15-year-old should be able to follow without slowing down.",
   "pivotLine": "One sentence only. This is a bridge, not a conclusion. It sits between the source world and the user's world — the exact moment the reader sees the connection. After this line, yourWorld continues the story in the user's context. Think of it as a dramatic pause that opens a door, not a line that closes the argument. 'Darwin saw it instantly.' is the model: short, narrative, creates momentum forward. No abstract nouns. No jargon.",
   "yourWorld": "2-4 short sentences. The application to the user's world — specific, grounded, no hand-waving. Follow the same rhythm as sourceWorld: short sentences, one idea each. The user should recognise their own world immediately.",
-  "whyItMatters": "One sentence. Plain language only — no jargon, no abstract nouns. Direct and personal. If you removed the writing style, the idea must still land. Bad: 'The strongest argument is never as loud as the operational residue that precedes it.' Good: 'Your next breakthrough is probably not in your field.'",
+  "whyItMatters": "1-2 sentences maximum. Plain language only. No jargon. No abstract nouns. Direct and personal. A 16-year-old must understand it immediately and feel it. If you removed the writing style, the idea must still land. Bad: 'The strongest argument is never as loud as the operational residue that precedes it.' Good: 'Your next breakthrough is probably not in your field. It is sitting in a book you would never normally pick up.'",
   "bridgeData": {
     "leftLabel": "${discipline}",
     "leftConcept": "3-5 word core principle from this discipline",
@@ -2050,6 +2128,7 @@ async function generateCard() {
     state.todayDiscipline    = discipline;
     state.todayThinkingType  = todayType;
     state.cardCount          = (state.cardCount || 0) + 1;
+    state.disciplineIndex    = (state.disciplineIndex || 0) + 1;
     state.exploredThinkingTypes = state.exploredThinkingTypes || {};
     state.exploredThinkingTypes[todayType] = (state.exploredThinkingTypes[todayType] || 0) + 1;
     state.clusterProgress[cluster] = (state.clusterProgress[cluster] || 0) + 1;
@@ -2289,14 +2368,9 @@ function showConnectionAnimation(discipline, userDomain, callback) {
 // TOMORROW SECTION
 // ============================================================
 function getNextWeekdayDiscipline() {
-  const today = new Date();
-  let next = new Date(today);
-  next.setDate(today.getDate() + 1);
-  while (next.getDay() === 0 || next.getDay() === 6) next.setDate(next.getDate() + 1);
-  const nextUTC = Date.UTC(next.getFullYear(), next.getMonth(), next.getDate());
-  const epochUTC = Date.UTC(2024, 0, 1);
-  const dayIdx = Math.floor((nextUTC - epochUTC) / 86400000);
-  return ALL_DISCIPLINES[((dayIdx % ALL_DISCIPLINES.length) + ALL_DISCIPLINES.length) % ALL_DISCIPLINES.length];
+  if (!state.disciplineSequence || state.disciplineSequence.length === 0) return '';
+  const nextIdx = (state.disciplineIndex || 0) % state.disciplineSequence.length;
+  return state.disciplineSequence[nextIdx];
 }
 
 function renderTomorrow(todayDiscipline) {
