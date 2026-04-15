@@ -1888,6 +1888,8 @@ ZERO TOLERANCE: Em dashes (—) are completely banned. Every em dash must be rep
 BANNED PHRASES — never use any of these:
 "In today's fast-paced world" / "Let's dive in" / "Here's the thing" / "It turns out" / "Interestingly" / "In fact" / "It's worth noting" / "At its core" / "The reality is" / "What's fascinating is" / "reveals" / "illuminates" / "underscores" / "highlights" / "showcases" / "In essence" / "Fundamentally" / "What this shows us"
 
+BANNED WORDS: "quietly" — this is an AI tell, not human writing. Never use it.
+
 ---
 
 RULE 9: FLUENT EMPTINESS DETECTOR
@@ -2166,7 +2168,7 @@ async function generateCard() {
     if (!jsonMatch) throw new Error(`JSON parse failed: ${text.slice(0,200)}`);
     const card = JSON.parse(jsonMatch[0]);
     // Strip em dashes from all text fields
-    const stripEm = s => typeof s === 'string' ? s.replace(/\s*—\s*/g, ', ').replace(/,\s*,/g, ',') : s;
+    const stripEm = s => typeof s === 'string' ? s.replace(/\s*—\s*/g, '. ') : s;
     ['hook','title','para1','para2','whyItMatters'].forEach(f => { if (card[f]) card[f] = stripEm(card[f]); });
 
     state.todayDate          = today;
