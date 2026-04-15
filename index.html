@@ -772,6 +772,9 @@ body::before {
   /* Footer — stack vertically */
   .ob-footer { flex-direction: column; gap: 8px; align-items: flex-start; }
   .ob-footer-sep { display: none; }
+  .ob-footer-about { order: 1; }
+  .ob-footer-email { order: 2; }
+  .ob-footer-copy { order: 3; }
 }
 
 /* ===== OB ABOUT LINK ===== */
@@ -1151,11 +1154,11 @@ body::before {
   <div class="ob-section-rule"><hr></div>
 
   <footer class="ob-footer">
-    <span>© 2026 Eneth</span>
+    <span class="ob-footer-copy">© 2026 Eneth</span>
     <span class="ob-footer-sep">·</span>
-    <a href="mailto:hello@eneth.co">hello@eneth.co</a>
+    <a href="mailto:hello@eneth.co" class="ob-footer-email">hello@eneth.co</a>
     <span class="ob-footer-sep">·</span>
-    <button onclick="showScreen('screen-about')">The thinking behind Eneth →</button>
+    <button class="ob-footer-about" onclick="showScreen('screen-about')">The thinking behind Eneth →</button>
   </footer>
 </div>
 
