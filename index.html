@@ -1885,6 +1885,14 @@ BANNED PHRASES — never use any of these:
 
 BANNED WORDS: "quietly" — this is an AI tell, not human writing. Never use it.
 
+TONE RULE: CURIOUS AND EMPOWERING, NOT INDIGNANT.
+
+This applies to every card. When touching on how any system, institution, or profession works — explain WHY it works that way (structural reasons, incentives, history) rather than implying incompetence or negligence. Systems are usually optimised for something. The insight is what they are NOT optimised for, and what the reader can do with that knowledge.
+
+Never write from outside looking in with contempt. Write from inside the reader's world, giving them a new tool.
+
+The reader should finish the card feeling equipped, not angry.
+
 RULE: EVERY PROMISE THE CARD MAKES, IT KEEPS.
 
 If the card says "there is a name for this" — give the name. If it says "this has a surprising origin" — reveal the origin. If it sets up a question, it must answer it. No open loops. No teaser lines that lead nowhere. A reader who feels cheated by an unfulfilled setup will not come back.
@@ -2031,7 +2039,7 @@ Answer these questions internally before generating the final JSON:
 4. Is there one sentence the reader will remember an hour from now?
 5. Have I removed or generalised every uncertain attribution?
 6. Does the underlying idea remain strong if the writing style is stripped away?
-7. Read the whyItMatters aloud. 1-2 sentences maximum. Would a 16-year-old understand it immediately? Would they feel it? No jargon. No abstract nouns. If not — rewrite. Bad: 'Systems that optimise locally often fail globally.' Good: 'The thing you are optimising for might be destroying something more important. Check what you are not measuring.'
+7. Read the whyItMatters aloud. Does it end with a concrete implication addressed directly to the reader as "you"? A diagnosis alone is not enough. Does it pass the quality test: does the reader think "I know what this changes for me now" — not just "nice insight"? If not — rewrite.
 
 If any answer is no — regenerate. Do not output a card that fails any of these tests.
 
@@ -2094,11 +2102,11 @@ The thinking prompt must be specific to THIS insight. A generic prompt that coul
 Respond ONLY with valid JSON — no markdown, no code fences, no extra text:
 {
   "title": "Punchy headline, max 8 words, impossible to ignore, NOT the discipline name",
-  "hook": "1-3 sentences maximum. NON-NEGOTIABLE RULE: every discipline and every world mentioned anywhere in the card must appear in the hook. If the card bridges cryptography and business strategy, both must be in the hook. The bridge must be visible from line 1, not revealed in para2. Authoritative on the mechanism, never on the user's specific situation. Specific — a real person, year, number, or event where certain. No em dashes. No questions. No 'Did you know'. Ends with a period. These examples show the quality and the pattern — they are not templates, find your own version that fits this specific card: (A) 'In 1996, Paul Kocher broke a perfect encryption system without touching the code. Every strategic move you make leaks the same way.' (B) 'During World War II, Allied codebreakers did not crack Enigma by guessing German words. Corporate strategy leaks the same way. Not through the decision. Through the habits around it.' (C) 'In 1956, George Miller proved the human mind can hold exactly seven things at once. Your onboarding flow is asking it to hold fourteen.' (D) 'The British army lost the American Revolution not on the battlefield. They kept fighting the wrong kind of war. Most reorganisations fail for exactly the same reason.'",
+  "hook": "Two sentences. The second must be shorter than the first. Open with something surprising — a specific person, moment, discovery, or number. End with one short phrase that gestures toward the reader's world without explaining the connection. Make them feel it applies to them before they know how. Tone: sharp, curious, never preachy, never negative, never over-explanatory. The hook must create one feeling: I need the next paragraph. No em dashes. No questions. No 'Did you know'. Model: 'In September 1838, Darwin picked up an economics essay for fun. It changed biology forever.' — first sentence opens a moment, second lands the consequence. Find your own version that fits this specific card.",
   "sourceWorld": "2-4 short sentences. The discipline's story — what happened, what was discovered, why it mattered there. Open with something concrete: a person, a moment, a number. Introduce any jargon naturally and ground it immediately in plain language. One idea at a time. A 15-year-old should be able to follow without slowing down.",
   "pivotLine": "One sentence only. This is a bridge, not a conclusion. It sits between the source world and the user's world — the exact moment the reader sees the connection. After this line, yourWorld continues the story in the user's context. Think of it as a dramatic pause that opens a door, not a line that closes the argument. 'Darwin saw it instantly.' is the model: short, narrative, creates momentum forward. No abstract nouns. No jargon.",
   "yourWorld": "2-4 short sentences. The application to the user's world — specific, grounded, no hand-waving. Follow the same rhythm as sourceWorld: short sentences, one idea each. The user should recognise their own world immediately.",
-  "whyItMatters": "1-2 sentences maximum. Plain language only. No jargon. No abstract nouns. Direct and personal. A 16-year-old must understand it immediately and feel it. If you removed the writing style, the idea must still land. Bad: 'The strongest argument is never as loud as the operational residue that precedes it.' Good: 'Your next breakthrough is probably not in your field. It is sitting in a book you would never normally pick up.'",
+  "whyItMatters": "The ending converts the insight into a usable shift in thought. It does not conclude the story. It changes how the reader sees their own world from this moment forward. Structure: 2-3 sentences, each doing a distinct job. Sentence 1 — Diagnosis: name the real issue beneath the surface of the specific example. Sentence 2 — Pattern: abstract the case into a broader truth that travels across domains. Sentence 3 — Implication: translate that pattern into one changed way for the reader to think, notice, ask, or interpret their own world. Address the reader directly as 'you.' If diagnosis and pattern can be said in one sentence, combine them — but the implication is non-negotiable. Tone: precise, calm, intelligent, direct. Never preachy. Never: 'you should...' / 'the lesson is...' / vague inspiration / moralising / repeating the same idea across sentences. Quality test: a weak ending makes the reader think 'nice insight.' A strong ending makes the reader think 'I know what this changes for me now.' Every ending must pass this test.",
   "bridgeData": {
     "leftLabel": "${discipline}",
     "leftConcept": "3-5 word core principle from this discipline",
