@@ -1546,7 +1546,11 @@ function shareLinkedIn() {
 
 function copyCard() {
   gtag('event', 'copy_text');
-  navigator.clipboard.writeText(getShareText()).then(() => showToast('Copied to clipboard!'));
+  const c = state.todayCard;
+  if (!c) return;
+  const text = [c.hook, c.sourceWorld, c.pivotLine, c.yourWorld, 'Why this matters\n' + c.whyItMatters]
+    .filter(Boolean).join('\n\n');
+  navigator.clipboard.writeText(text).then(() => showToast('Copied to clipboard!'));
 }
 
 // ============================================================
