@@ -1452,41 +1452,27 @@ const HOBBY_TO_CLUSTER = {
   'Investing':                ['Economics'],
 };
 
-// Clusters that are universally life-adjacent — appear for everyone
-const LIFE_CLUSTERS = new Set([
-  'History & Philosophy', 'Mind & Cognition', 'Religion & Myth', 'Eastern & Classical'
-]);
-
 function buildUserSequence(profile) {
-  // 1. Identify near clusters from profile (domains + education + hobbies)
+  // Near clusters: domains + education + hobbies
   const nearClusters = new Set();
   (profile.domains || []).forEach(d => (DOMAIN_TO_CLUSTER[d] || []).forEach(c => nearClusters.add(c)));
   (profile.education || []).forEach(e => (EDUCATION_TO_CLUSTER[e] || []).forEach(c => nearClusters.add(c)));
   (profile.hobbies || []).forEach(h => (HOBBY_TO_CLUSTER[h] || []).forEach(c => nearClusters.add(c)));
-  // Life clusters handled separately — remove from near
-  LIFE_CLUSTERS.forEach(c => nearClusters.delete(c));
 
-  // 2. Build tier queues
   const allClusters = Object.keys(CLUSTERS);
-  const farClusters = allClusters.filter(c => !nearClusters.has(c) && !LIFE_CLUSTERS.has(c));
+  const farClusters = allClusters.filter(c => !nearClusters.has(c));
 
   const farQ  = farClusters.flatMap(c => [...CLUSTERS[c].disciplines]);
-  const lifeQ = [...LIFE_CLUSTERS].flatMap(c => CLUSTERS[c] ? [...CLUSTERS[c].disciplines] : []);
   const nearQ = [...nearClusters].flatMap(c => CLUSTERS[c] ? [...CLUSTERS[c].disciplines] : []);
 
-  // 3. Interleave: 4 far, 1 life, 4 far, 1 near, repeat (~80% far, ~10% life, ~10% near)
+  // 4 far, 1 near, repeat (~80% far, ~20% near)
   const sequence = [];
-  let fi = 0, li = 0, ni = 0, slot = 0;
-  while (fi < farQ.length || li < lifeQ.length || ni < nearQ.length) {
-    const posInCycle = slot % 10;
-    if (posInCycle === 4 && li < lifeQ.length) {
-      sequence.push(lifeQ[li++]);
-    } else if (posInCycle === 9 && ni < nearQ.length) {
+  let fi = 0, ni = 0, slot = 0;
+  while (fi < farQ.length || ni < nearQ.length) {
+    if ((slot + 1) % 5 === 0 && ni < nearQ.length) {
       sequence.push(nearQ[ni++]);
     } else if (fi < farQ.length) {
       sequence.push(farQ[fi++]);
-    } else if (li < lifeQ.length) {
-      sequence.push(lifeQ[li++]);
     } else {
       sequence.push(nearQ[ni++]);
     }
