@@ -1433,31 +1433,64 @@ const EDUCATION_TO_CLUSTER = {
   'Environment & Sustainability':['Environment', 'Earth & Space'],
 };
 
+const HOBBY_TO_CLUSTER = {
+  'Music':                    ['Arts & Design'],
+  'Sports & Athletics':       ['Sports & Performance'],
+  'Reading':                  ['History & Philosophy'],
+  'Writing':                  ['History & Philosophy'],
+  'Travel & Exploration':     ['Earth & Space'],
+  'Film & Theatre':           ['Arts & Design'],
+  'Gaming':                   ['Technology & Computing'],
+  'Cooking & Gastronomy':     ['Health & Medicine'],
+  'Art & Craft':              ['Arts & Design'],
+  'Meditation & Philosophy':  ['Mind & Cognition', 'Eastern & Classical'],
+  'Nature & Outdoors':        ['Environment', 'Earth & Space'],
+  'Volunteering & Social Work':['Social Sciences'],
+  'News & Current Affairs':   ['Governance & Law'],
+  'Fitness & Wellness':       ['Health & Medicine', 'Sports & Performance'],
+  'Photography':              ['Arts & Design'],
+  'Investing':                ['Economics'],
+};
+
+// Clusters that are universally life-adjacent — appear for everyone
+const LIFE_CLUSTERS = new Set([
+  'History & Philosophy', 'Mind & Cognition', 'Religion & Myth', 'Eastern & Classical'
+]);
+
 function buildUserSequence(profile) {
-  // 1. Identify home clusters from profile
-  const homeClusters = new Set();
-  (profile.domains || []).forEach(d => (DOMAIN_TO_CLUSTER[d] || []).forEach(c => homeClusters.add(c)));
-  (profile.education || []).forEach(e => (EDUCATION_TO_CLUSTER[e] || []).forEach(c => homeClusters.add(c)));
+  // 1. Identify near clusters from profile (domains + education + hobbies)
+  const nearClusters = new Set();
+  (profile.domains || []).forEach(d => (DOMAIN_TO_CLUSTER[d] || []).forEach(c => nearClusters.add(c)));
+  (profile.education || []).forEach(e => (EDUCATION_TO_CLUSTER[e] || []).forEach(c => nearClusters.add(c)));
+  (profile.hobbies || []).forEach(h => (HOBBY_TO_CLUSTER[h] || []).forEach(c => nearClusters.add(c)));
+  // Life clusters handled separately — remove from near
+  LIFE_CLUSTERS.forEach(c => nearClusters.delete(c));
 
-  // 2. Sort clusters — far first, home last
+  // 2. Build tier queues
   const allClusters = Object.keys(CLUSTERS);
-  const farClusters = allClusters.filter(c => !homeClusters.has(c));
-  const sortedClusters = [...farClusters, ...Array.from(homeClusters)];
+  const farClusters = allClusters.filter(c => !nearClusters.has(c) && !LIFE_CLUSTERS.has(c));
 
-  // 3. Build interleaved sequence — one discipline per cluster per pass
-  const clusterQueues = {};
-  sortedClusters.forEach(c => { clusterQueues[c] = [...CLUSTERS[c].disciplines]; });
+  const farQ  = farClusters.flatMap(c => [...CLUSTERS[c].disciplines]);
+  const lifeQ = [...LIFE_CLUSTERS].flatMap(c => CLUSTERS[c] ? [...CLUSTERS[c].disciplines] : []);
+  const nearQ = [...nearClusters].flatMap(c => CLUSTERS[c] ? [...CLUSTERS[c].disciplines] : []);
 
+  // 3. Interleave: 4 far, 1 life, 4 far, 1 near, repeat (~80% far, ~10% life, ~10% near)
   const sequence = [];
-  let remaining = true;
-  while (remaining) {
-    remaining = false;
-    for (const cluster of sortedClusters) {
-      if (clusterQueues[cluster].length > 0) {
-        sequence.push(clusterQueues[cluster].shift());
-        remaining = true;
-      }
+  let fi = 0, li = 0, ni = 0, slot = 0;
+  while (fi < farQ.length || li < lifeQ.length || ni < nearQ.length) {
+    const posInCycle = slot % 10;
+    if (posInCycle === 4 && li < lifeQ.length) {
+      sequence.push(lifeQ[li++]);
+    } else if (posInCycle === 9 && ni < nearQ.length) {
+      sequence.push(nearQ[ni++]);
+    } else if (fi < farQ.length) {
+      sequence.push(farQ[fi++]);
+    } else if (li < lifeQ.length) {
+      sequence.push(lifeQ[li++]);
+    } else {
+      sequence.push(nearQ[ni++]);
     }
+    slot++;
   }
   return sequence;
 }
