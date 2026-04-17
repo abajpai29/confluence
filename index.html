@@ -1066,21 +1066,24 @@ body::before {
       <!-- Step 4: Domains -->
       <div class="ob-step hidden" id="ob-step-4">
         <div class="ob-ack" id="ob-ack-4"></div>
-        <label class="ob-label">Which domains have you worked in <span>(pick all that apply)</span></label>
+        <label class="ob-label" id="ob-domain-label">Which domains have you worked in <span>(pick all that apply)</span></label>
         <div class="chips" id="chips-domain">
           <div class="chip" data-val="Technology & Software">Technology & Software</div>
           <div class="chip" data-val="Engineering">Engineering</div>
           <div class="chip" data-val="Business & Strategy">Business & Strategy</div>
-          <div class="chip" data-val="Finance & Banking">Finance & Banking</div>
+          <div class="chip" data-val="Finance">Finance</div>
+          <div class="chip" data-val="Banking">Banking</div>
           <div class="chip" data-val="Medicine & Healthcare">Medicine & Healthcare</div>
           <div class="chip" data-val="Law">Law</div>
-          <div class="chip" data-val="Policy & Government">Policy & Government</div>
+          <div class="chip" data-val="Public Policy">Public Policy</div>
+          <div class="chip" data-val="Government">Government</div>
           <div class="chip" data-val="Science & Research">Science & Research</div>
-          <div class="chip" data-val="Creative & Design">Creative & Design</div>
+          <div class="chip" data-val="Design">Design</div>
+          <div class="chip" data-val="Media & Communications">Media & Communications</div>
+          <div class="chip" data-val="Entertainment & Creative Arts">Entertainment & Creative Arts</div>
           <div class="chip" data-val="Education & Teaching">Education & Teaching</div>
           <div class="chip" data-val="Social Impact">Social Impact</div>
           <div class="chip" data-val="Agriculture">Agriculture</div>
-          <div class="chip" data-val="Media & Communication">Media & Communication</div>
           <div class="chip" data-val="Consulting & Advisory">Consulting & Advisory</div>
           <div class="chip" data-val="Entrepreneurship & Startups">Entrepreneurship & Startups</div>
           <div class="chip" data-val="Sports & Athletics">Sports & Athletics</div>
@@ -1388,24 +1391,27 @@ function getTodayStr() { return new Date().toISOString().split('T')[0]; }
 // PROFILE → CLUSTER MAPPING
 // ============================================================
 const DOMAIN_TO_CLUSTER = {
-  'Technology & Software':      ['Technology & Computing'],
-  'Engineering':                ['Engineering'],
-  'Business & Strategy':        ['Business & Strategy'],
-  'Finance & Banking':          ['Economics'],
-  'Medicine & Healthcare':      ['Health & Medicine'],
-  'Law':                        ['Governance & Law'],
-  'Policy & Government':        ['Governance & Law'],
-  'Science & Research':         ['Biology', 'Physics', 'Chemistry'],
-  'Creative & Design':          ['Arts & Design'],
-  'Education & Teaching':       ['Social Sciences'],
-  'Social Impact':              ['Social Sciences'],
-  'Agriculture':                ['Environment', 'Earth & Space'],
-  'Media & Communication':      ['Arts & Design'],
-  'Consulting & Advisory':      ['Business & Strategy'],
-  'Entrepreneurship & Startups':['Business & Strategy'],
-  'Sports & Athletics':         ['Sports & Performance'],
-  'Real Estate':                ['Economics'],
-  'Hospitality & Tourism':      ['Social Sciences'],
+  'Technology & Software':         ['Technology & Computing'],
+  'Engineering':                   ['Engineering'],
+  'Business & Strategy':           ['Business & Strategy'],
+  'Finance':                       ['Economics'],
+  'Banking':                       ['Economics'],
+  'Medicine & Healthcare':         ['Health & Medicine'],
+  'Law':                           ['Governance & Law'],
+  'Public Policy':                 ['Governance & Law'],
+  'Government':                    ['Governance & Law'],
+  'Science & Research':            ['Biology', 'Physics', 'Chemistry'],
+  'Design':                        ['Arts & Design'],
+  'Media & Communications':        ['Arts & Design'],
+  'Entertainment & Creative Arts': ['Arts & Design'],
+  'Education & Teaching':          ['Social Sciences'],
+  'Social Impact':                 ['Social Sciences'],
+  'Agriculture':                   ['Environment', 'Earth & Space'],
+  'Consulting & Advisory':         ['Business & Strategy'],
+  'Entrepreneurship & Startups':   ['Business & Strategy'],
+  'Sports & Athletics':            ['Sports & Performance'],
+  'Real Estate':                   ['Economics'],
+  'Hospitality & Tourism':         ['Social Sciences'],
 };
 
 const EDUCATION_TO_CLUSTER = {
@@ -1606,6 +1612,15 @@ function obNext(step) {
   const next = step + 1;
   const ackEl = document.getElementById('ob-ack-' + next);
   if (ackEl && acks[step]) ackEl.textContent = acks[step]();
+  if (step === 2) {
+    const stage = getChips('chips-stage')[0] || '';
+    const domLabel = document.getElementById('ob-domain-label');
+    if (domLabel) {
+      domLabel.innerHTML = stage === 'Student'
+        ? 'Which fields interest you <span>(pick all that apply)</span>'
+        : 'Which domains have you worked in <span>(pick all that apply)</span>';
+    }
+  }
   obShowStep(next);
 }
 
@@ -2065,7 +2080,9 @@ function buildPrompt(discipline, cluster, todayType) {
   const p    = state.profile;
   const edu  = (p.education || []).join(', ')  || 'not specified';
   const hob  = (p.hobbies   || []).join(', ')  || 'not specified';
-  const doms = (p.domains   || []).join(', ')  || 'not specified';
+  let domsText = (p.domains || []).join(', ') || 'not specified';
+  if ((p.domains || []).includes('Design')) domsText = domsText.replace('Design', 'Design (product, UX, graphic, architecture)');
+  const doms = domsText;
 
   const lifeStageAnchor = {
     'Working Professional': 'Anchor the insight to their role, industry, and daily work decisions.',
