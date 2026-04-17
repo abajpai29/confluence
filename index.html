@@ -2088,9 +2088,9 @@ Keep that promise. Every single time.`;
 
 function buildPrompt(discipline, cluster, todayType, recentHistory = '') {
   const p    = state.profile;
-  const edu  = (p.education || []).join(', ')  || 'not specified';
-  const hob  = (p.hobbies   || []).join(', ')  || 'not specified';
-  let domsText = (p.domains || []).join(', ') || 'not specified';
+  const edu  = (p.education || []).filter(d => d !== 'Other').join(', ')  || 'not specified';
+  const hob  = (p.hobbies   || []).filter(d => d !== 'Other').join(', ')  || 'not specified';
+  let domsText = (p.domains || []).filter(d => d !== 'Other').join(', ') || 'not specified';
   if ((p.domains || []).includes('Design')) domsText = domsText.replace('Design', 'Design (product, UX, graphic, architecture)');
   const doms = domsText;
 
