@@ -2078,7 +2078,7 @@ Every card is a promise: this is true, this is surprising, this will change how 
 
 Keep that promise. Every single time.`;
 
-function buildPrompt(discipline, cluster, todayType) {
+function buildPrompt(discipline, cluster, todayType, recentHistory = '') {
   const p    = state.profile;
   const edu  = (p.education || []).join(', ')  || 'not specified';
   const hob  = (p.hobbies   || []).join(', ')  || 'not specified';
@@ -2114,7 +2114,7 @@ EDUCATION: ${edu}
 INTERESTS: ${hob}
 
 TODAY'S LENS: ${discipline} (Cluster: ${cluster})
-
+${recentHistory ? `\nRECENT CARDS — avoid reusing these exact mechanisms, jargons, or pivot line phrases. A different discipline's concept that arrives at a similar truth from a genuinely different angle is fine — that is convergent evidence. But do not repeat the same mechanism name or its direct synonym.\n${recentHistory}\n` : ''}
 HOW TO USE LIFE STAGE AND DOMAIN TOGETHER: Life stage sets the general orientation — how the person relates to knowledge and their field. Domain tells you which world they actually inhabit. Use both together, never one alone.
 
 Student (any domains): professional domain chips indicate interest and curiosity, not experience. Do not write as if they are actively practising in that field. Use real-world examples and concepts — students can handle depth — but frame them as things being encountered and understood, not executed.
@@ -2177,6 +2177,14 @@ async function generateCard() {
   const cluster    = DISC_TO_CLUSTER[discipline];
   const todayType  = THINKING_TYPES[(state.cardCount || 0) % 7];
 
+  const history = state.cardHistory || [];
+  const recentTitles = history.slice(-15).map(h => h.card?.title).filter(Boolean).join(' / ');
+  const recentPivots = history.slice(-5).map(h => h.card?.pivotLine).filter(Boolean).join(' | ');
+  const recentExamples = history.slice(-5).map(h => h.card?.yourWorld?.split(/[.,]/)[0]).filter(Boolean).join(' / ');
+  const recentHistory = (recentTitles || recentPivots || recentExamples)
+    ? `Mechanisms (last 15): ${recentTitles}\nPivot lines (last 5): ${recentPivots}\nYourWorld openers (last 5): ${recentExamples}`
+    : '';
+
   document.getElementById('generate-area').innerHTML = `
     <div class="loading-state">
       <div class="loading-dots">
@@ -2194,7 +2202,7 @@ async function generateCard() {
         model: 'claude-sonnet-4-6',
         max_tokens: 1800,
         system: INSIGHT_SYSTEM_PROMPT,
-        messages: [{ role: 'user', content: buildPrompt(discipline, cluster, todayType) }]
+        messages: [{ role: 'user', content: buildPrompt(discipline, cluster, todayType, recentHistory) }]
       })
     });
 
