@@ -2317,7 +2317,7 @@ function renderCard(card, discipline) {
         const hasFeedback = (state.feedback || []).some(f => f.date === getTodayStr());
         return hasFeedback
           ? `<div class="card-feedback-thanks">Got it. That helps shape future lenses.</div>`
-          : `<div class="card-feedback-label">Did this shift how you see something?</div>
+          : `<div class="card-feedback-label">Did this change how you see something?</div>
              <div class="card-feedback-btns">
                <button class="feedback-btn" onclick="submitFeedback('yes','${discipline}')">This changed something</button>
                <button class="feedback-btn" onclick="submitFeedback('no','${discipline}')">Did not land</button>
@@ -2500,7 +2500,7 @@ function renderTomorrow(todayDiscipline) {
     <div class="tomorrow-wrap">
       <div class="tomorrow-label">${isFriday ? 'Monday' : 'Tomorrow'}</div>
       <div class="tomorrow-discipline">${nextDisc}</div>
-      <div class="tomorrow-sub">A different lens. A different way to see.</div>
+      <div class="tomorrow-sub">A different world. A different way to think.</div>
     </div>`;
   const name = state.profile?.name || 'Friend';
   const cl = document.getElementById('close-line-area');
