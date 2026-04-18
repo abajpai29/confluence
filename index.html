@@ -1350,6 +1350,8 @@ Object.entries(CLUSTERS).forEach(([cluster, data]) => {
   data.disciplines.forEach(d => { ALL_DISCIPLINES.push(d); DISC_TO_CLUSTER[d] = cluster; });
 });
 
+const SCHOOL_DISCIPLINES = ['Mathematics', 'Physics', 'Chemistry', 'Biology', 'Geography'];
+
 // ============================================================
 // STATE
 // ============================================================
@@ -1361,6 +1363,7 @@ let state = {
   todayDiscipline: null,
   todayThinkingType: null,
   cardCount: 0,
+  schoolUnlockIndex: 0,
   streak: 0,
   lastCardDate: null,
   clusterProgress: {},
@@ -2107,7 +2110,7 @@ Every card is a promise: this is true, this is surprising, this will change how 
 
 Keep that promise. Every single time.`;
 
-function buildPrompt(discipline, cluster, todayType, recentHistory = '') {
+function buildPrompt(discipline, cluster, todayType, recentHistory = '', isSchoolUnlock = false) {
   const p    = state.profile;
   const edu  = (p.education || []).filter(d => d !== 'Other').join(', ')  || 'not specified';
   const hob  = (p.hobbies   || []).filter(d => d !== 'Other').join(', ')  || 'not specified';
@@ -2152,7 +2155,20 @@ Researcher in industry domains (Technology, Finance, Healthcare): analytical rig
 Working Professional / Entrepreneur / Consultant: practitioner framing — real stakes, daily decisions, clients, teams.
 
 LIFE STAGE FOCUS: ${lifeStageAnchor}
+${isSchoolUnlock ? `
+SCHOOL UNLOCK: This card enters through a concept from ${discipline} that the reader almost certainly studied in school. Pick a specific concept — not the broadest one, but one with genuine hidden depth.
 
+Three angles to consider — pick whichever is most surprising for this specific concept, do not try to cover all three:
+— Past: what existed before this concept, what problem or moment created it — the history school never mentioned
+— Present: the concept itself seen differently — the real mechanism or hidden story behind what school taught as a formula or definition
+— Applications: where this concept actually operates in the world today — in technology, systems, decisions, or daily life
+
+The reader should finish the card thinking: "I studied this for years and never knew THIS."
+
+Example (Mathematics): School taught a² + b² = c². What school skipped: the Babylonians knew this 1,000 years before Pythagoras — it is on a clay tablet from 1800 BCE. Egyptian rope-stretchers used 3:4:5 knotted ropes to make perfect right angles when building temples. Pythagoras likely encountered it in Egypt, then proved it formally. His own theorem then produced √2 — a number that cannot be a fraction — which destroyed his cult's belief that all numbers were divine ratios. The person who revealed this was, according to legend, drowned.
+
+Connect to their world exactly as you normally would — the school angle is the entry, not the landing.
+` : ''}
 The connection must be genuinely surprising and specific to this person's world.
 
 The insight can land anywhere in their life — their profession, something they studied, or something they love. Don't default to the first domain. Pick wherever the connection is most surprising and resonant.
@@ -2202,8 +2218,18 @@ async function generateCard() {
     return;
   }
 
-  const discipline = getTodaysDiscipline();
-  const cluster    = DISC_TO_CLUSTER[discipline];
+  const isSchoolUnlock = ((state.cardCount || 0) % 5 === 4);
+  let discipline, cluster;
+  if (isSchoolUnlock) {
+    let idx = (state.schoolUnlockIndex || 0) % SCHOOL_DISCIPLINES.length;
+    const lastDisc = (state.cardHistory || []).slice(-1)[0]?.discipline;
+    if (SCHOOL_DISCIPLINES[idx] === lastDisc) idx = (idx + 1) % SCHOOL_DISCIPLINES.length;
+    discipline = SCHOOL_DISCIPLINES[idx];
+    cluster = 'School Classics';
+  } else {
+    discipline = getTodaysDiscipline();
+    cluster = DISC_TO_CLUSTER[discipline];
+  }
   const todayType  = THINKING_TYPES[(state.cardCount || 0) % 7];
 
   const history = state.cardHistory || [];
@@ -2236,7 +2262,7 @@ async function generateCard() {
         model: 'claude-sonnet-4-6',
         max_tokens: 1800,
         system: INSIGHT_SYSTEM_PROMPT,
-        messages: [{ role: 'user', content: buildPrompt(discipline, cluster, todayType, recentHistory) }]
+        messages: [{ role: 'user', content: buildPrompt(discipline, cluster, todayType, recentHistory, isSchoolUnlock) }]
       })
     });
 
@@ -2273,6 +2299,7 @@ async function generateCard() {
     state.todayDiscipline    = discipline;
     state.todayThinkingType  = todayType;
     state.cardCount          = (state.cardCount || 0) + 1;
+    if (isSchoolUnlock) state.schoolUnlockIndex = (state.schoolUnlockIndex || 0) + 1;
     state.disciplineIndex    = (state.disciplineIndex || 0) + 1;
     state.exploredThinkingTypes = state.exploredThinkingTypes || {};
     state.exploredThinkingTypes[todayType] = (state.exploredThinkingTypes[todayType] || 0) + 1;
