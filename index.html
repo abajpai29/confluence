@@ -345,7 +345,7 @@ body::before {
 .ob-ack {
   font-family: 'Source Serif 4', Georgia, serif;
   font-size: 15px; font-style: italic; font-weight: 300;
-  color: var(--accent); margin-bottom: 20px; min-height: 24px;
+  color: var(--accent); margin-bottom: 16px; min-height: 0;
 }
 .ob-step-nav {
   display: flex; justify-content: space-between; align-items: center;
@@ -1017,6 +1017,7 @@ body::before {
     <div class="ob-card" id="ob-card">
       <!-- Step 1: Name -->
       <div class="ob-step" id="ob-step-1">
+        <div class="ob-ack" id="ob-ack-1"></div>
         <label class="ob-label">What should we call you</label>
         <input type="text" class="ob-input" id="ob-name" maxlength="40" placeholder="Your name" />
         <div class="ob-step-nav">
@@ -1054,7 +1055,7 @@ body::before {
           <div class="chip" data-val="Africa">Africa</div>
           <div class="chip" data-val="Southeast Asia">Southeast Asia</div>
           <div class="chip" data-val="South America">South America</div>
-          <div class="chip" data-val="Australia & NZ">Australia & NZ</div>
+          <div class="chip" data-val="Australia">Australia</div>
           <div class="chip" data-val="Rest of World">Rest of World</div>
         </div>
         <div class="ob-step-nav">
@@ -1102,14 +1103,14 @@ body::before {
         <div class="ob-ack" id="ob-ack-5"></div>
         <label class="ob-label">What have you studied or are currently studying <span>(pick all that apply)</span></label>
         <div class="chips" id="chips-edu">
+          <div class="chip" data-val="Physics">Physics</div>
+          <div class="chip" data-val="Chemistry">Chemistry</div>
+          <div class="chip" data-val="Biology">Biology</div>
           <div class="chip" data-val="Mathematics & Statistics">Mathematics</div>
           <div class="chip" data-val="Commerce">Commerce</div>
           <div class="chip" data-val="Economics & Commerce">Economics</div>
           <div class="chip" data-val="Engineering & Technology">Engineering</div>
           <div class="chip" data-val="Medicine & Health">Medicine</div>
-          <div class="chip" data-val="Physics">Physics</div>
-          <div class="chip" data-val="Chemistry">Chemistry</div>
-          <div class="chip" data-val="Biology">Biology</div>
           <div class="chip" data-val="Business & Management">Business</div>
           <div class="chip" data-val="Law & Governance">Law</div>
           <div class="chip" data-val="Arts & Humanities">Arts & Humanities</div>
@@ -1117,7 +1118,6 @@ body::before {
           <div class="chip" data-val="Architecture & Design">Architecture</div>
           <div class="chip" data-val="Public Policy & Governance">Public Policy</div>
           <div class="chip" data-val="Environment & Sustainability">Environment & Sustainability</div>
-          <div class="chip" data-val="Agriculture">Agriculture</div>
           <div class="chip" data-val="Other">Other</div>
         </div>
         <div class="ob-step-nav">
@@ -1818,7 +1818,7 @@ Adapt based on location — anchor examples, institutions, and professional refe
 - Africa: regional business and development context, mobile-first economy, regional institutions
 - Southeast Asia: regional tech and business context, ASEAN, family conglomerates, fintech
 - South America: regional professional context, Latin American institutions, commodity economies
-- Australia & NZ: ANZ professional context, similar to UK in many ways
+- Australia: Australian professional context, similar to UK in many ways
 - Rest of World or not specified: use universally relatable examples that require no local knowledge
 
 ---
