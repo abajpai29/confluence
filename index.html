@@ -2117,10 +2117,10 @@ function buildPrompt(discipline, cluster, todayType, recentHistory = '') {
 
   const lifeStageAnchor = {
     'Working Professional': 'Anchor most insights to their role, industry, and daily work decisions. But roughly one in five cards should land outside pure work — in a personal decision, a thinking habit, or a pattern in how they live and choose. Not every mechanism needs to resolve into a professional context.',
-    'Entrepreneur':         'Anchor to the venture they are building. Frame connections as opportunities, risks, or strategic angles.',
-    'Consultant':           'Anchor to client work. Frame connections as novel frameworks or analytical angles that differentiate their advice.',
-    'Student':              'Anchor to their studies and emerging interests. Frame connections as ways to see their subjects differently.',
-    'Researcher':           'Anchor to their research domain. Frame connections as methodological insights or cross-field hypotheses.',
+    'Entrepreneur':         'Anchor most insights to the venture they are building — opportunities, risks, or strategic angles. But roughly one in five cards should land outside the venture, in a personal decision, a life pattern, or how they think and choose.',
+    'Consultant':           'Anchor most insights to client work — novel frameworks or analytical angles that differentiate their advice. But roughly one in five cards should land outside client work, in a personal habit, a life decision, or how they see the world.',
+    'Student':              'Anchor most insights to their studies and emerging interests. But roughly one in five cards should land outside academics — in a personal pattern, a life choice, or something they are navigating as a person, not just a student.',
+    'Researcher':           'Anchor most insights to their research domain — methodological insights or cross-field hypotheses. But roughly one in five cards should land outside research, in a personal decision, a thinking habit, or a pattern in how they live.',
   }[p.lifeStage] || 'Anchor the insight to what matters most in their world right now.';
 
   const thinkingTypeGuide = {
