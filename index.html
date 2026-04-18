@@ -2310,6 +2310,8 @@ async function generateCard() {
         .replace(/ - (it|they|this|that)\b/gi, (_, w) => '. ' + w[0].toUpperCase() + w.slice(1))
         .replace(/\bquietly\b/gi, '')
         .replace(/\binternally airtight\b/gi, 'perfectly logical')
+        .replace(/\balmost never\b/gi, 'never')
+        .replace(/\balmost always\b/gi, 'always')
         .replace(/\.\s+([a-z])/g, (_, c) => '. ' + c.toUpperCase())
         .replace(/,\s*,/g, ',')
         .replace(/\s{2,}/g, ' ')
