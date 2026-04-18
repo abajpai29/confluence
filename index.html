@@ -2230,6 +2230,7 @@ async function generateCard() {
     discipline = getTodaysDiscipline();
     cluster = DISC_TO_CLUSTER[discipline];
   }
+  document.getElementById('today-discipline-name').textContent = discipline;
   const todayType  = THINKING_TYPES[(state.cardCount || 0) % 7];
 
   const history = state.cardHistory || [];
