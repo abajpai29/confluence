@@ -2284,6 +2284,7 @@ async function generateCard() {
     const cleanField = s => {
       if (typeof s !== 'string') return s;
       return s
+        .replace(/\s*—([^—\n]+)—\s*/g, ' - $1 - ')
         .replace(/\s*—\s*/g, '. ')
         .replace(/\bquietly\b/gi, '')
         .replace(/\binternally airtight\b/gi, 'perfectly logical')
