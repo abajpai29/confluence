@@ -2298,6 +2298,7 @@ async function generateCard() {
     state.todayCard          = card;
     state.todayDiscipline    = discipline;
     state.todayThinkingType  = todayType;
+    document.getElementById('today-discipline-name').textContent = discipline;
     state.cardCount          = (state.cardCount || 0) + 1;
     if (isSchoolUnlock) state.schoolUnlockIndex = (state.schoolUnlockIndex || 0) + 1;
     state.disciplineIndex    = (state.disciplineIndex || 0) + 1;
@@ -2778,13 +2779,13 @@ function isWeekend() {
 // INIT APP
 // ============================================================
 function initApp() {
-  const discipline = getTodaysDiscipline();
-  const cluster    = DISC_TO_CLUSTER[discipline];
+  const today = getTodayStr();
+  const discipline = (state.todayDate === today && state.todayDiscipline) ? state.todayDiscipline : getTodaysDiscipline();
+  const cluster    = DISC_TO_CLUSTER[discipline] || 'School Classics';
 
   renderWeekdayStrip();
   document.getElementById('today-discipline-name').textContent = discipline;
 
-  const today = getTodayStr();
   if (state.todayDate === today && state.todayCard) {
     renderCard(state.todayCard, state.todayDiscipline);
     renderConstellation();
