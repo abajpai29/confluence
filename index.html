@@ -1957,7 +1957,7 @@ A curious 16-year-old should be able to follow the language. The depth of the id
 ZERO TOLERANCE: Em dashes (—) are completely banned. Before using a hyphen-dash (-), run this check in order: (1) Can this be two sentences? Use a period. (2) Can a comma work? Use a comma. (3) Only if neither works — a true mid-sentence aside where removing it would break the sentence — use a hyphen-dash. Maximum one hyphen-dash per card. Heuristic: if the clause after the dash starts with "it", "they", "this", or "that", it is almost always a new sentence — use a period. Exception: if the clause before the dash is a negation ("X is not Y - it is Z"), do not just swap in a period — that creates the banned "Not X. It is Y." pattern. Rewrite the whole sentence instead. The only valid hyphen-dash is a true parenthetical: "The systems built to fight the old threat - high-calorie food, sedentary work - are now producing the new one." Scan your output before returning. If a single em dash remains, rewrite.
 
 BANNED PHRASES — never use any of these:
-"In today's fast-paced world" / "Let's dive in" / "Here's the thing" / "It turns out" / "Interestingly" / "In fact" / "It's worth noting" / "At its core" / "The reality is" / "What's fascinating is" / "reveals" / "illuminates" / "underscores" / "highlights" / "showcases" / "In essence" / "Fundamentally" / "What this shows us" / "Here is what rarely gets taught" / "But here is the structural fact that matters" / "Read closely and" / "Here is what matters" / "the sharper question is" / "the real question is" / "the better question is" / "the right question is" / "the question to ask is" / "worth sitting with" / "worth considering" / "worth exploring" / "worth asking" / "worth pressure-testing" / "worth [anything]ing" — these announce the insight instead of delivering it. Say the thing directly.
+"In today's fast-paced world" / "Let's dive in" / "Here's the thing" / "It turns out" / "Interestingly" / "In fact" / "It's worth noting" / "At its core" / "The reality is" / "What's fascinating is" / "reveals" / "illuminates" / "underscores" / "highlights" / "showcases" / "In essence" / "Fundamentally" / "What this shows us" / "Here is what rarely gets taught" / "But here is the structural fact that matters" / "Read closely and" / "Here is what matters" / "the sharper question is" / "the real question is" / "the better question is" / "the right question is" / "the question to ask is" / "It's not just X — it's Y" / "Not only X but Y" / "stops being X and starts being Y" / "it's not about X, it's about Y" / "worth sitting with" / "worth considering" / "worth exploring" / "worth asking" / "worth pressure-testing" / "worth [anything]ing" — these announce the insight instead of delivering it. Say the thing directly.
 
 BANNED WORDS: "quietly" / "internally airtight" / "vibrant" / "profound" / "groundbreaking" / "pivotal" / "crucial" / "enduring" / "testament" / "tapestry" / "landscape" (abstract) / "underscore" / "interplay" / "intricate" / "foster" / "garner" / "showcase" / "delve" / "highlight" (verb) — these are AI vocabulary tells. They appear far more in generated text than in human writing. Never use them.
 
@@ -1976,6 +1976,8 @@ RULE OF THREE: Do not force ideas into groups of three to appear comprehensive. 
 SYNONYM CYCLING: Do not cycle "mechanism", "pattern", "structure", "dynamic", "force", "logic", "system" as synonyms across the card to avoid repetition. Pick the most accurate word and use it. Repetition penalty in your output model creates fake variety that sounds like a thesaurus, not a writer.
 
 COPULA AVOIDANCE: Do not substitute elaborate constructions for simple verbs. "Serves as", "stands as", "functions as", "acts as", "marks" — when these replace "is", rewrite. "Gallery 825 serves as LAAA's exhibition space" → "Gallery 825 is LAAA's exhibition space."
+
+FALSE AGENCY: Do not give inanimate things human verbs. "The data tells us", "the system learns", "the market rewards", "the decision emerges", "the culture shifts", "the conversation moves toward", "the framework assumes" — these hide the actual human actor. Name who does the thing. If no specific person fits, use "you" to put the reader in the seat. A person made the decision. A team missed the signal. A committee set the policy.
 
 SUPERFICIAL -ING PHRASES: Do not tack present participle phrases onto sentences to add fake depth. "The process failed, highlighting the importance of X" — cut "highlighting the importance of". If X matters, say X matters directly. "Symbolizing", "reflecting", "underscoring", "contributing to", "showcasing", "emphasizing" at the end of a sentence are almost always empty.
 
@@ -2231,6 +2233,24 @@ Do NOT use the person's name anywhere in the card. Write as narrative: stories, 
 THINKING PROMPT TYPE FOR TODAY: ${todayType}
 What this demands: ${thinkingTypeGuide}
 The thinking prompt must be specific to THIS insight. A generic prompt that could apply to any card is a failure. It must create productive discomfort — the user should feel they don't have a ready answer.
+
+---
+
+WRITING GATE — read this immediately before writing every field. Non-negotiable.
+
+VOICE: Sharp, noticed, not presented. Writer disappears. Reader arrives at the insight — never announce it.
+
+BINARY CONTRASTS — banned in all forms. Count every instance across the whole card: "Not X. It is Y." / "not X but Y" / "It's not just X — it's Y" / "Not only X but Y" / "The answer isn't X, it's Y" / "It feels like X, it's actually Y" / "stops being X and starts being Y" / "doesn't mean X, it means Y" / "not about X, it's about Y." Maximum one per card. If zero — better. If two or more — rewrite all instances.
+
+FALSE AGENCY — banned. Inanimate things do not perform human actions: "the data tells us" / "the system learns" / "the market rewards" / "the decision emerges" / "the culture shifts" / "the conversation moves toward" / "the model misses" / "the framework assumes." Name who actually does the thing. If no specific person fits, use "you."
+
+REPETITION — say it once. If a sentence restates the previous one in different words, delete the restatement.
+
+ENDING — the last sentence of whyItMatters must reframe, not conclude. It changes how the reader sees the first sentence of the card. If it summarises what came before — rewrite it.
+
+HARD CHECKS: Em dashes → zero. "Almost never / almost always" → zero. "Worth [verb]ing" → zero. Adverbs (genuinely, deeply, truly, fundamentally, inherently, inevitably) → zero.
+
+---
 
 Respond ONLY with valid JSON — no markdown, no code fences, no extra text:
 {
