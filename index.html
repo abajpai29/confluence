@@ -1378,6 +1378,21 @@ let state = {
 
 const THINKING_TYPES = ['polymathic', 'critical', 'systems', 'structured', 'creative', 'metacognitive', 'probabilistic'];
 
+const CONNECTION_TYPES = [
+  { id: 1,  name: 'THE LENS' },
+  { id: 2,  name: 'THE JOURNEY',         sourceWorldNote: 'sourceWorld traces each field crossing — one sentence per field.' },
+  { id: 3,  name: 'THE UNTOLD STORY' },
+  { id: 4,  name: 'THE CONVERGENCE',     sourceWorldNote: "sourceWorld covers both fields' independent paths — roughly half for each." },
+  { id: 5,  name: 'THE PARADOX' },
+  { id: 6,  name: 'THE PERSON' },
+  { id: 7,  name: 'THE FAILURE' },
+  { id: 8,  name: 'THE MIRROR',          yourWorldNote: "yourWorld must land in the reader's personal life — a habit, a fear, a pattern of choosing — not their professional role." },
+  { id: 9,  name: 'THE TRANSPLANT' },
+  { id: 10, name: 'THE PROPHET' },
+  { id: 11, name: 'THE ECHO' },
+  { id: 12, name: 'THE HIDDEN MECHANISM' },
+];
+
 const STORAGE_KEY = 'confluence_v3';
 function saveState() { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e){} }
 function loadState() {
@@ -2052,51 +2067,73 @@ THE SEVEN CARD FORMATS
 
 Pick whichever fits today's discipline and this person best. Do not announce which format you are using. Just write it.
 
+THE 12 CONNECTION TYPES
+
+These are the forms a great connection can take. You will be assigned one type per card via CONNECTION TYPE below. Execute that type with full commitment — find the best possible version of it for this discipline and this person's world.
+
 TYPE 1 — THE LENS
-Take a concept from today's discipline and use it as a new lens on the person's world. Show them their own domain through unfamiliar eyes.
-Best for: Ecology, Architecture, Psychology, Linguistics, Anthropology
+Take a concept from this discipline and use it as a new lens on the person's world. Show their domain through unfamiliar eyes. The concept is the tool — their world is the subject. The card does not argue the fields are similar. It uses one to see the other.
+Best for: Ecology, Architecture, Psychology, Linguistics, Anthropology, Cognitive Science
+Example shape: "Ecology has a concept called carrying capacity — the maximum load an environment can sustain before it degrades. Your organisation's meeting culture has a carrying capacity too. You crossed it years ago."
 
 TYPE 2 — THE JOURNEY
-Show how a concept originated in one field, then traveled across 2-3 others, before arriving in the person's world. The concept proves its own universality by having already crossed disciplines.
+A concept originated in this discipline, then traveled across 2-3 other fields, before arriving in the person's world. Each crossing is a beat. The reader discovers their field received something it did not originate. sourceWorld traces each crossing — one sentence per field.
 Best for: Game Theory, Thermodynamics, Information Theory, Evolutionary concepts, Systems Thinking
+Example shape: "Entropy began in steam engines in 1850. A century later Shannon borrowed it for information theory. Today it governs why your product roadmap becomes unmanageable without deliberate pruning."
 
 TYPE 3 — THE UNTOLD STORY
-Take something the person likely memorised in school — a theorem, a law, a formula, a historical event. Reveal the human drama, the origin story, the controversy behind it. Connect it to their world.
+Something the person likely memorised in school — a theorem, a law, a formula, a historical event. Reveal the human drama, controversy, or accident behind it. The familiar thing becomes strange. Connect that strangeness to their world.
 Best for: Mathematics, Physics, History, Philosophy of Science, Classical disciplines
+Example shape: "The Nash Equilibrium was proved by a 21-year-old in a 27-page thesis that every major economist initially dismissed. Nash had no formal economics training."
 
-TYPE 4 — THE COMMON ANCESTOR
-Two things that seem completely unrelated independently arrived at the same principle. Not one borrowing from the other — both discovering it separately. Show the shared root.
-Examples: music and mathematics both emerge from ratio; insurance and gambling are mathematically identical; evolution and financial markets both run on variation and selection.
-Best for: Mathematics, Economics, Biology, Music Theory
+TYPE 4 — THE CONVERGENCE
+Two fields, with no knowledge of each other, independently arrived at the same principle. Neither borrowed from the other. sourceWorld covers both paths — roughly half for each. Reveal the shared root. The point: if two unrelated systems arrived at the same place, the principle is more fundamental than either field understood.
+Best for: Mathematics, Economics, Biology, Music Theory, Physics
+Example shape: "Islamic geometric artists in the 12th century and quasicrystal physicists in the 1980s independently discovered the same non-repeating tiling pattern. Neither knew about the other."
 
 TYPE 5 — THE PARADOX
-A result that is mathematically proven but completely defies intuition — and is secretly operating in the person's world. Show them where it is running in their domain without them knowing.
-Examples: Braess's Paradox, Simpson's Paradox, the Friendship Paradox.
+A result that is proven but defies intuition — and is secretly operating in the person's world. Not a metaphor. An actual mechanism running beneath something they interact with every day. Show them where it lives in their domain.
 Best for: Mathematics, Statistics, Game Theory, Network Science, Economics
+Examples: Braess's Paradox, Simpson's Paradox, Friendship Paradox, Condorcet's Paradox
+Example shape: "Add a new road to a traffic network and average journey times get worse. Braess's Paradox — proven, observed in real cities. Every feature you add to reduce friction adds a new decision point."
 
 TYPE 6 — THE PERSON
-A historical figure who crossed into unexpected territory and what they found there. Not a biography. A story of what happens when someone refuses to stay in one discipline. Connect their crossing to the person's own world.
-Examples: Florence Nightingale as statistician, Shannon borrowing entropy from thermodynamics.
+A historical figure who crossed into unexpected territory and what they found there. Not a biography. The story of what happens when someone refuses to stay in one discipline. The crossing itself is the insight. Connect what they found to the reader's own world.
 Best for: History of Science, Mathematics, Medicine, any discipline with a compelling origin figure
+Examples: Florence Nightingale as statistician, Shannon borrowing entropy from thermodynamics, Darwin reading Malthus
+Example shape: "Florence Nightingale is remembered as a nurse. She should be remembered as a statistician. The deaths she stopped were not stopped by care. They were stopped by a chart she designed that made the truth impossible for Parliament to look away from."
 
 TYPE 7 — THE FAILURE
-A famous collapse, disaster, or mistake in one domain that contains an exact lesson for the person's world. Lead with the story. Land the lesson. Make it specific to them.
-Examples: Tacoma Narrows Bridge, Challenger disaster.
-Best for: Engineering, Medicine, Military History, Organisational Behaviour
+A famous collapse or systematic mistake in this discipline that contains an exact lesson for the reader's world. Not a cautionary tale — a mechanism. Show how the failure worked, not just that it happened. Then show the same mechanism operating in their world.
+Best for: Engineering, Medicine, Military History, Organisational Behaviour, Economics
+Examples: Tacoma Narrows Bridge, Challenger, Long-Term Capital Management, Chernobyl
+Example shape: "The Challenger engineers knew. They sent memos. The launch went ahead because the decision system was optimised for schedule, not safety signal. Every organisation that has shipped something broken despite internal warnings ran the same architecture."
 
----
+TYPE 8 — THE MIRROR
+This discipline reflects something back about how the person actually lives, chooses, and sees themselves — not their career or domain. The connection lands in a habit, a fear, a pattern of choosing, or a way of seeing that is theirs as a person. Not what they do. Who they are. yourWorld must land in the reader's personal life, not their professional role.
+Best for: Philosophy, Psychology, Anthropology, Sociology, Religion and Myth, Eastern and Classical thought
+Example shape: "Anthropologists studying gift economies found that what people give reveals more about who they want to be seen as than about the recipient. Your last three unrequested recommendations say the same thing about you."
 
-THE SEVEN CONNECTION SHAPES
+TYPE 9 — THE TRANSPLANT
+Your field had a specific problem it could not solve despite sustained effort. This discipline had already solved an equivalent problem using a different method. Someone made the connection deliberately. The transplant worked because the underlying mechanism was identical — even though the surface looked nothing alike.
+Best for: Medicine, Engineering, Business, Technology, Public Policy
+Examples: Aviation checklists transplanted to surgery; pit stop efficiency to hospital emergency protocols
+Example shape: "Surgical death rates were not falling despite better training and better equipment. Atul Gawande noticed aviation had already solved the equivalent problem — not by training pilots better but by removing certain decisions from pilots entirely. The checklist was a transplant, not an invention."
 
-These are the forms a great connection takes. Use these as inspiration, not instruction. Do not pick a type. Find the truest connection and let it be whatever it is.
+TYPE 10 — THE PROPHET
+This discipline developed a framework — a model, a set of equations, a theory — that turned out to describe something that did not yet exist in the person's world. The prediction was not intentional. When you apply the framework now, it described your field's future before anyone in your field saw it coming.
+Best for: Game Theory, Information Theory, Thermodynamics, Ecology, Cybernetics, Mathematics, Systems Theory
+Example shape: "In 1950 John von Neumann described a self-replicating automaton that could copy its own instructions and spread through any available medium. He was doing pure mathematics. He had described the computer virus 30 years before the internet existed."
 
-- Structural analogy: the same underlying pattern exists in both fields
-- Historical parallel: the same event or phenomenon happened before, in a completely different world
-- Origin story: your field's core idea was borrowed from this discipline, knowingly or not
-- Hidden mechanism: this discipline explains why something in your field works, at a deeper level
-- Predictive lens: this discipline saw what was coming in your field before anyone in it did
-- Borrowed solution: your field solved a hard problem using a blueprint from somewhere else entirely
-- Life mirror: this discipline reflects something back about how the person lives, chooses, or sees themselves. Not their career. Them.
+TYPE 11 — THE ECHO
+The situation the reader is inside right now already played out — in a different field, a different century. Same pressures, same initial responses, same mistakes. Do not announce the parallel. Tell the earlier story in full. Let the reader feel the recognition arrive on their own.
+Best for: History, Economics, Political Science, Sociology, Technology History
+Example shape: "In 1455, Gutenberg's press created an information flood that existing gatekeepers could not control. They tried censorship, licensing, burning books. Within 50 years the information had restructured society anyway." [Reader recognises the present without being told.]
+
+TYPE 12 — THE HIDDEN MECHANISM
+This discipline explains why something in the person's world works — at a level nobody in their field has fully admitted. Not a lens, not an analogy. An actual causal explanation. The mechanism was always operating. This discipline named it first.
+Best for: Physics, Biology, Chemistry, Neuroscience, Mathematics, Thermodynamics
+Example shape: "Every negotiation stalls near the end — both sides know the deal is close but neither moves. Game theorists call this the war of attrition, originally modelled for animal territory disputes. It predicted the exact incentive structure that makes procurement stall at 80%."
 
 ---
 
@@ -2165,7 +2202,7 @@ Every card is a promise: this is true, this is surprising, this will change how 
 
 Keep that promise. Every single time.`;
 
-function buildPrompt(discipline, cluster, todayType, recentHistory = '', isSchoolUnlock = false) {
+function buildPrompt(discipline, cluster, todayType, recentHistory = '', isSchoolUnlock = false, assignedType = null) {
   const p    = state.profile;
   const edu  = (p.education || []).filter(d => d !== 'Other').join(', ')  || 'not specified';
   const hob  = (p.hobbies   || []).filter(d => d !== 'Other').join(', ')  || 'not specified';
@@ -2252,7 +2289,12 @@ HARD CHECKS: Em dashes → zero. "Almost never / almost always" → zero. "Worth
 
 ---
 
-Respond ONLY with valid JSON — no markdown, no code fences, no extra text:
+${assignedType ? `CONNECTION TYPE FOR THIS CARD: TYPE ${assignedType.id} — ${assignedType.name}
+Refer to the type definition above. Build this card fully committed to that type. Find the best possible version of ${assignedType.name} for ${discipline} and this person's world.${assignedType.sourceWorldNote ? '\nNOTE for sourceWorld: ' + assignedType.sourceWorldNote : ''}${assignedType.yourWorldNote ? '\nNOTE for yourWorld: ' + assignedType.yourWorldNote : ''}
+
+---
+
+` : ''}Respond ONLY with valid JSON — no markdown, no code fences, no extra text:
 {
   "title": "Punchy headline, max 8 words, impossible to ignore, NOT the discipline name",
   "hook": "Maximum three sentences. Two is the target. Three only if the third adds a genuinely new dimension — not more explanation, not the connection reveal. The hook contains only: a specific opening moment, and one gesture toward why it matters. Nothing else belongs here. The mechanism belongs in sourceWorld. The named concept belongs in sourceWorld. The specific connection to the reader's world belongs in yourWorld. The hook does not explain. It opens a gap. Model: 'In September 1838, Darwin picked up an economics essay for fun. It changed biology forever.' — no mechanism, no explanation, no reveal. Just a moment and a consequence. The reader is pulled through by the gap between those two sentences. Do not copy this model. Find your own version: a specific moment, then a consequence that makes the reader unable to stop. All must be grammatically complete — subject and verb required. 'The Deccan Traps.' is not a sentence. 'In the 1930s, chemists discovered X.' is. Open with something surprising — a specific person, moment, discovery, or number. Tone: sharp, curious, never preachy, never negative, never over-explanatory. The hook must create one feeling: I need the next paragraph. No em dashes. No hyphen-dashes. No colons. No questions. No 'Did you know'. Find your own version that fits this specific card. DATE WARNING: by "date" here, the only things at risk are years (e.g. 1838, 2004) and decades (e.g. the 1980s, the 1990s) — not calendar dates. A well-placed year or decade grounds the hook and signals credibility. Use them confidently when you know them. The rule is not to avoid dates — it is to never guess. A wrong year or decade destroys trust instantly. The 1980s is the most common wrong decade guess across all disciplines — do not default to it. If you are uncertain about a year or decade, drop it entirely. Do not substitute a decade for a year thinking it is safer — a wrong decade is just as damaging. Example of what goes wrong: 'In the 1980s, immunologists discovered Tregs' — Tregs were identified in the 1990s. 'In 2004, Jana Novotna...' — Novotna retired in 1999. The Darwin example is safe because the Malthus reading in 1838 is well-documented. Most science, sports, music, and cultural examples are not. When certain, use the date. When in doubt, drop it. CRITICAL — at least one sentence in the hook must gesture toward the reader's actual world — their domains, life stage, and profession as given in the profile above. But the hook must not reveal the specific connection, mechanism, or example that belongs to yourWorld. Gesture at the domain. Do not name the insight. "Indian banking ran this exact miscalculation through the 2010s" in the hook is a reveal — it belongs in yourWorld. The hook version would be: "Every financial model built on historical behaviour carries the same structural blind spot." The reader feels the relevance without knowing the specific connection yet. Save the specific for yourWorld. This does not mean naming their job. It means placing a pattern, institution, or dynamic they inhabit — without giving away where it lands. Do not use 'you' or 'your' anywhere in the hook — not in any sentence. The hook is observational, not addressed to the reader. Just place a world the reader recognises next to the source world, and let the gap do the work. Bad: 'He was made monstrous by the very system that later had to destroy him.' (stays inside mythology, no real-world anchor). Good: 'The systems that cause the most damage today were built to prevent exactly that damage.' (real-world consequence, reader feels it immediately). HARD RULE: the second sentence must never use 'you', 'your', or any accusatory framing ('keep failing', 'always miss', 'never understand'). Those words break the elegance and signal contempt. The sentence must be observational, not directed.",
@@ -2282,6 +2324,13 @@ FINAL CHECK BEFORE RETURNING: read every sentence in every field. For each sente
 // ============================================================
 // GENERATE CARD
 // ============================================================
+function pickConnectionType() {
+  const recent = state.recentConnectionTypes || [];
+  const available = CONNECTION_TYPES.filter(t => !recent.includes(t.id));
+  const pool = available.length > 0 ? available : CONNECTION_TYPES;
+  return pool[Math.floor(Math.random() * pool.length)];
+}
+
 function countDramaticPairs(card) {
   const fields = ['hook', 'sourceWorld', 'pivotLine', 'yourWorld', 'whyItMatters'];
   const text = fields.map(f => card[f] || '').join(' ');
@@ -2342,7 +2391,10 @@ async function generateCard() {
   startLoadingFragments();
 
   try {
-    const prompt = buildPrompt(discipline, cluster, todayType, recentHistory, isSchoolUnlock);
+    const assignedType = pickConnectionType();
+    const recentTypes = state.recentConnectionTypes || [];
+    state.recentConnectionTypes = [assignedType.id, ...recentTypes].slice(0, 3);
+    const prompt = buildPrompt(discipline, cluster, todayType, recentHistory, isSchoolUnlock, assignedType);
 
     const fetchCard = async () => {
       const res = await fetch(WORKER_URL, {
