@@ -1537,9 +1537,9 @@ const LOADING_FRAGMENTS = [
   "Finding the one connection you'd never make yourself...",
   "Somewhere between thermodynamics and your Tuesday meeting...",
   "The ancient Greeks had something to say about this. So did a biologist in 1972...",
-  "Almost there. This one's genuinely surprising...",
   "Somewhere in the history of human thought, this was already solved...",
-  "Your insight is forming at the intersection of the unexpected..."
+  "The unexpected discipline. The direct connection. Almost ready...",
+  "Almost there.",
 ];
 
 let _fragInterval = null;
@@ -1550,12 +1550,13 @@ function startLoadingFragments() {
   let i = 0;
   el.textContent = LOADING_FRAGMENTS[0];
   _fragInterval = setInterval(() => {
-    i = (i + 1) % LOADING_FRAGMENTS.length;
+    if (i >= LOADING_FRAGMENTS.length - 1) return;
+    i++;
     el.style.opacity = '0';
     setTimeout(() => {
       if (el) { el.textContent = LOADING_FRAGMENTS[i]; el.style.opacity = '1'; }
     }, 300);
-  }, 2000);
+  }, 2500);
 }
 
 function stopLoadingFragments() {
