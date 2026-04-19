@@ -172,7 +172,7 @@ async function sendDailyReminders(env) {
 }
 
 function emailTemplate(siteUrl, name) {
-  const greeting = name ? `<div style="font-size:16px;font-weight:300;color:#8a6f52;margin-bottom:16px;">Hi ${name}.</div>` : '';
+  const greeting = name ? `<div style="font-size:16px;font-weight:300;color:#8a6f52;margin-bottom:16px;">Hi ${name},</div>` : '';
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -182,7 +182,7 @@ function emailTemplate(siteUrl, name) {
 </head>
 <body style="margin:0;padding:0;background:#f5f0e8;">
   <div style="max-width:480px;margin:0 auto;padding:48px 32px 56px;font-family:Georgia,'Times New Roman',serif;">
-    <div style="font-size:18px;font-weight:700;color:#1a1614;margin-bottom:56px;letter-spacing:0.01em;">Eneth</div>
+    <div style="font-family:Georgia,'Times New Roman',serif;font-size:20px;font-weight:500;color:#1a1614;margin-bottom:56px;letter-spacing:0.04em;">Eneth</div>
     ${greeting}<div style="font-size:22px;font-weight:400;color:#1a1614;line-height:1.5;margin-bottom:44px;">See something new today.</div>
     <a href="${siteUrl}" style="display:inline-block;background:#1a1614;color:#f5f0e8;font-family:Georgia,serif;font-size:15px;font-style:italic;padding:14px 32px;text-decoration:none;letter-spacing:0.01em;">Open →</a>
     <div style="margin-top:48px;font-family:Georgia,'Times New Roman',serif;font-size:13px;font-style:italic;font-weight:300;color:#8a6f52;">Think to the nth degree.</div>
