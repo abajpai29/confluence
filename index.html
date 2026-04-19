@@ -2452,16 +2452,16 @@ async function generateCard() {
     };
     ['hook','title','sourceWorld','pivotLine','yourWorld','para1','para2','whyItMatters'].forEach(f => { if (card[f]) card[f] = cleanField(card[f]); });
 
-    // Auto-retry if 2+ dramatic pairs or any prose colon detected (silent, max 2 retries)
+    // Auto-retry if any dramatic pair or prose colon detected (silent, max 2 retries)
     let attempts = 0;
-    while ((countDramaticPairs(card) >= 2 || hasProseColon(card)) && attempts < 2) {
+    while ((countDramaticPairs(card) >= 1 || hasProseColon(card)) && attempts < 2) {
       attempts++;
       const retry = await fetchCard();
       ['hook','title','sourceWorld','pivotLine','yourWorld','para1','para2','whyItMatters'].forEach(f => { if (retry[f]) retry[f] = cleanField(retry[f]); });
       const retryScore = countDramaticPairs(retry) + (hasProseColon(retry) ? 1 : 0);
       const cardScore = countDramaticPairs(card) + (hasProseColon(card) ? 1 : 0);
       if (retryScore < cardScore) card = retry;
-      if (countDramaticPairs(card) < 2 && !hasProseColon(card)) break;
+      if (countDramaticPairs(card) < 1 && !hasProseColon(card)) break;
     }
     stopLoadingFragments();
 
