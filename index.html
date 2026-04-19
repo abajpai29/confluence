@@ -2288,7 +2288,8 @@ function countDramaticPairs(card) {
 }
 
 function hasProseColon(card) {
-  const fields = ['hook', 'sourceWorld', 'pivotLine', 'yourWorld', 'whyItMatters', 'para1', 'para2'];
+  // Only retry for colons in high-visibility fields — body text colons handled by prompt alone
+  const fields = ['hook', 'pivotLine', 'whyItMatters'];
   return fields.some(f => (card[f] || '').includes(':'));
 }
 
