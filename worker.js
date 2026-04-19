@@ -135,35 +135,6 @@ export default {
   },
 };
 
-const ALL_DISCIPLINES = [
-  'Quantum Mechanics','Thermodynamics','Fluid Dynamics','Electromagnetism','Optics','Statistical Mechanics','Acoustics','Relativity','Particle Physics',
-  'Organic Chemistry','Biochemistry','Physical Chemistry','Materials Chemistry',
-  'Game Theory','Topology','Number Theory','Chaos Theory','Probability Theory','Graph Theory','Statistics',
-  'Evolutionary Biology','Neuroscience','Genetics','Immunology','Microbiology','Epidemiology',
-  'Geology','Astronomy','Oceanography','Climate Science','Meteorology','Geophysics','Geography',
-  'Ecology','Environmental Science','Sustainability','Conservation Biology',
-  'Sociology','Anthropology','Psychology','Social Psychology','Linguistics','Criminology','Demography','Political Science',
-  'Behavioural Economics','Development Economics','Agricultural Economics','Financial Markets','Microfinance','Public Finance',
-  'Political Philosophy','Constitutional Law','Geopolitics','Military Strategy','Public Policy','International Relations','Public Administration','Diplomacy',
-  'Philosophy','Ethics','Philosophy of Science','History','Logic','Stoicism','Archaeology',
-  'Mythology','Theology','Comparative Religion','Folklore',
-  'Music','Architecture','Urban Planning','Film Studies','English Literature','Typography','Cultural Studies','Symbolism',
-  'Materials Science','Mechanical Engineering','Electrical Engineering','Structural Engineering','Civil Engineering','Biomedical Engineering','Chemical Engineering',
-  'Computer Science','Information Theory','Cryptography','Artificial Intelligence','Human-Computer Interaction','Network Science',
-  'Organisational Behaviour','Business Strategy','Consumer Psychology','Entrepreneurship','Supply Chain Management','Risk Management','Marketing',
-  'Public Health','Psychiatry','Medicine','Bioethics','Medical Anthropology','Pharmacology','Sleep Science',
-  'Sports Psychology','Biomechanics','Exercise Science','Sports Analytics','Sports Medicine',
-  'Vedic Philosophy','Buddhist Philosophy','Taoism','Ayurveda','Islamic Philosophy','Classical Rhetoric','Confucianism',
-  'Cognitive Science','Behavioural Science','Decision Theory','Consciousness Studies','Ethology',
-];
-
-function getTodayDiscipline() {
-  const epoch = Date.UTC(2024, 0, 1);
-  const now = Date.UTC(new Date().getUTCFullYear(), new Date().getUTCMonth(), new Date().getUTCDate());
-  const dayIndex = Math.floor((now - epoch) / 86400000);
-  return ALL_DISCIPLINES[dayIndex % ALL_DISCIPLINES.length];
-}
-
 async function sendDailyReminders(env) {
   if (!env.RATE_LIMIT || !env.RESEND_API_KEY) return;
 
@@ -182,8 +153,7 @@ async function sendDailyReminders(env) {
     try { subscriber = JSON.parse(raw); } catch { continue; }
     if (!subscriber.email) continue;
 
-    const discipline = getTodayDiscipline();
-    const html = emailTemplate(siteUrl, subscriber.name || '', discipline);
+    const html = emailTemplate(siteUrl, subscriber.name || '');
 
     await fetch('https://api.resend.com/emails', {
       method: 'POST',
@@ -201,7 +171,7 @@ async function sendDailyReminders(env) {
   }
 }
 
-function emailTemplate(siteUrl, name, discipline) {
+function emailTemplate(siteUrl, name) {
   const greeting = name ? `<div style="font-size:16px;font-weight:300;color:#8a6f52;margin-bottom:16px;">Hi ${name}.</div>` : '';
   return `<!DOCTYPE html>
 <html lang="en">
@@ -213,8 +183,7 @@ function emailTemplate(siteUrl, name, discipline) {
 <body style="margin:0;padding:0;background:#f5f0e8;">
   <div style="max-width:480px;margin:0 auto;padding:48px 32px 56px;font-family:Georgia,'Times New Roman',serif;">
     <div style="font-size:18px;font-weight:700;color:#1a1614;margin-bottom:56px;letter-spacing:0.01em;">Eneth</div>
-    ${greeting}<div style="font-size:22px;font-weight:400;color:#1a1614;line-height:1.5;margin-bottom:12px;">Today you're exploring your connection with ${discipline}.</div>
-    <div style="font-size:15px;font-weight:300;font-style:italic;color:#8a6f52;margin-bottom:44px;">See something new today.</div>
+    ${greeting}<div style="font-size:22px;font-weight:400;color:#1a1614;line-height:1.5;margin-bottom:44px;">See something new today.</div>
     <a href="${siteUrl}" style="display:inline-block;background:#1a1614;color:#f5f0e8;font-family:Georgia,serif;font-size:15px;font-style:italic;padding:14px 32px;text-decoration:none;letter-spacing:0.01em;">Open →</a>
     <div style="margin-top:48px;font-family:Georgia,'Times New Roman',serif;font-size:13px;font-style:italic;font-weight:300;color:#8a6f52;">Think to the nth degree.</div>
   </div>
