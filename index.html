@@ -2280,6 +2280,13 @@ FINAL CHECK BEFORE RETURNING: read every sentence in every field. For each sente
 // ============================================================
 // GENERATE CARD
 // ============================================================
+function countDramaticPairs(card) {
+  const fields = ['hook', 'sourceWorld', 'pivotLine', 'yourWorld', 'whyItMatters'];
+  const text = fields.map(f => card[f] || '').join(' ');
+  const pattern = /\bnot\b[^.!?]*[.!?]\s+(It|They|This|That)\s+(is|was|are|were)\b/gi;
+  return (text.match(pattern) || []).length;
+}
+
 async function generateCard() {
   const today = getTodayStr();
   if (state.todayDate === today && state.todayCard) {
@@ -2327,31 +2334,35 @@ async function generateCard() {
   startLoadingFragments();
 
   try {
-    const res = await fetch(WORKER_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-6',
-        max_tokens: 1800,
-        system: INSIGHT_SYSTEM_PROMPT,
-        messages: [{ role: 'user', content: buildPrompt(discipline, cluster, todayType, recentHistory, isSchoolUnlock) }]
-      })
-    });
+    const prompt = buildPrompt(discipline, cluster, todayType, recentHistory, isSchoolUnlock);
+
+    const fetchCard = async () => {
+      const res = await fetch(WORKER_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-6',
+          max_tokens: 1800,
+          system: INSIGHT_SYSTEM_PROMPT,
+          messages: [{ role: 'user', content: prompt }]
+        })
+      });
+      if (!res.ok) {
+        const errBody = await res.json().catch(() => ({}));
+        const errMsg = typeof errBody?.error === 'string' ? errBody.error : (errBody?.error?.message || JSON.stringify(errBody).slice(0, 300));
+        throw new Error(`Worker responded ${res.status}: ${errMsg}`);
+      }
+      const data = await res.json();
+      let text = (data?.content?.[0]?.text || '').trim();
+      text = text.replace(/^```json\s*/i,'').replace(/^```\s*/i,'').replace(/\s*```$/,'').trim();
+      const jsonMatch = text.match(/\{[\s\S]*\}/);
+      if (!jsonMatch) throw new Error(`JSON parse failed: ${text.slice(0,200)}`);
+      return JSON.parse(jsonMatch[0]);
+    };
 
     stopLoadingFragments();
 
-    if (!res.ok) {
-      const errBody = await res.json().catch(() => ({}));
-      const errMsg = typeof errBody?.error === 'string' ? errBody.error : (errBody?.error?.message || JSON.stringify(errBody).slice(0, 300));
-      throw new Error(`Worker responded ${res.status}: ${errMsg}`);
-    }
-
-    const data = await res.json();
-    let text = (data?.content?.[0]?.text || '').trim();
-    text = text.replace(/^```json\s*/i,'').replace(/^```\s*/i,'').replace(/\s*```$/,'').trim();
-    const jsonMatch = text.match(/\{[\s\S]*\}/);
-    if (!jsonMatch) throw new Error(`JSON parse failed: ${text.slice(0,200)}`);
-    const card = JSON.parse(jsonMatch[0]);
+    let card = await fetchCard();
     // Strip em dashes, fix capitalisation after periods, remove banned words
     const cleanField = s => {
       if (typeof s !== 'string') return s;
@@ -2366,6 +2377,7 @@ async function generateCard() {
         .replace(/\balmost entirely\b/gi, 'entirely')
         .replace(/\balmost everything\b/gi, 'everything')
         .replace(/\balmost no one\b/gi, 'no one')
+        .replace(/\balmost nobody\b/gi, 'nobody')
         .replace(/\brarely\b/gi, 'never')
         .replace(/ +\./g, '.')
         .replace(/ +,/g, ',')
@@ -2375,6 +2387,16 @@ async function generateCard() {
         .trim();
     };
     ['hook','title','sourceWorld','pivotLine','yourWorld','para1','para2','whyItMatters'].forEach(f => { if (card[f]) card[f] = cleanField(card[f]); });
+
+    // Auto-retry if 2+ dramatic pairs detected (silent, max 2 retries)
+    let attempts = 0;
+    while (countDramaticPairs(card) >= 2 && attempts < 2) {
+      attempts++;
+      const retry = await fetchCard();
+      ['hook','title','sourceWorld','pivotLine','yourWorld','para1','para2','whyItMatters'].forEach(f => { if (retry[f]) retry[f] = cleanField(retry[f]); });
+      if (countDramaticPairs(retry) < countDramaticPairs(card)) card = retry;
+      if (countDramaticPairs(card) < 2) break;
+    }
 
     state.todayDate          = today;
     state.todayCard          = card;
