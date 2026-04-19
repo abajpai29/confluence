@@ -2278,7 +2278,7 @@ WRITING GATE — read this immediately before writing every field. Non-negotiabl
 
 VOICE: Sharp, noticed, not presented. Writer disappears. Reader arrives at the insight — never announce it.
 
-BINARY CONTRASTS — banned in all fields including pivotLine. "Not X. It is Y." / "not X but Y" / "It's not just X — it's Y" / "Not only X but Y" / "The answer isn't X, it's Y" / "It feels like X, it's actually Y" / "stops being X and starts being Y" / "doesn't mean X, it means Y" / "not about X, it's about Y." Target: zero across the entire card. PivotLine is not exempt — a binary contrast there is more visible, not less. If you are reaching for this construction anywhere, stop and rewrite as a direct positive claim. "The gap between encoding and decoding is a structural feature of language." not "It is not noise. It is structure." One instance is the absolute maximum across the whole card, and only if removing it makes the sentence genuinely weaker. Two or more: rewrite all, no exceptions.
+BINARY CONTRASTS — banned in all fields including pivotLine. "Not X. It is Y." / "not X but Y" / "It's not just X — it's Y" / "Not only X but Y" / "The answer isn't X, it's Y" / "It feels like X, it's actually Y" / "stops being X and starts being Y" / "doesn't mean X, it means Y" / "not about X, it's about Y." Target: zero across the entire card. PivotLine is not exempt — a binary contrast there is more visible, not less. If you are reaching for this construction anywhere, stop and rewrite as a direct positive claim. "The gap between encoding and decoding is a structural feature of language." not "It is not noise. It is structure." One instance is the absolute maximum across the whole card, and only if removing it makes the sentence genuinely weaker. Two or more: rewrite all, no exceptions. The present-tense two-sentence form is the same pattern and equally banned: "X does not Y. It Z." / "They are not the ones that X. They are the ones that Y." / "X does not survive because of Y. It survives because of Z." — collapse every instance to a single direct positive claim.
 
 FALSE AGENCY — banned. Inanimate things do not perform human actions: "the data tells us" / "the system learns" / "the market rewards" / "the decision emerges" / "the culture shifts" / "the conversation moves toward" / "the model misses" / "the framework assumes." Name who actually does the thing. If no specific person fits, use "you."
 
@@ -2296,7 +2296,7 @@ Refer to the type definition above. Build this card fully committed to that type
 ---
 
 ` : ''}WRITING GATE — check every sentence before outputting:
-No -ly adverbs. No dramatic pairs — two short consecutive sentences where the second inverts or extends the first must be collapsed into one. Specific patterns to catch: "X had not changed. What changed was Y." / "X did not do A. It did B." / "X traveled cleanly. Y did not." / "The X was good. The Y was not." — all must be rewritten as single direct statements. No noun-list fragments (a series of nouns with no verb). Active voice: name the person or thing doing the action. Specific over vague: name the actual thing, not a category. No throat-clearing openers. Human voice test: if this sentence could appear in any AI-generated article on any topic, rewrite it.
+No -ly adverbs. No negation-then-affirmation rhythm in any form — single sentence or two adjacent sentences, any tense. The rhythm itself is the AI tell. All banned: "not X but Y" / "X did not do A. It did B." / "X does not reward Y. It rewards Z." / "are not the ones that X. They are the ones that Y." / "X had not changed. What changed was Y." / "The X was good. The Y was not." — rewrite every instance as a direct positive claim. If it cannot be said without the negation, find a different angle entirely. No noun-list fragments (a series of nouns with no verb). Active voice: name the person or thing doing the action. Specific over vague: name the actual thing, not a category. No throat-clearing openers. Human voice test: if this sentence could appear in any AI-generated article on any topic, rewrite it.
 
 ---
 
@@ -2346,7 +2346,7 @@ function countDramaticPairs(card) {
 
 function hasProseColon(card) {
   // Only retry for colons in high-visibility fields — body text colons handled by prompt alone
-  const fields = ['hook', 'pivotLine', 'whyItMatters'];
+  const fields = ['hook', 'sourceWorld', 'pivotLine', 'yourWorld', 'whyItMatters'];
   return fields.some(f => (card[f] || '').includes(':'));
 }
 
