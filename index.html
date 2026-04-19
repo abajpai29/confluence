@@ -2420,8 +2420,6 @@ async function generateCard() {
       return JSON.parse(jsonMatch[0]);
     };
 
-    stopLoadingFragments();
-
     let card = await fetchCard();
     // Strip em dashes, fix capitalisation after periods, remove banned words
     const cleanField = s => {
@@ -2459,6 +2457,7 @@ async function generateCard() {
       if (retryScore < cardScore) card = retry;
       if (countDramaticPairs(card) < 2 && !hasProseColon(card)) break;
     }
+    stopLoadingFragments();
 
     state.todayDate          = today;
     state.todayCard          = card;

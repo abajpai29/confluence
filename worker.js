@@ -15,7 +15,7 @@
 
 const MAX_REQUESTS_PER_IP_PER_DAY = 50;
 const MAX_TOKENS_CAP = 2200;
-const MAX_PROMPT_CHARS = 16000;
+const MAX_PROMPT_CHARS = 32000;
 
 export default {
   // ── HTTP handler ────────────────────────────────────────────────
@@ -48,6 +48,12 @@ export default {
       body = await request.json();
     } catch {
       return json({ error: 'Invalid JSON body' }, 400, corsHeaders);
+    }
+
+    // ── Test email action (temporary) ─────────────────────────────
+    if (body.action === 'test-email') {
+      await sendDailyReminders(env);
+      return json({ ok: true }, 200, corsHeaders);
     }
 
     // ── Subscribe action ───────────────────────────────────────────
