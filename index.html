@@ -2246,7 +2246,7 @@ REPETITION — say it once. If a sentence restates the previous one in different
 
 ENDING — the last sentence of whyItMatters must reframe, not conclude. It changes how the reader sees the first sentence of the card. If it summarises what came before — rewrite it.
 
-HARD CHECKS: Em dashes → zero. "Almost never / almost always" → zero. "Worth [verb]ing" → zero. Adverbs → zero. This means any -ly adverb modifying a verb or adjective. The full banned list includes but is not limited to: genuinely, deeply, truly, fundamentally, inherently, inevitably, aggressively, simultaneously, individually, collectively, rationally, explicitly, effectively, actually, carefully, clearly, largely, notably, precisely, remarkably, significantly, substantially, widely. If you need an adverb to make a verb meaningful, find a stronger verb. Colon constructions ("Term: explanation" / "Key insight: sentence") → zero — rewrite as a full sentence. Dramatic pairs (two consecutive short sentences where the second inverts the first) → zero — collapse into one direct statement.
+HARD CHECKS: Em dashes → zero. "Almost never / almost always" → zero. "Worth [verb]ing" → zero. Adverbs → zero. This means any -ly adverb modifying a verb or adjective. The full banned list includes but is not limited to: genuinely, deeply, truly, fundamentally, inherently, inevitably, aggressively, simultaneously, individually, collectively, rationally, explicitly, effectively, actually, carefully, clearly, largely, notably, precisely, remarkably, significantly, substantially, widely. Also banned as adjective intensifiers: "remarkable" (as in "remarkable fidelity"), "profound", "striking", "extraordinary" — these are vague emphasis words. Replace with a specific claim. If you need an adverb to make a verb meaningful, find a stronger verb. Colon constructions ("Term: explanation" / "Key insight: sentence") → zero — rewrite as a full sentence. Dramatic pairs (two consecutive short sentences where the second inverts the first) → zero — collapse into one direct statement.
 
 ---
 
@@ -2283,7 +2283,7 @@ FINAL CHECK BEFORE RETURNING: read every sentence in every field. For each sente
 function countDramaticPairs(card) {
   const fields = ['hook', 'sourceWorld', 'pivotLine', 'yourWorld', 'whyItMatters'];
   const text = fields.map(f => card[f] || '').join(' ');
-  const pattern = /\bnot\b[^.!?]*[.!?]\s+(It|They|This|That)\s+(is|was|are|were)\b/gi;
+  const pattern = /\bnot\b[^.!?]*[.!?]\s+(It|They|This|That)\s+\w+/gi;
   return (text.match(pattern) || []).length;
 }
 
