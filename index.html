@@ -16,9 +16,9 @@
   </script>
   <title>Eneth</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%231a1614'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='20' font-weight='500' text-anchor='middle' fill='%23f5f0e8'%3EE%3C/text%3E%3C/svg%3E" />
-  <meta name="description" content="One unexpected connection every weekday. Think to the nth degree." />
+  <meta name="description" content="One unexpected connection every day. Think to the nth degree." />
   <meta property="og:title" content="Eneth · Think to the nth degree" />
-  <meta property="og:description" content="One unexpected connection. One field of human knowledge connected directly to your world. Every weekday." />
+  <meta property="og:description" content="One unexpected connection. One field of human knowledge connected directly to your world. Every day." />
   <meta property="og:url" content="https://eneth.co" />
   <meta property="og:type" content="website" />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,300&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;1,8..60,300;1,8..60,400&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet" />
@@ -971,7 +971,7 @@ body::before {
     <div class="ob-body">
       <p>Physics, Chemistry, History, Mathematics, Biology, Economics, Geography, English Literature, Political Science. Studied separately, each in its own world. The conversation happening between them? Nobody showed us that.</p>
       <p>That conversation is where the best thinking lives.</p>
-      <p>Every weekday, Eneth brings you one unexpected connection, from across the full map of human knowledge.</p>
+      <p>Every day, Eneth brings you one unexpected connection, from across the full map of human knowledge.</p>
       <p>Something you can't unsee.</p>
     </div>
     <div style="margin-top:32px; font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:400; letter-spacing:0.12em; color:var(--muted); text-transform:uppercase;">Better thinking starts here.</div>
@@ -1271,7 +1271,7 @@ body::before {
       <div class="about-divider">✦</div>
       <div class="about-body">
         <p>What you find here today is the beginning.</p>
-        <p>One unexpected connection from across human knowledge, every weekday. That is where we start. There is much more to come.</p>
+        <p>One unexpected connection from across human knowledge, every day. That is where we start. There is much more to come.</p>
         <p>Our hope is simple. That each day, it shifts something in you. That over time the shifts compound into something larger.</p>
         <p>A mind that works differently from the one you had before.</p>
         <p>A mind that thinks to the nth degree.</p>
@@ -1569,7 +1569,7 @@ function stopLoadingFragments() {
 function getShareText() {
   const c = state.todayCard;
   if (!c) return '';
-  return `I just saw my world through the lens of ${state.todayDiscipline} and I can't unsee it.\n\n"${c.hook}"\n\nEneth does this every weekday. One unexpected discipline connected directly to your world.\n\nThink to the nth degree.\n\nhttps://eneth.co`;
+  return `I just saw my world through the lens of ${state.todayDiscipline} and I can't unsee it.\n\n"${c.hook}"\n\nEneth does this every day. One unexpected discipline connected directly to your world.\n\nThink to the nth degree.\n\nhttps://eneth.co`;
 }
 
 function shareWhatsApp() {
@@ -2548,7 +2548,7 @@ function renderCard(card, discipline) {
     </div>
     ${!state.profile?.email ? `
     <div class="email-capture" id="email-capture-inline">
-      <div class="email-capture-label">Get your daily insight every weekday.</div>
+      <div class="email-capture-label">Get your daily insight every day.</div>
       <div class="email-capture-row">
         <input type="email" class="email-input" id="inline-email" placeholder="your@email.com" />
         <button class="email-submit-btn" onclick="saveInlineEmail()">→</button>
@@ -2720,7 +2720,7 @@ function renderTomorrow(todayDiscipline) {
   const isFriday = new Date().getDay() === 5;
   document.getElementById('tomorrow-area').innerHTML = `
     <div class="tomorrow-wrap">
-      <div class="tomorrow-label">${isFriday ? 'Monday' : 'Tomorrow'}</div>
+      <div class="tomorrow-label">Tomorrow</div>
       <div class="tomorrow-discipline">${nextDisc}</div>
       <div class="tomorrow-sub">A different world. A different way to think.</div>
     </div>`;
@@ -2853,9 +2853,9 @@ function renderConstellation(newDiscipline) {
 // WEEKDAY STRIP
 // ============================================================
 function renderWeekdayStrip() {
-  const labels = ['M','T','W','T','F'];
+  const labels = ['M','T','W','T','F','S','S'];
   const dow = new Date().getDay();
-  const todayIdx = (dow >= 1 && dow <= 5) ? dow - 1 : -1;
+  const todayIdx = dow === 0 ? 6 : dow - 1;
   const el = document.getElementById('weekday-strip');
   if (!el) return;
   el.innerHTML = `<div class="weekday-strip-inner">${labels.map((d,i) => `
@@ -2941,9 +2941,7 @@ function renderArchive() {
 }
 
 function isWeekend() {
-  if (new URLSearchParams(location.search).has('test')) return false;
-  const d = new Date().getDay();
-  return d === 0 || d === 6;
+  return false;
 }
 
 // ============================================================
