@@ -2445,6 +2445,7 @@ async function generateCard() {
         .replace(/\brarely\b/gi, 'never')
         .replace(/ +\./g, '.')
         .replace(/ +,/g, ',')
+        .replace(/,([^\s])/g, ', $1')
         .replace(/\.\s+([a-z])/g, (_, c) => '. ' + c.toUpperCase())
         .replace(/,\s*,/g, ',')
         .replace(/\s{2,}/g, ' ')
